@@ -2,48 +2,56 @@ import { ReactElement } from 'react'
 import { NavLink } from 'react-router-dom'
 import { NavItem } from '../../types/Nav'
 import RustylootLogo from '../../assets/RustylootLogo.png'
+import { User } from '../../types/User'
+import LogoutIcon from '../icons/LogoutIcon'
 
-const MenuDesktop = ({ navigation }: { navigation: NavItem[] }): ReactElement => {
+const MenuDesktop = ({ navigation, user }: { navigation: NavItem[], user: User }): ReactElement => {
   return (
-    <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
+    <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64r md:flex-col">
       <div className="flex min-h-0 flex-1 flex-col bg-dark-1">
         <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
-          <div className="flex flex-shrink-0 items-center px-4">
+          <div className="flex flex-shrink-0 items-center px-6">
             <img
               className="h-8 w-auto"
               src={RustylootLogo}
               alt="RustylootLogo"
             />
           </div>
-          <nav className="mt-5 flex-1 space-y-1 px-2">
+          <nav className="mt-5 flex-1 space-y-1 px-6">
             {navigation.map((item: NavItem) => (
               <NavLink
                 key={item.name}
                 to={item.href}
-                className="text-gray-300 hover:text-white group flex items-center px-2 py-2 text-base font-medium rounded-md"
-                style={({ isActive }) => isActive ? { backgroundColor: 'rgb(17 24 39)', color: 'white' } : undefined}
+                className="text-gray-6 hover:text-white hover:bg-dark-21 hover:bg-opacity-70 text-sm group gap-4 flex items-center px-4 py-3 font-medium rounded-lg"
+                style={({ isActive }) => isActive ? { backgroundColor: 'rgba(255, 194, 57, 0.1)', color: '#ffc239' } : undefined}
               >
+                {item.icon}
                 {item.name}
               </NavLink>
             ))}
           </nav>
         </div>
-        <div className="flex flex-shrink-0 bg-gray-700 p-4">
-          <a href="#" className="group block w-full flex-shrink-0">
-            <div className="flex items-center">
-              <div>
-                <img
-                  className="inline-block h-9 w-9 rounded-full"
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
+        <div className="flex flex-shrink-0 p-6">
+          <div className="group block w-full flex-shrink-0 bg-dark-1f p-3 rounded-lg">
+            <div className="flex flex-col items-center">
+              <div className='flex justify-between items-center w-full mb-2'>
+                <div className='p-0.5 rounded-full border-2 border-gray-3b'>
+                  <img
+                    className="inline-block h-9 w-9 rounded-full"
+                    src={user.avatar}
+                    alt={user.name}
+                  />
+                </div>
+                <div className='w-10 h-10 rounded-full bg-dark-1 text-gray-3b flex items-center justify-center cursor-pointer'>
+                  <LogoutIcon iconCalsses='w-3 h-3' />
+                </div>
               </div>
               <div className="ml-3">
-                <p className="text-sm font-medium text-white">Tom Cook</p>
-                <p className="text-xs font-medium text-gray-300 group-hover:text-gray-200">View profile</p>
+                <p className="text-sm font-bold text-white">{user.name}</p>
+                <p className="text-xs font-medium text-gray-6">{user.email}</p>
               </div>
             </div>
-          </a>
+          </div>
         </div>
       </div>
     </div>

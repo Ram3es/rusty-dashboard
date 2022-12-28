@@ -6,6 +6,10 @@ import Dashboard from './routes/Dashboard'
 import MenuMobile from './components/nav/MenuMobile'
 import MenuDesktop from './components/nav/MenuDesktop'
 import MenuIcon from './components/icons/MenuIcon'
+import DashboardIcon from './components/icons/DashboardIcon'
+import UsersIcon from './components/icons/UsersIcon'
+import Users from './routes/Users'
+import { User } from './types/User'
 
 const socket = io(API_URLS.API_URL, {
   transports: ['websocket', 'polling'],
@@ -13,15 +17,25 @@ const socket = io(API_URLS.API_URL, {
 })
 
 const navigation = [
-  { name: 'Dashboard', href: '/' },
-  { name: 'Test', href: '/test' }
+  { name: 'Dashboard', href: '/', icon: <DashboardIcon iconCalsses='w-4 h-4' /> },
+  { name: 'Users', href: '/users', icon: <UsersIcon iconCalsses='h-4' /> }
 ]
 
 function App (): JSX.Element {
   // const [isConnected, setIsConnected] = useState(socket.connected)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [user, setUser] = useState<User>({
+    name: 'Some user',
+    email: 'test@test.test',
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+  })
 
   useEffect(() => {
+    setUser({
+      name: 'Rainy Bainnny',
+      email: 'kekwtheeldest4356@gmail.com',
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+    })
     socket.emit('admin:game:get', {}, (data: any) => {
       console.log(data, 'games')
     })
@@ -30,8 +44,8 @@ function App (): JSX.Element {
   return (
     <BrowserRouter>
       <MenuMobile isOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} navigation={navigation} />
-      <MenuDesktop navigation={navigation} />
-      <div className="flex flex-1 flex-col md:pl-64">
+      <MenuDesktop navigation={navigation} user={user} />
+      <div className="flex flex-1 flex-col md:pl-270px">
         <div className="sticky top-0 z-10 bg-gray-100 pl-1 pt-1 sm:pl-3 sm:pt-3 md:hidden">
           <button
             type="button"
@@ -42,9 +56,10 @@ function App (): JSX.Element {
             <MenuIcon />
           </button>
         </div>
-        <main className="flex-1">
+        <main className="flex-1 bg-dark-18 min-h-screen">
           <Routes>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/users" element={<Users />} />
           </Routes>
         </main>
       </div>
