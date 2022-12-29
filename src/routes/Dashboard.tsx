@@ -1,16 +1,17 @@
-import { useEffect, useState } from 'react'
-import { Listbox } from '@headlessui/react'
-import ArrowIcon from '../components/icons/ArrowIcon'
-import { StatisticCartItem } from '../types/StatisticCartItem'
-import StatisticCart from '../components/base/StatisticCart'
+import CardsStatistic from '../components/CardsStatistic'
+import PipeChartWithTable from '../components/PipeChartWithTable'
 import SessionIcon from '../components/icons/SessionIcon'
 import UsersIcon from '../components/icons/UsersIcon'
 import DepositIcon from '../components/icons/DepositIcon'
 import DiceIcon from '../components/icons/DiceIcon'
 import StatisticIcon from '../components/icons/StatisticIcon'
 import MinesIson from '../components/icons/MinesIson'
+import { DepositBase } from '../types/Deposit'
+import { StatisticCartItem } from '../types/StatisticCartItem'
+import { useEffect, useState } from 'react'
+import GamesStatistic from '../components/dashboard/GamesStatistic'
 
-const people = [
+const timePeriodOptions = [
   { id: 1, name: 'Today', unavailable: false },
   { id: 2, name: 'Yesterday', unavailable: false },
   { id: 3, name: 'This week', unavailable: false },
@@ -18,8 +19,10 @@ const people = [
 ]
 
 const Dashboard = () => {
-  const [selectedPerson, setSelectedPerson] = useState(people[0])
   const [generalStatistic, setGeneralStatistic] = useState<StatisticCartItem[]>([])
+  const [depositData, setDepositData] = useState<DepositBase[]>([])
+  const [game, setGame] = useState<string>('jackpot')
+  // const [gamesStatistic, setGamesStatistic] = useState([])
 
   useEffect(() => {
     setGeneralStatistic([
@@ -60,42 +63,47 @@ const Dashboard = () => {
         subtext: 'Top Game'
       }
     ])
+
+    setDepositData([
+      {
+        name: 'skins',
+        value: 549.55
+      },
+      {
+        name: 'gift cards',
+        value: 3199.99
+      },
+      {
+        name: 'crypto',
+        value: 5233.31
+      }
+    ])
   }, [])
 
   return (
     <>
       <div className="p-6 grid grid-cols-6 gap-6">
-        <div className="col-span-6 flex flex-col rounded-lg bg-dark-1 px-8 py-10">
-          <div className="flex justify-between w-full mb-6">
-            <h3 className="uppercase text-2xl text-white">GENERAL STATISTICS</h3>
-            <div className="relative">
-              <Listbox value={selectedPerson} onChange={setSelectedPerson}>
-                {({ open }) => (
-                  <>
-                    <Listbox.Button className='w-36 h-10 flex items-center justify-between px-4 py-2 rounded bg-dark-17 text-gray-6'>
-                      <span>{selectedPerson.name}</span>
-                      <ArrowIcon iconCalsses={`w-4 transform ${open ? 'rotate-90' : ''}`} />
-                    </Listbox.Button>
-                    <Listbox.Options className="absolute left-0 top-full bg-dark-17 mt-1 w-full px-4 py-2 rounded">
-                      {people.map((person) => (
-                        <Listbox.Option
-                          className="cursor-pointer text-gray-6 hover:text-white"
-                          key={person.id}
-                          value={person}
-                          disabled={person.unavailable}
-                        >
-                          {person.name}
-                        </Listbox.Option>
-                      ))}
-                    </Listbox.Options>
-                  </>
-                )}
-              </Listbox>
-            </div>
-          </div>
-          <div className='flex gap-10 flex-wrap'>
-              {generalStatistic.map((item, index) => <StatisticCart key={index} item={item} />)}
-          </div>
+        <div className="col-span-7 flex flex-col rounded-lg bg-dark-1 px-8 py-10">
+          <CardsStatistic
+            title="GENERAL STATISTICS"
+            statisticOptions={timePeriodOptions}
+            generalStatistic={generalStatistic}
+          />
+        </div>
+        <div className="col-span-3 rounded-lg bg-dark-1 px-8 py-10">
+          <PipeChartWithTable
+            periodOptions={timePeriodOptions}
+            depositData={depositData}
+          />
+        </div>
+        <div className="col-span-4 row-span-5 2xl:row-span-3 rounded-lg bg-dark-1">
+          <GamesStatistic currentGame={game} setCurrentGame={setGame} />
+        </div>
+        <div className="col-span-3 2xl:col-span-2 row-span-2 rounded-lg bg-dark-1 px-8 py-10">
+          CREATE FLASH CODE
+        </div>
+        <div className="col-span-3 2xl:col-span-1 row-span-2 rounded-lg bg-dark-1 px-8 py-10">
+          EXCLUDED ACCOUNTS
         </div>
       </div>
     </>

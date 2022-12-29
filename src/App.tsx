@@ -56,7 +56,7 @@ function App (): JSX.Element {
             <MenuIcon />
           </button>
         </div>
-        <main className="flex-1 bg-dark-18 min-h-screen">
+        <main className="flex-1 min-h-screen">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/users" element={<Users />} />

@@ -1,4 +1,5 @@
 import { StatisticCartItem } from '../../types/StatisticCartItem'
+import CoinceImage from '../../assets/coins.png'
 
 const StatisticCart = ({ item }: { item: StatisticCartItem }) => {
   return (
@@ -7,7 +8,10 @@ const StatisticCart = ({ item }: { item: StatisticCartItem }) => {
         {item.icon}
       </div>
       <div className='flex flex-col gap-2'>
-        <div className='text-white text-2xl'>{item.text}</div>
+        <div className='text-white text-2xl flex gap-2 items-center'>
+          <span>{item.text}</span>
+          {(item.isCoinceValue === true) && <img src={CoinceImage} alt="CoinceImage" />}
+        </div>
         <div className='text-gray-7 text-base'>{item.subtext}</div>
         {(item.percent != null) && <div className={`${item.percent >= 0 ? 'text-green-500 bg-green-500' : 'text-red-500 bg-red-500'} flex gap-1 items-center text-xs px-2 py-1 bg-opacity-10 w-fit`}>
           <span className={`${item.percent >= 0 ? '' : 'transform rotate-180'}`}>
