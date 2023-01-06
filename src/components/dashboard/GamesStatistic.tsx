@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import Graph from '../base/Graph'
 import CoinFlipIcon from '../icons/CoinFlipIcon'
 import JackpotIcon from '../icons/JackpotIcon'
 import MinesIcon from '../icons/MinesIcon'
@@ -37,7 +39,147 @@ const gameModes = [
   }
 ]
 
-const GamesStatistic = ({ currentGame, setCurrentGame }: { currentGame: string, setCurrentGame: Function }) => {
+const dataWagers = {
+  name: 'Wagers',
+  labels: [
+    <span key="dataWagers">dataWagers</span>
+  ],
+  data: [
+    {
+      name: '14.11',
+      value: [-1100],
+      colors: [
+        {
+          postitveColor: '#2E72C9',
+          negativeColor: '#AF0A3B'
+        }
+      ]
+    },
+    {
+      name: '15.11',
+      value: [500],
+      colors: [
+        {
+          postitveColor: '#2E72C9',
+          negativeColor: '#AF0A3B'
+        }
+      ]
+    },
+    {
+      name: '16.11',
+      value: [2100],
+      colors: [
+        {
+          postitveColor: '#2E72C9',
+          negativeColor: '#AF0A3B'
+        }
+      ]
+    },
+    {
+      name: '17.11',
+      value: [3000],
+      colors: [
+        {
+          postitveColor: '#2E72C9',
+          negativeColor: '#AF0A3B'
+        }
+      ]
+    },
+    {
+      name: '18.11',
+      value: [-2100],
+      colors: [
+        {
+          postitveColor: '#2E72C9',
+          negativeColor: '#AF0A3B'
+        }
+      ]
+    },
+    {
+      name: '19.11',
+      value: [1000],
+      colors: [
+        {
+          postitveColor: '#2E72C9',
+          negativeColor: '#AF0A3B'
+        }
+      ]
+    }
+  ]
+}
+
+const dataProfit = {
+  name: 'PROFIT',
+  labels: [
+    <span key="dataProfit">dataProfit</span>
+  ],
+  data: [
+    {
+      name: '14.11',
+      value: [-1100],
+      colors: [
+        {
+          postitveColor: '#2E72C9',
+          negativeColor: '#AF0A3B'
+        }
+      ]
+    },
+    {
+      name: '15.11',
+      value: [500],
+      colors: [
+        {
+          postitveColor: '#2E72C9',
+          negativeColor: '#AF0A3B'
+        }
+      ]
+    },
+    {
+      name: '16.11',
+      value: [2100],
+      colors: [
+        {
+          postitveColor: '#2E72C9',
+          negativeColor: '#AF0A3B'
+        }
+      ]
+    },
+    {
+      name: '17.11',
+      value: [3000],
+      colors: [
+        {
+          postitveColor: '#2E72C9',
+          negativeColor: '#AF0A3B'
+        }
+      ]
+    },
+    {
+      name: '18.11',
+      value: [-2100],
+      colors: [
+        {
+          postitveColor: '#2E72C9',
+          negativeColor: '#AF0A3B'
+        }
+      ]
+    },
+    {
+      name: '19.11',
+      value: [1000],
+      colors: [
+        {
+          postitveColor: '#2E72C9',
+          negativeColor: '#AF0A3B'
+        }
+      ]
+    }
+  ]
+}
+
+const GamesStatistic = ({ periodOptions, currentGame, setCurrentGame }: { periodOptions: any[], currentGame: string, setCurrentGame: Function }) => {
+  const [selectedPeriod, setSelectedPeriod] = useState(periodOptions[0])
+
   return (
     <div className="flex flex-col">
       <div className="p-5 flex flex-wrap justify-around gap-4 2xl:gap-10 bg-dark-171">
@@ -51,7 +193,10 @@ const GamesStatistic = ({ currentGame, setCurrentGame }: { currentGame: string, 
           </div>
         )}
       </div>
-      <div>Statistic</div>
+      <div className='flex flex-col justify-between'>
+        <Graph timePeriodOptions={periodOptions} currentTimePeriod={selectedPeriod} changeTimePeriod={setSelectedPeriod} data={dataWagers.data} name={dataWagers.name} labels={dataWagers.labels} />
+        <Graph timePeriodOptions={periodOptions} currentTimePeriod={selectedPeriod} changeTimePeriod={setSelectedPeriod} data={dataProfit.data} name={dataProfit.name} labels={dataProfit.labels} />
+      </div>
     </div>
   )
 }

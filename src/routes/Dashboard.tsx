@@ -10,6 +10,10 @@ import { DepositBase } from '../types/Deposit'
 import { StatisticCartItem } from '../types/StatisticCartItem'
 import { useEffect, useState } from 'react'
 import GamesStatistic from '../components/dashboard/GamesStatistic'
+import Graph from '../components/base/Graph'
+import SkinsIcon from '../components/icons/SkinsIcon'
+import GiftCardsIcon from '../components/icons/GiftCardsIcon'
+import CryptoIcon from '../components/icons/CryptoIcon'
 
 const timePeriodOptions = [
   { id: 1, name: 'Today', unavailable: false },
@@ -22,7 +26,133 @@ const Dashboard = () => {
   const [generalStatistic, setGeneralStatistic] = useState<StatisticCartItem[]>([])
   const [depositData, setDepositData] = useState<DepositBase[]>([])
   const [game, setGame] = useState<string>('jackpot')
+  const [depositDataStatisticPeriod, setDepositDataStatisticPeriod] = useState(timePeriodOptions[0])
   // const [gamesStatistic, setGamesStatistic] = useState([])
+
+  const dataDeposit = {
+    name: 'deposit',
+    labels: [
+      <span className='flex items-center' key="val0">
+        <div
+          className='w-5 h-5 rounded-full flex justify-center items-center mr-2'
+          style={{ background: 'radial-gradient(50% 50% at 50% 50%, #EB184C 55.21%, #AE0A3A 100%)' }}
+        >
+          <SkinsIcon iconCalsses='w-3' />
+        </div>
+        Skin
+      </span>,
+      <span className='flex items-center' key="val2">
+         <div
+          className='w-5 h-5 rounded-full flex justify-center items-center mr-2'
+          style={{ background: 'radial-gradient(50% 50% at 50% 50%, #FCA313 64.06%, #FA9215 100%)' }}
+        >
+          <CryptoIcon iconCalsses='w-3' />
+        </div>
+        Crypto
+      </span>,
+      <span className='flex items-center' key="val1">
+         <div
+          className='w-5 h-5 rounded-full flex justify-center items-center mr-2'
+          style={{ background: 'radial-gradient(50% 50% at 50% 50%, #3790D4 64.06%, #2E72C9 100%)' }}
+        >
+          <GiftCardsIcon iconCalsses='w-3' />
+        </div>
+        Gift Cards
+      </span>
+    ],
+    data: [
+      {
+        name: '14.11',
+        value: [1100, 800, 100],
+        colors: [
+          {
+            postitveColor: '#E4164A'
+          },
+          {
+            postitveColor: '#FCA213'
+          },
+          {
+            postitveColor: '#3790D4'
+          }
+        ]
+      },
+      {
+        name: '15.11',
+        value: [100, 500, 300],
+        colors: [
+          {
+            postitveColor: '#E4164A'
+          },
+          {
+            postitveColor: '#FCA213'
+          },
+          {
+            postitveColor: '#3790D4'
+          }
+        ]
+      },
+      {
+        name: '16.11',
+        value: [10, 1000, 500],
+        colors: [
+          {
+            postitveColor: '#E4164A'
+          },
+          {
+            postitveColor: '#FCA213'
+          },
+          {
+            postitveColor: '#3790D4'
+          }
+        ]
+      },
+      {
+        name: '17.11',
+        value: [0, 800, 0],
+        colors: [
+          {
+            postitveColor: '#E4164A'
+          },
+          {
+            postitveColor: '#FCA213'
+          },
+          {
+            postitveColor: '#3790D4'
+          }
+        ]
+      },
+      {
+        name: '18.11',
+        value: [1000, 100, 100],
+        colors: [
+          {
+            postitveColor: '#E4164A'
+          },
+          {
+            postitveColor: '#FCA213'
+          },
+          {
+            postitveColor: '#3790D4'
+          }
+        ]
+      },
+      {
+        name: '19.11',
+        value: [600, 800, 1100],
+        colors: [
+          {
+            postitveColor: '#E4164A'
+          },
+          {
+            postitveColor: '#FCA213'
+          },
+          {
+            postitveColor: '#3790D4'
+          }
+        ]
+      }
+    ]
+  }
 
   useEffect(() => {
     setGeneralStatistic([
@@ -83,27 +213,24 @@ const Dashboard = () => {
   return (
     <>
       <div className="p-6 grid grid-cols-6 gap-6">
-        <div className="col-span-7 flex flex-col rounded-lg bg-dark-1 px-8 py-10">
+        <div className="col-span-6 flex flex-col rounded-lg bg-dark-1 px-8 py-10">
           <CardsStatistic
             title="GENERAL STATISTICS"
             statisticOptions={timePeriodOptions}
             generalStatistic={generalStatistic}
           />
         </div>
-        <div className="col-span-3 rounded-lg bg-dark-1 px-8 py-10">
+        <div className="col-span-6 2xl:col-span-3 rounded-lg bg-dark-1 px-8 py-10">
           <PipeChartWithTable
             periodOptions={timePeriodOptions}
             depositData={depositData}
           />
         </div>
-        <div className="col-span-4 row-span-5 2xl:row-span-3 rounded-lg bg-dark-1">
-          <GamesStatistic currentGame={game} setCurrentGame={setGame} />
+        <div className="col-span-6 2xl:col-span-3 row-span-5 2xl:row-span-2 rounded-lg bg-dark-1">
+          <GamesStatistic periodOptions={timePeriodOptions} currentGame={game} setCurrentGame={setGame} />
         </div>
-        <div className="col-span-3 2xl:col-span-2 row-span-2 rounded-lg bg-dark-1 px-8 py-10">
-          CREATE FLASH CODE
-        </div>
-        <div className="col-span-3 2xl:col-span-1 row-span-2 rounded-lg bg-dark-1 px-8 py-10">
-          EXCLUDED ACCOUNTS
+        <div className="col-span-6 2xl:col-span-3 rounded-lg bg-dark-1 px-8 py-10">
+          <Graph timePeriodOptions={timePeriodOptions} currentTimePeriod={depositDataStatisticPeriod} changeTimePeriod={setDepositDataStatisticPeriod} data={dataDeposit.data} name={dataDeposit.name} labels={dataDeposit.labels} />
         </div>
       </div>
     </>

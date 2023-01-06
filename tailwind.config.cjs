@@ -14,10 +14,12 @@ module.exports = {
         'dark-17': '#171C29',
         'dark-25': '#252D40',
         'dark-171': '#171D2B',
+        'dark-22': '#22273E',
         'gray-6': '#666E97',
         'gray-3b': '#3B436B',
         'gray-7': '#7A81A5',
-        'yellow-f': '#FFC239'
+        'yellow-f': '#FFC239',
+        'green-39': '#39C89D'
       },
       spacing: {
         '1.5px': '1.5px',

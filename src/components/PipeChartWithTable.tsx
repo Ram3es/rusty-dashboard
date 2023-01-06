@@ -6,6 +6,7 @@ import CryptoIcon from './icons/CryptoIcon'
 import GiftCardsIcon from './icons/GiftCardsIcon'
 import SkinsIcon from './icons/SkinsIcon'
 import { PieChart, Pie, Cell } from 'recharts'
+import ButtonsToggle from './base/ButtonsToggle'
 
 const depositOptions = ['deposit', 'withdraw']
 
@@ -82,12 +83,7 @@ const PipeChartWithTable = ({ periodOptions, depositData }: { periodOptions: any
         <div className='flex gap-5 justify-between items-end'>
           <div className='flex flex-col gap-5'>
             <div className="uppercase text-white text-2xl">{currentDepositSelect}</div>
-            <div className="flex">
-              {depositOptions.map((option, index) => <button
-                className={`py-2 px-3 rounded capitalize ${option === currentDepositSelect ? 'text-white bg-dark-25' : 'text-gray-6 bg-dark-17'}`}
-                onClick={() => setCurrentDepositSelect(option)}
-                key={index}>{option}</button>)}
-            </div>
+            <ButtonsToggle options={depositOptions} currentSelect={currentDepositSelect} peackFunction={setCurrentDepositSelect} />
           </div>
           <div className="relative">
               <Listbox value={selectedDepositPeriod} onChange={setSelectedDepositPeriod}>
