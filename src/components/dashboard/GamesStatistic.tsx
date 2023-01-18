@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Graph from '../base/Graph'
+import AllGamesIcon from '../icons/AllGamesIcon'
 import CoinFlipIcon from '../icons/CoinFlipIcon'
 import JackpotIcon from '../icons/JackpotIcon'
 import MinesIcon from '../icons/MinesIcon'
@@ -9,6 +10,10 @@ import UpgraderIcon from '../icons/UpgraderIcon'
 import WheelIcon from '../icons/WheelIcon'
 
 const gameModes = [
+  {
+    name: 'all',
+    icon: <AllGamesIcon iconCalsses="h-5" />
+  },
   {
     name: 'jackpot',
     icon: <JackpotIcon iconCalsses="h-5" />

@@ -7,7 +7,7 @@ import LogoutIcon from '../icons/LogoutIcon'
 
 const MenuDesktop = ({ navigation, user }: { navigation: NavItem[], user: User }): ReactElement => {
   return (
-    <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64r md:flex-col">
+    <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64r md:flex-col w-64">
       <div className="flex min-h-0 flex-1 flex-col bg-dark-1">
         <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
           <div className="flex flex-shrink-0 items-center px-6">
@@ -46,7 +46,7 @@ const MenuDesktop = ({ navigation, user }: { navigation: NavItem[], user: User }
                   <LogoutIcon iconCalsses='w-3 h-3' />
                 </div>
               </div>
-              <div className="ml-3">
+              <div className="ml-3 w-full">
                 <p className="text-sm font-bold text-white">{user.name}</p>
                 <p className="text-xs font-medium text-gray-6">{user.email}</p>
               </div>

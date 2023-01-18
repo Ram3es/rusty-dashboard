@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
 import io from 'socket.io-client'
 import { API_URLS } from './constants'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Dashboard from './routes/Dashboard'
+import { BrowserRouter } from 'react-router-dom'
 import MenuMobile from './components/nav/MenuMobile'
 import MenuDesktop from './components/nav/MenuDesktop'
 import MenuIcon from './components/icons/MenuIcon'
 import DashboardIcon from './components/icons/DashboardIcon'
 import UsersIcon from './components/icons/UsersIcon'
-import Users from './routes/Users'
 import { User } from './types/User'
+import RoutersContainer from './components/RoutersContainer'
+import Store from './store/globalStatisticStore'
 
 const socket = io(API_URLS.API_URL, {
   transports: ['websocket', 'polling'],
@@ -22,7 +22,6 @@ const navigation = [
 ]
 
 function App (): JSX.Element {
-  // const [isConnected, setIsConnected] = useState(socket.connected)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [user, setUser] = useState<User>({
     name: 'Some user',
@@ -31,13 +30,14 @@ function App (): JSX.Element {
   })
 
   useEffect(() => {
-    setUser({
-      name: 'Rainy Bainnny',
-      email: 'kekwtheeldest4356@gmail.com',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-    })
-    socket.emit('admin:connect', {}, (data: any) => {
-      console.log(data, 'ADMIN CONNECT!')
+    socket.on('system:connect', (data: { error: boolean, user: { data: any } }) => {
+      console.log(data, 'system CONNEC ')
+      if (!data.error) {
+        setUser({
+          name: data.user.data.username,
+          avatar: data.user.data.avatar
+        })
+      }
     })
   }, [])
 
@@ -57,10 +57,9 @@ function App (): JSX.Element {
           </button>
         </div>
         <main className="flex-1 min-h-screen">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/users" element={<Users />} />
-          </Routes>
+          <Store>
+            <RoutersContainer socket={socket} />
+          </Store>
         </main>
       </div>
     </BrowserRouter>

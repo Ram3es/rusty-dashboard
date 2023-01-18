@@ -1,3 +1,45 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.scrolling-btn-image {
+  height: 100%;
+  width: 1680px;
+  background: url("./assets/animatedButtonBg.jpg") repeat-x;
+  background-size: contain;
+  animation: slide 32s linear infinite;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 0;
+}
+
+.scrolling-btn-image-gray {
+  height: 100%;
+  width: 1680px;
+  background: url("./assets/animatedGrayButtonBg.jpg") repeat-x;
+  background-size: contain;
+  animation: slide 32s linear infinite;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 0;
+}
+
+.scrolling-btn-wrapper:hover {
+  filter: drop-shadow(0px 0px 7px rgba(255, 194, 57, 0.2)) drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.25)) drop-shadow(0px 0px 10px rgba(255, 199, 0, 0.3));
+}
+
+.scrolling-btn-wrapper-gray:hover {
+  filter: drop-shadow(0px 0px 7px rgba(114, 121, 153, 0.2)) drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.25)) drop-shadow(0px 0px 10px rgba(114, 121, 153, 0.3));
+}
+
+@keyframes slide {
+  0% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translate(-890px); /* The image width */
+  }
+}
