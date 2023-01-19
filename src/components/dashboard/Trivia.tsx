@@ -14,21 +14,23 @@ dayjs.extend(relativeTime)
 
 interface TriviaRound {
   question: string
-  ansver1: {
-    text: string
-    isCorrect: boolean
-  }
-  ansver2: {
-    text: string
-    isCorrect: boolean
-  }
-  ansver3: {
-    text: string
-    isCorrect: boolean
-  }
-  ansver4: {
-    text: string
-    isCorrect: boolean
+  ansvers: {
+    ansver1: {
+      text: string
+      isCorrect: boolean
+    }
+    ansver2: {
+      text: string
+      isCorrect: boolean
+    }
+    ansver3: {
+      text: string
+      isCorrect: boolean
+    }
+    ansver4: {
+      text: string
+      isCorrect: boolean
+    }
   }
   reward: number
   winnersCount: number
@@ -59,6 +61,42 @@ const Trivia = ({ name }: { name: string }) => {
 
   const createGame = () => {
     setIsCreateGamePopupOpen(true)
+  }
+
+  const validateQuestionForm = (form: TriviaRound) => {
+    if (form.question === '') {
+      console.log('error questions:', form.question)
+      return false
+    }
+
+    if (form.reward === 0) {
+      console.log('error reward:', form.reward)
+      return false
+    }
+
+    if (form.winnersCount === 0) {
+      console.log('error winnersCount:', form.winnersCount)
+      return false
+    }
+
+    const ansvers = Object.values(form.ansvers)
+    const correctAnsvers = ansvers.filter(a => a.isCorrect)
+    if (correctAnsvers.length > 1 || correctAnsvers.length === 0) {
+      console.log('correctAnsvers.length', correctAnsvers.length)
+      return false
+    }
+
+    const emptyAnsvers = ansvers.filter(ansver => ansver.text === '')
+
+    return emptyAnsvers.length === 0
+  }
+
+  const resetAllAnsvers = (ansvers: { ansver1: { text: string, isCorrect: boolean }, ansver2: { text: string, isCorrect: boolean }, ansver3: { text: string, isCorrect: boolean }, ansver4: { text: string, isCorrect: boolean } }) => {
+    console.log('ansvers', ansvers)
+
+    for (const ansver in ansvers) {
+      ansvers[ansver].isCorrect = false
+    }
   }
 
   const formatDate = (date: Date) => {
@@ -96,9 +134,9 @@ const Trivia = ({ name }: { name: string }) => {
   }, [scaduleTime])
 
   const foundCorrectAnsver = (triviaGame: TriviaRound) => {
-    const correctKey: string | undefined = Object.keys(triviaGame).find((key: string) => triviaGame[key].isCorrect === true)
+    const correctKey: string | undefined = Object.keys(triviaGame.ansvers).find((key: string) => triviaGame.ansvers[key].isCorrect === true)
     console.log(correctKey)
-    return (correctKey != null) ? triviaGame[correctKey] : undefined
+    return (correctKey != null) ? triviaGame.ansvers[correctKey] : undefined
   }
 
   const triviaGamesSubmit = () => {
@@ -128,21 +166,23 @@ const Trivia = ({ name }: { name: string }) => {
                 for (let i = 0; i < value; i++) {
                   triviaQuestions.push({
                     question: '',
-                    ansver1: {
-                      text: '',
-                      isCorrect: false
-                    },
-                    ansver2: {
-                      text: '',
-                      isCorrect: false
-                    },
-                    ansver3: {
-                      text: '',
-                      isCorrect: false
-                    },
-                    ansver4: {
-                      text: '',
-                      isCorrect: false
+                    ansvers: {
+                      ansver1: {
+                        text: '',
+                        isCorrect: false
+                      },
+                      ansver2: {
+                        text: '',
+                        isCorrect: false
+                      },
+                      ansver3: {
+                        text: '',
+                        isCorrect: false
+                      },
+                      ansver4: {
+                        text: '',
+                        isCorrect: false
+                      }
                     },
                     reward: 0,
                     winnersCount: 0
@@ -156,7 +196,11 @@ const Trivia = ({ name }: { name: string }) => {
             />
             <div className='mt-10 flex justify-center items-center gap-4'>
               <Button color='gray' text='Back' submitFunction={() => setIsCreateGamePopupOpen(false)} />
-              <Button text='Next' submitFunction={() => setCreateTriviaStage(2)} />
+              <Button text='Next' submitFunction={() => {
+                if (newTriviaGame.rounds > 0) {
+                  setCreateTriviaStage(2)
+                }
+              }} />
             </div>
           </div>
         )
@@ -234,12 +278,12 @@ const Trivia = ({ name }: { name: string }) => {
                   </div>
                   <div className='col-span-1 relative'>
                     <InputWithLabel
-                      value={newTriviaGame.questions[index].ansver1.text}
+                      value={newTriviaGame.questions[index].ansvers.ansver1.text}
                       name="scaduleDays"
                       changeFunction={(name: any, value: string) => {
                         setNewTriviaGema((prev) => {
                           const questionsArray = [...prev.questions]
-                          questionsArray[index].ansver1.text = value
+                          questionsArray[index].ansvers.ansver1.text = value
                           return { ...prev, questions: questionsArray }
                         })
                       }}
@@ -249,12 +293,15 @@ const Trivia = ({ name }: { name: string }) => {
                     />
                     <div className='absolute right-0 top-0'>
                       <InputWithLabel
-                        value={newTriviaGame.questions[index].ansver1.isCorrect}
+                        value={newTriviaGame.questions[index].ansvers.ansver1.isCorrect}
                         name="scaduleDays"
                         changeFunction={(name: any, value: boolean) => {
                           setNewTriviaGema((prev) => {
                             const questionsArray = [...prev.questions]
-                            questionsArray[index].ansver1.isCorrect = value
+                            if (value) {
+                              resetAllAnsvers(questionsArray[index].ansvers)
+                            }
+                            questionsArray[index].ansvers.ansver1.isCorrect = value
                             return { ...prev, questions: questionsArray }
                           })
                         }}
@@ -264,12 +311,12 @@ const Trivia = ({ name }: { name: string }) => {
                   </div>
                   <div className='col-span-1 relative'>
                     <InputWithLabel
-                      value={newTriviaGame.questions[index].ansver2.text}
+                      value={newTriviaGame.questions[index].ansvers.ansver2.text}
                       name="scaduleDays"
                       changeFunction={(name: any, value: string) => {
                         setNewTriviaGema((prev) => {
                           const questionsArray = [...prev.questions]
-                          questionsArray[index].ansver2.text = value
+                          questionsArray[index].ansvers.ansver2.text = value
                           return { ...prev, questions: questionsArray }
                         })
                       }}
@@ -279,12 +326,15 @@ const Trivia = ({ name }: { name: string }) => {
                     />
                     <div className='absolute right-0 top-0'>
                       <InputWithLabel
-                        value={newTriviaGame.questions[index].ansver2.isCorrect}
+                        value={newTriviaGame.questions[index].ansvers.ansver2.isCorrect}
                         name="scaduleDays"
                         changeFunction={(name: any, value: boolean) => {
                           setNewTriviaGema((prev) => {
                             const questionsArray = [...prev.questions]
-                            questionsArray[index].ansver2.isCorrect = value
+                            if (value) {
+                              resetAllAnsvers(questionsArray[index].ansvers)
+                            }
+                            questionsArray[index].ansvers.ansver2.isCorrect = value
                             return { ...prev, questions: questionsArray }
                           })
                         }}
@@ -294,12 +344,12 @@ const Trivia = ({ name }: { name: string }) => {
                   </div>
                   <div className='col-span-1 relative'>
                     <InputWithLabel
-                      value={newTriviaGame.questions[index].ansver3.text}
+                      value={newTriviaGame.questions[index].ansvers.ansver3.text}
                       name="scaduleDays"
                       changeFunction={(name: any, value: string) => {
                         setNewTriviaGema((prev) => {
                           const questionsArray = [...prev.questions]
-                          questionsArray[index].ansver3.text = value
+                          questionsArray[index].ansvers.ansver3.text = value
                           return { ...prev, questions: questionsArray }
                         })
                       }}
@@ -309,12 +359,15 @@ const Trivia = ({ name }: { name: string }) => {
                     />
                     <div className='absolute right-0 top-0'>
                       <InputWithLabel
-                        value={newTriviaGame.questions[index].ansver3.isCorrect}
+                        value={newTriviaGame.questions[index].ansvers.ansver3.isCorrect}
                         name="scaduleDays"
                         changeFunction={(name: any, value: boolean) => {
                           setNewTriviaGema((prev) => {
                             const questionsArray = [...prev.questions]
-                            questionsArray[index].ansver3.isCorrect = value
+                            if (value) {
+                              resetAllAnsvers(questionsArray[index].ansvers)
+                            }
+                            questionsArray[index].ansvers.ansver3.isCorrect = value
                             return { ...prev, questions: questionsArray }
                           })
                         }}
@@ -324,12 +377,12 @@ const Trivia = ({ name }: { name: string }) => {
                   </div>
                   <div className='col-span-1 relative'>
                     <InputWithLabel
-                      value={newTriviaGame.questions[index].ansver4.text}
+                      value={newTriviaGame.questions[index].ansvers.ansver4.text}
                       name="scaduleDays"
                       changeFunction={(name: any, value: string) => {
                         setNewTriviaGema((prev) => {
                           const questionsArray = [...prev.questions]
-                          questionsArray[index].ansver4.text = value
+                          questionsArray[index].ansvers.ansver4.text = value
                           return { ...prev, questions: questionsArray }
                         })
                       }}
@@ -339,12 +392,15 @@ const Trivia = ({ name }: { name: string }) => {
                     />
                     <div className='absolute right-0 top-0'>
                       <InputWithLabel
-                        value={newTriviaGame.questions[index].ansver4.isCorrect}
+                        value={newTriviaGame.questions[index].ansvers.ansver4.isCorrect}
                         name="scaduleDays"
                         changeFunction={(name: any, value: boolean) => {
                           setNewTriviaGema((prev) => {
                             const questionsArray = [...prev.questions]
-                            questionsArray[index].ansver4.isCorrect = value
+                            if (value) {
+                              resetAllAnsvers(questionsArray[index].ansvers)
+                            }
+                            questionsArray[index].ansvers.ansver4.isCorrect = value
                             return { ...prev, questions: questionsArray }
                           })
                         }}
@@ -391,10 +447,12 @@ const Trivia = ({ name }: { name: string }) => {
                     }
                   }} />
                   <Button text='Next' submitFunction={() => {
-                    if (questionsStage === newTriviaGame.questions.length) {
-                      setCreateTriviaStage(4)
-                    } else {
-                      setQuestionsStage(prev => prev + 1)
+                    if (validateQuestionForm(newTriviaGame.questions[0])) {
+                      if (questionsStage === newTriviaGame.questions.length) {
+                        setCreateTriviaStage(4)
+                      } else {
+                        setQuestionsStage(prev => prev + 1)
+                      }
                     }
                   }
                   } />

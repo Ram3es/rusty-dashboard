@@ -2,7 +2,7 @@ import { Listbox } from '@headlessui/react'
 import { useContext, useEffect, useState } from 'react'
 import * as dayjs from 'dayjs'
 
-import { Context } from '../store/globalStatisticStore'
+import { Context } from '../store/GlobalStatisticStore'
 import { StatisticCartItem } from '../types/StatisticCartItem'
 import StatisticCart from './base/StatisticCart'
 import ArrowIcon from './icons/ArrowIcon'

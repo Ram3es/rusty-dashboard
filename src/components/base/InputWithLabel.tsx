@@ -12,7 +12,7 @@ const InputWithLabel = ({ label, value, name, changeFunction, type, placeholder 
         placeholder={placeholder}
       />
         : <input
-      className="px-3 py-2 bg-dark-17 rounded text-white"
+      className="px-3 py-2 accent-yellow-f rounded text-white"
       type={type}
       name={name}
       checked={value}
