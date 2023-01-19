@@ -1,5 +1,5 @@
 import { createContext, ReactElement, useReducer } from 'react'
-import Reducer from './globalStatisticReducer'
+import Reducer from './GlobalStatisticReducer'
 
 const initialState = {
   data: {}
