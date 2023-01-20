@@ -12,26 +12,27 @@ import InputWithLabel from '../base/InputWithLabel'
 
 dayjs.extend(relativeTime)
 
+interface TriviaRoundAnsvers {
+  ansver1: {
+    text: string
+    isCorrect: boolean
+  }
+  ansver2: {
+    text: string
+    isCorrect: boolean
+  }
+  ansver3: {
+    text: string
+    isCorrect: boolean
+  }
+  ansver4: {
+    text: string
+    isCorrect: boolean
+  }
+}
 interface TriviaRound {
   question: string
-  ansvers: {
-    ansver1: {
-      text: string
-      isCorrect: boolean
-    }
-    ansver2: {
-      text: string
-      isCorrect: boolean
-    }
-    ansver3: {
-      text: string
-      isCorrect: boolean
-    }
-    ansver4: {
-      text: string
-      isCorrect: boolean
-    }
-  }
+  ansvers: TriviaRoundAnsvers
   reward: number
   winnersCount: number
 }
@@ -59,41 +60,63 @@ const Trivia = ({ name }: { name: string }) => {
   const [createTriviaStage, setCreateTriviaStage] = useState<number>(1)
   const [questionsStage, setQuestionsStage] = useState<number>(0)
 
+  const initialFormErrors = {
+    question: '',
+    ansvers: '',
+    reward: '',
+    winnersCount: ''
+  }
+
+  const [formErrors, setFormErrors] = useState(initialFormErrors)
+
   const createGame = () => {
     setIsCreateGamePopupOpen(true)
   }
 
   const validateQuestionForm = (form: TriviaRound) => {
     if (form.question === '') {
-      console.log('error questions:', form.question)
+      setFormErrors((prev) => {
+        return { ...prev, question: 'The question field must not be empty.' }
+      })
       return false
     }
 
     if (form.reward === 0) {
-      console.log('error reward:', form.reward)
+      setFormErrors((prev) => {
+        return { ...prev, reward: 'The reward field must not be zero.' }
+      })
       return false
     }
 
     if (form.winnersCount === 0) {
-      console.log('error winnersCount:', form.winnersCount)
+      setFormErrors((prev) => {
+        return { ...prev, winnersCount: 'The winnersCount field must not be zero.' }
+      })
       return false
     }
 
     const ansvers = Object.values(form.ansvers)
-    const correctAnsvers = ansvers.filter(a => a.isCorrect)
-    if (correctAnsvers.length > 1 || correctAnsvers.length === 0) {
-      console.log('correctAnsvers.length', correctAnsvers.length)
+
+    const emptyAnsvers = ansvers.filter(ansver => ansver.text === '')
+    if (emptyAnsvers.length !== 0) {
+      setFormErrors((prev) => {
+        return { ...prev, ansvers: 'All ansvers fields must not be empty.' }
+      })
       return false
     }
 
-    const emptyAnsvers = ansvers.filter(ansver => ansver.text === '')
+    const correctAnsvers = ansvers.filter(a => a.isCorrect)
+    if (correctAnsvers.length > 1 || correctAnsvers.length === 0) {
+      setFormErrors((prev) => {
+        return { ...prev, ansvers: 'Please choose one correct answer.' }
+      })
+      return false
+    }
 
-    return emptyAnsvers.length === 0
+    return true
   }
 
-  const resetAllAnsvers = (ansvers: { ansver1: { text: string, isCorrect: boolean }, ansver2: { text: string, isCorrect: boolean }, ansver3: { text: string, isCorrect: boolean }, ansver4: { text: string, isCorrect: boolean } }) => {
-    console.log('ansvers', ansvers)
-
+  const resetAllAnsvers = (ansvers: TriviaRoundAnsvers) => {
     for (const ansver in ansvers) {
       ansvers[ansver].isCorrect = false
     }
@@ -259,6 +282,17 @@ const Trivia = ({ name }: { name: string }) => {
           return (
               <div className={`${index + 1 === questionsStage ? 'flex flex-col' : 'hidden'}`} key={index}>
                 <h4 className='text-white uppercase text-2xl text-center w-full mb-10'>Question {questionsStage}/{newTriviaGame.questions.length}</h4>
+                <div className='text-red-400'>
+                  {Object.keys(formErrors).map((fieldName, i) => {
+                    if (formErrors[fieldName].length > 0) {
+                      return (
+                        <p key={i}>{formErrors[fieldName]}</p>
+                      )
+                    } else {
+                      return ''
+                    }
+                  })}
+                </div>
                 <div className='grid grid-cols-2 gap-5'>
                   <div className='col-span-2'>
                     <InputWithLabel
@@ -270,6 +304,7 @@ const Trivia = ({ name }: { name: string }) => {
                           questionsArray[index].question = value
                           return { ...prev, questions: questionsArray }
                         })
+                        setFormErrors(initialFormErrors)
                       }}
                       type='text'
                       label='Question'
@@ -286,6 +321,7 @@ const Trivia = ({ name }: { name: string }) => {
                           questionsArray[index].ansvers.ansver1.text = value
                           return { ...prev, questions: questionsArray }
                         })
+                        setFormErrors(initialFormErrors)
                       }}
                       type='text'
                       label='Answer 1'
@@ -319,6 +355,7 @@ const Trivia = ({ name }: { name: string }) => {
                           questionsArray[index].ansvers.ansver2.text = value
                           return { ...prev, questions: questionsArray }
                         })
+                        setFormErrors(initialFormErrors)
                       }}
                       type='text'
                       label='Answer 2'
@@ -352,6 +389,7 @@ const Trivia = ({ name }: { name: string }) => {
                           questionsArray[index].ansvers.ansver3.text = value
                           return { ...prev, questions: questionsArray }
                         })
+                        setFormErrors(initialFormErrors)
                       }}
                       type='text'
                       label='Answer 3'
@@ -385,6 +423,7 @@ const Trivia = ({ name }: { name: string }) => {
                           questionsArray[index].ansvers.ansver4.text = value
                           return { ...prev, questions: questionsArray }
                         })
+                        setFormErrors(initialFormErrors)
                       }}
                       type='text'
                       label='Answer 4'
@@ -418,6 +457,7 @@ const Trivia = ({ name }: { name: string }) => {
                           questionsArray[index].reward = value
                           return { ...prev, questions: questionsArray }
                         })
+                        setFormErrors(initialFormErrors)
                       }}
                       type='number'
                       label='Reward'
@@ -433,6 +473,7 @@ const Trivia = ({ name }: { name: string }) => {
                           questionsArray[index].winnersCount = value
                           return { ...prev, questions: questionsArray }
                         })
+                        setFormErrors(initialFormErrors)
                       }}
                       type='number'
                       label='Amount of Winners'
@@ -578,7 +619,9 @@ const Trivia = ({ name }: { name: string }) => {
         </div>
       </div>
       {isCreateGamePopupOpen
-        ? <PopupWrapper>
+        ? <PopupWrapper
+            closePopup={() => setIsCreateGamePopupOpen(false)}
+          >
             {createGamePopup()}
         </PopupWrapper>
         : null}

@@ -1,4 +1,4 @@
-const PopupWrapper = (props: any) => {
+const PopupWrapper = ({ children, closePopup }: { children: JSX.Element | JSX.Element[] | undefined, closePopup: Function }) => {
   return (
     <div className='fixed flex justify-center items-center left-0 top-0 w-full h-screen bg-black bg-opacity-30'>
         <div
@@ -9,7 +9,19 @@ const PopupWrapper = (props: any) => {
             backdropFilter: 'blur(20px)',
             borderRadius: '5px'
           }}>
-            {props.children}
+            <div className='flex justify-end'>
+              <button
+                type='button'
+                className='rounded-md p-2 text-gray-8 hover:text-gray-6 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500'
+                onClick={() => closePopup()}
+              >
+              <span className='sr-only'>Close menu</span>
+              <svg className='h-6 w-6' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' aria-hidden='true'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M6 18L18 6M6 6l12 12'/>
+              </svg>
+            </button>
+            </div>
+            {children}
           </div>
       </div>
   )
