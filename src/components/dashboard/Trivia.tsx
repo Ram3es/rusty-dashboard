@@ -74,6 +74,10 @@ const Trivia = ({ name }: { name: string }) => {
   }
 
   const validateQuestionForm = (form: TriviaRound) => {
+    const ansvers = Object.values(form.ansvers)
+    const emptyAnsvers = ansvers.filter(ansver => ansver.text === '')
+    const correctAnsvers = ansvers.filter(a => a.isCorrect)
+
     if (form.question === '') {
       setFormErrors((prev) => {
         return { ...prev, question: 'The question field must not be empty.' }
@@ -95,9 +99,6 @@ const Trivia = ({ name }: { name: string }) => {
       return false
     }
 
-    const ansvers = Object.values(form.ansvers)
-
-    const emptyAnsvers = ansvers.filter(ansver => ansver.text === '')
     if (emptyAnsvers.length !== 0) {
       setFormErrors((prev) => {
         return { ...prev, ansvers: 'All ansvers fields must not be empty.' }
@@ -105,7 +106,6 @@ const Trivia = ({ name }: { name: string }) => {
       return false
     }
 
-    const correctAnsvers = ansvers.filter(a => a.isCorrect)
     if (correctAnsvers.length > 1 || correctAnsvers.length === 0) {
       setFormErrors((prev) => {
         return { ...prev, ansvers: 'Please choose one correct answer.' }
