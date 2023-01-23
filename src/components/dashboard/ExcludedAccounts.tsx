@@ -77,13 +77,13 @@ const ExcludedAccounts = ({ name }: { name: string }) => {
         <div className="flex w-full justify-between items-end gap-4" style={{ width: 'calc(100% - 60px)' }}>
           <div className='w-full'>
             <InputWithLabel
-            label="Acount"
-            type="text"
-            value={state.account}
-            name="account"
-            changeFunction={updateCode}
-            placeholder="Steam 64 / Name"
-          />
+              label="Acount"
+              type="text"
+              value={state.account}
+              name="account"
+              changeFunction={updateCode}
+              placeholder="Steam 64 / Name"
+            />
           </div>
           <div className='w-10'>
             <Button text='Add' submitFunction={codeSubmit} />
