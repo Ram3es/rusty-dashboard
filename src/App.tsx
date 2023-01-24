@@ -9,7 +9,7 @@ import DashboardIcon from './components/icons/DashboardIcon'
 import UsersIcon from './components/icons/UsersIcon'
 import { User } from './types/User'
 import RoutersContainer from './components/RoutersContainer'
-import Store from './store/globalStatisticStore'
+import Store from './store/GlobalStatisticStore'
 
 const socket = io(API_URLS.API_URL, {
   transports: ['websocket', 'polling'],

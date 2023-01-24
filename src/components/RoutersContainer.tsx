@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Dashboard from '../routes/Dashboard'
 import Users from '../routes/Users'
-import { Context } from '../store/globalStatisticStore'
+import { Context } from '../store/GlobalStatisticStore'
 
 const RoutersContainer = ({ socket }: { socket: any }) => {
   const [state, dispatch] = useContext(Context)

@@ -12,8 +12,7 @@ import InputWithLabel from '../base/InputWithLabel'
 
 dayjs.extend(relativeTime)
 
-interface TriviaRound {
-  question: string
+interface TriviaRoundAnsvers {
   ansver1: {
     text: string
     isCorrect: boolean
@@ -30,6 +29,10 @@ interface TriviaRound {
     text: string
     isCorrect: boolean
   }
+}
+interface TriviaRound {
+  question: string
+  ansvers: TriviaRoundAnsvers
   reward: number
   winnersCount: number
 }
@@ -57,8 +60,66 @@ const Trivia = ({ name }: { name: string }) => {
   const [createTriviaStage, setCreateTriviaStage] = useState<number>(1)
   const [questionsStage, setQuestionsStage] = useState<number>(0)
 
+  const initialFormErrors = {
+    question: '',
+    ansvers: '',
+    reward: '',
+    winnersCount: ''
+  }
+
+  const [formErrors, setFormErrors] = useState(initialFormErrors)
+
   const createGame = () => {
     setIsCreateGamePopupOpen(true)
+  }
+
+  const validateQuestionForm = (form: TriviaRound) => {
+    const ansvers = Object.values(form.ansvers)
+    const emptyAnsvers = ansvers.filter(ansver => ansver.text === '')
+    const correctAnsvers = ansvers.filter(a => a.isCorrect)
+
+    if (form.question === '') {
+      setFormErrors((prev) => {
+        return { ...prev, question: 'The question field must not be empty.' }
+      })
+      return false
+    }
+
+    if (form.reward === 0) {
+      setFormErrors((prev) => {
+        return { ...prev, reward: 'The reward field must not be zero.' }
+      })
+      return false
+    }
+
+    if (form.winnersCount === 0) {
+      setFormErrors((prev) => {
+        return { ...prev, winnersCount: 'The winnersCount field must not be zero.' }
+      })
+      return false
+    }
+
+    if (emptyAnsvers.length !== 0) {
+      setFormErrors((prev) => {
+        return { ...prev, ansvers: 'All ansvers fields must not be empty.' }
+      })
+      return false
+    }
+
+    if (correctAnsvers.length > 1 || correctAnsvers.length === 0) {
+      setFormErrors((prev) => {
+        return { ...prev, ansvers: 'Please choose one correct answer.' }
+      })
+      return false
+    }
+
+    return true
+  }
+
+  const resetAllAnsvers = (ansvers: TriviaRoundAnsvers) => {
+    for (const ansver in ansvers) {
+      ansvers[ansver].isCorrect = false
+    }
   }
 
   const formatDate = (date: Date) => {
@@ -96,9 +157,9 @@ const Trivia = ({ name }: { name: string }) => {
   }, [scaduleTime])
 
   const foundCorrectAnsver = (triviaGame: TriviaRound) => {
-    const correctKey: string | undefined = Object.keys(triviaGame).find((key: string) => triviaGame[key].isCorrect === true)
+    const correctKey: string | undefined = Object.keys(triviaGame.ansvers).find((key: string) => triviaGame.ansvers[key].isCorrect === true)
     console.log(correctKey)
-    return (correctKey != null) ? triviaGame[correctKey] : undefined
+    return (correctKey != null) ? triviaGame.ansvers[correctKey] : undefined
   }
 
   const triviaGamesSubmit = () => {
@@ -128,21 +189,23 @@ const Trivia = ({ name }: { name: string }) => {
                 for (let i = 0; i < value; i++) {
                   triviaQuestions.push({
                     question: '',
-                    ansver1: {
-                      text: '',
-                      isCorrect: false
-                    },
-                    ansver2: {
-                      text: '',
-                      isCorrect: false
-                    },
-                    ansver3: {
-                      text: '',
-                      isCorrect: false
-                    },
-                    ansver4: {
-                      text: '',
-                      isCorrect: false
+                    ansvers: {
+                      ansver1: {
+                        text: '',
+                        isCorrect: false
+                      },
+                      ansver2: {
+                        text: '',
+                        isCorrect: false
+                      },
+                      ansver3: {
+                        text: '',
+                        isCorrect: false
+                      },
+                      ansver4: {
+                        text: '',
+                        isCorrect: false
+                      }
                     },
                     reward: 0,
                     winnersCount: 0
@@ -156,7 +219,11 @@ const Trivia = ({ name }: { name: string }) => {
             />
             <div className='mt-10 flex justify-center items-center gap-4'>
               <Button color='gray' text='Back' submitFunction={() => setIsCreateGamePopupOpen(false)} />
-              <Button text='Next' submitFunction={() => setCreateTriviaStage(2)} />
+              <Button text='Next' submitFunction={() => {
+                if (newTriviaGame.rounds > 0) {
+                  setCreateTriviaStage(2)
+                }
+              }} />
             </div>
           </div>
         )
@@ -215,6 +282,17 @@ const Trivia = ({ name }: { name: string }) => {
           return (
               <div className={`${index + 1 === questionsStage ? 'flex flex-col' : 'hidden'}`} key={index}>
                 <h4 className='text-white uppercase text-2xl text-center w-full mb-10'>Question {questionsStage}/{newTriviaGame.questions.length}</h4>
+                <div className='text-red-400'>
+                  {Object.keys(formErrors).map((fieldName, i) => {
+                    if (formErrors[fieldName].length > 0) {
+                      return (
+                        <p key={i}>{formErrors[fieldName]}</p>
+                      )
+                    } else {
+                      return ''
+                    }
+                  })}
+                </div>
                 <div className='grid grid-cols-2 gap-5'>
                   <div className='col-span-2'>
                     <InputWithLabel
@@ -226,6 +304,7 @@ const Trivia = ({ name }: { name: string }) => {
                           questionsArray[index].question = value
                           return { ...prev, questions: questionsArray }
                         })
+                        setFormErrors(initialFormErrors)
                       }}
                       type='text'
                       label='Question'
@@ -234,14 +313,15 @@ const Trivia = ({ name }: { name: string }) => {
                   </div>
                   <div className='col-span-1 relative'>
                     <InputWithLabel
-                      value={newTriviaGame.questions[index].ansver1.text}
+                      value={newTriviaGame.questions[index].ansvers.ansver1.text}
                       name="scaduleDays"
                       changeFunction={(name: any, value: string) => {
                         setNewTriviaGema((prev) => {
                           const questionsArray = [...prev.questions]
-                          questionsArray[index].ansver1.text = value
+                          questionsArray[index].ansvers.ansver1.text = value
                           return { ...prev, questions: questionsArray }
                         })
+                        setFormErrors(initialFormErrors)
                       }}
                       type='text'
                       label='Answer 1'
@@ -249,12 +329,15 @@ const Trivia = ({ name }: { name: string }) => {
                     />
                     <div className='absolute right-0 top-0'>
                       <InputWithLabel
-                        value={newTriviaGame.questions[index].ansver1.isCorrect}
+                        value={newTriviaGame.questions[index].ansvers.ansver1.isCorrect}
                         name="scaduleDays"
                         changeFunction={(name: any, value: boolean) => {
                           setNewTriviaGema((prev) => {
                             const questionsArray = [...prev.questions]
-                            questionsArray[index].ansver1.isCorrect = value
+                            if (value) {
+                              resetAllAnsvers(questionsArray[index].ansvers)
+                            }
+                            questionsArray[index].ansvers.ansver1.isCorrect = value
                             return { ...prev, questions: questionsArray }
                           })
                         }}
@@ -264,14 +347,15 @@ const Trivia = ({ name }: { name: string }) => {
                   </div>
                   <div className='col-span-1 relative'>
                     <InputWithLabel
-                      value={newTriviaGame.questions[index].ansver2.text}
+                      value={newTriviaGame.questions[index].ansvers.ansver2.text}
                       name="scaduleDays"
                       changeFunction={(name: any, value: string) => {
                         setNewTriviaGema((prev) => {
                           const questionsArray = [...prev.questions]
-                          questionsArray[index].ansver2.text = value
+                          questionsArray[index].ansvers.ansver2.text = value
                           return { ...prev, questions: questionsArray }
                         })
+                        setFormErrors(initialFormErrors)
                       }}
                       type='text'
                       label='Answer 2'
@@ -279,12 +363,15 @@ const Trivia = ({ name }: { name: string }) => {
                     />
                     <div className='absolute right-0 top-0'>
                       <InputWithLabel
-                        value={newTriviaGame.questions[index].ansver2.isCorrect}
+                        value={newTriviaGame.questions[index].ansvers.ansver2.isCorrect}
                         name="scaduleDays"
                         changeFunction={(name: any, value: boolean) => {
                           setNewTriviaGema((prev) => {
                             const questionsArray = [...prev.questions]
-                            questionsArray[index].ansver2.isCorrect = value
+                            if (value) {
+                              resetAllAnsvers(questionsArray[index].ansvers)
+                            }
+                            questionsArray[index].ansvers.ansver2.isCorrect = value
                             return { ...prev, questions: questionsArray }
                           })
                         }}
@@ -294,14 +381,15 @@ const Trivia = ({ name }: { name: string }) => {
                   </div>
                   <div className='col-span-1 relative'>
                     <InputWithLabel
-                      value={newTriviaGame.questions[index].ansver3.text}
+                      value={newTriviaGame.questions[index].ansvers.ansver3.text}
                       name="scaduleDays"
                       changeFunction={(name: any, value: string) => {
                         setNewTriviaGema((prev) => {
                           const questionsArray = [...prev.questions]
-                          questionsArray[index].ansver3.text = value
+                          questionsArray[index].ansvers.ansver3.text = value
                           return { ...prev, questions: questionsArray }
                         })
+                        setFormErrors(initialFormErrors)
                       }}
                       type='text'
                       label='Answer 3'
@@ -309,12 +397,15 @@ const Trivia = ({ name }: { name: string }) => {
                     />
                     <div className='absolute right-0 top-0'>
                       <InputWithLabel
-                        value={newTriviaGame.questions[index].ansver3.isCorrect}
+                        value={newTriviaGame.questions[index].ansvers.ansver3.isCorrect}
                         name="scaduleDays"
                         changeFunction={(name: any, value: boolean) => {
                           setNewTriviaGema((prev) => {
                             const questionsArray = [...prev.questions]
-                            questionsArray[index].ansver3.isCorrect = value
+                            if (value) {
+                              resetAllAnsvers(questionsArray[index].ansvers)
+                            }
+                            questionsArray[index].ansvers.ansver3.isCorrect = value
                             return { ...prev, questions: questionsArray }
                           })
                         }}
@@ -324,14 +415,15 @@ const Trivia = ({ name }: { name: string }) => {
                   </div>
                   <div className='col-span-1 relative'>
                     <InputWithLabel
-                      value={newTriviaGame.questions[index].ansver4.text}
+                      value={newTriviaGame.questions[index].ansvers.ansver4.text}
                       name="scaduleDays"
                       changeFunction={(name: any, value: string) => {
                         setNewTriviaGema((prev) => {
                           const questionsArray = [...prev.questions]
-                          questionsArray[index].ansver4.text = value
+                          questionsArray[index].ansvers.ansver4.text = value
                           return { ...prev, questions: questionsArray }
                         })
+                        setFormErrors(initialFormErrors)
                       }}
                       type='text'
                       label='Answer 4'
@@ -339,12 +431,15 @@ const Trivia = ({ name }: { name: string }) => {
                     />
                     <div className='absolute right-0 top-0'>
                       <InputWithLabel
-                        value={newTriviaGame.questions[index].ansver4.isCorrect}
+                        value={newTriviaGame.questions[index].ansvers.ansver4.isCorrect}
                         name="scaduleDays"
                         changeFunction={(name: any, value: boolean) => {
                           setNewTriviaGema((prev) => {
                             const questionsArray = [...prev.questions]
-                            questionsArray[index].ansver4.isCorrect = value
+                            if (value) {
+                              resetAllAnsvers(questionsArray[index].ansvers)
+                            }
+                            questionsArray[index].ansvers.ansver4.isCorrect = value
                             return { ...prev, questions: questionsArray }
                           })
                         }}
@@ -362,6 +457,7 @@ const Trivia = ({ name }: { name: string }) => {
                           questionsArray[index].reward = value
                           return { ...prev, questions: questionsArray }
                         })
+                        setFormErrors(initialFormErrors)
                       }}
                       type='number'
                       label='Reward'
@@ -377,6 +473,7 @@ const Trivia = ({ name }: { name: string }) => {
                           questionsArray[index].winnersCount = value
                           return { ...prev, questions: questionsArray }
                         })
+                        setFormErrors(initialFormErrors)
                       }}
                       type='number'
                       label='Amount of Winners'
@@ -391,10 +488,12 @@ const Trivia = ({ name }: { name: string }) => {
                     }
                   }} />
                   <Button text='Next' submitFunction={() => {
-                    if (questionsStage === newTriviaGame.questions.length) {
-                      setCreateTriviaStage(4)
-                    } else {
-                      setQuestionsStage(prev => prev + 1)
+                    if (validateQuestionForm(newTriviaGame.questions[0])) {
+                      if (questionsStage === newTriviaGame.questions.length) {
+                        setCreateTriviaStage(4)
+                      } else {
+                        setQuestionsStage(prev => prev + 1)
+                      }
                     }
                   }
                   } />
@@ -520,7 +619,9 @@ const Trivia = ({ name }: { name: string }) => {
         </div>
       </div>
       {isCreateGamePopupOpen
-        ? <PopupWrapper>
+        ? <PopupWrapper
+            closePopup={() => setIsCreateGamePopupOpen(false)}
+          >
             {createGamePopup()}
         </PopupWrapper>
         : null}
