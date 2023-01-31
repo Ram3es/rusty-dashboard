@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import AffiliateMainItemStatistics from '../../components/affiliate/AffiliateMainItemStatistics'
+// import Graph from '../../components/base/Graph'
 import UserSearch from '../../components/users/UserSearch'
 
 const Affiliateitem = () => {
@@ -22,6 +23,9 @@ const Affiliateitem = () => {
         </div>
         <div className="col-span-6 flex flex-col rounded-lg bg-dark-1 px-8 py-10">
           <AffiliateMainItemStatistics />
+        </div>
+        <div className="col-span-6 2xl:col-span-3 rounded-lg bg-dark-1">
+          {/* <Graph timePeriodOptions={timePeriodOptions} currentTimePeriod={depositDataStatisticPeriod} changeTimePeriod={setDepositDataStatisticPeriod} data={dataDeposit.data} names={[{ name: 'Deposit', value: 1000, color: 'green' }]} labels={dataDeposit.labels} /> */}
         </div>
       </div>
     </>

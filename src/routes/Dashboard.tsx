@@ -29,7 +29,7 @@ import DiceIcon from '../components/icons/DiceIcon'
 import StatisticIcon from '../components/icons/StatisticIcon'
 import { StatisticCartItem } from '../types/StatisticCartItem'
 import { TimeOption } from '../types/TimeOption'
-import { GamesData } from '../types/GamesData'
+// import { GamesData } from '../types/GamesData'
 
 const timePeriodOptions: TimeOption[] = [
   { id: 1, name: 'Today', unavailable: false },
