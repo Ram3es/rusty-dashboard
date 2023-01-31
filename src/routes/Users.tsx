@@ -1,4 +1,4 @@
-import UserMainStatistic from '../components/users/UserMainStatistic'
+import MainStatistic from '../components/users/MainStatistic'
 import UserSearch from '../components/users/UserSearch'
 
 const timePeriodOptions = [
@@ -20,7 +20,7 @@ const Users = () => {
           <UserSearch submitFn={foundUser} />
         </div>
         <div className="col-span-6 flex flex-col rounded-lg bg-dark-1 px-8 py-10">
-          <UserMainStatistic timePeriodOptions={timePeriodOptions}/>
+          <MainStatistic timePeriodOptions={timePeriodOptions} />
         </div>
       </div>
     </>

@@ -21,7 +21,7 @@ const socket = io(API_URLS.API_URL, {
 })
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: <DashboardIcon iconCalsses='w-4 h-4' /> },
+  { name: 'Home', href: '/', icon: <DashboardIcon iconCalsses='w-4 h-4' /> },
   { name: 'Users', href: '/users', icon: <UsersIcon iconCalsses='h-4' /> },
   { name: 'Staff', href: '/staff', icon: <StaffIcon iconCalsses='w-4' /> },
   { name: 'Affiliates', href: '/affiliates', icon: <AffiliatesIcon iconCalsses='w-4' /> },

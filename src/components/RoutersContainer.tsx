@@ -1,6 +1,7 @@
 import { useContext, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import Affiliates from '../routes/Affiliates'
+import Affiliateitem from '../routes/Affiliate/Affiliateitem'
+import Affiliates from '../routes/Affiliate/Affiliates'
 import Bots from '../routes/Bots'
 import Dashboard from '../routes/Dashboard'
 import Sponsee from '../routes/Sponsee'
@@ -28,6 +29,7 @@ const RoutersContainer = ({ socket }: { socket: any }) => {
         <Route path="/users" element={<Users />} />
         <Route path="/staff" element={<Staff />} />
         <Route path="/affiliates" element={<Affiliates />} />
+        <Route path="/affiliates/:name" element={<Affiliateitem />} />
         <Route path="/bots" element={<Bots />} />
         <Route path="/sponsee" element={<Sponsee />} />
       </Routes>

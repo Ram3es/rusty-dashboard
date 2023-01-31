@@ -2,7 +2,7 @@ import { Listbox } from '@headlessui/react'
 import { useState } from 'react'
 import ArrowIcon from '../icons/ArrowIcon'
 
-const UserMainStatistic = ({ timePeriodOptions }: { timePeriodOptions: any[] }) => {
+const MainStatistic = ({ timePeriodOptions }: { timePeriodOptions: any[] }) => {
   const [selectedGeneralStatisticPeriod, setSelectedGeneralStatisticPeriod] = useState(timePeriodOptions[0])
 
   return (
@@ -41,4 +41,4 @@ const UserMainStatistic = ({ timePeriodOptions }: { timePeriodOptions: any[] }) 
   )
 }
 
-export default UserMainStatistic
+export default MainStatistic
