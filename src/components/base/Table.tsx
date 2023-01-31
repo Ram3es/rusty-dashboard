@@ -1,7 +1,7 @@
 import { useTable, useSortBy, useFilters } from 'react-table'
 import { Header } from '../../types/Table'
 
-const Table = ({ columns, data, isHeaderHidden = false }: { columns: Header[], data: Array<Record<string, any>>, isHeaderHidden?: boolean }) => {
+const Table = ({ columns, data, isHeaderHidden = false }: { columns: Header[], data: Array<Record<string, any>>, isHeaderHidden?: boolean, searchObj?: { col8: string | number } }) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -13,12 +13,12 @@ const Table = ({ columns, data, isHeaderHidden = false }: { columns: Header[], d
   return (
     <table {...getTableProps()} className="border-separate border-spacing-y-2">
       <thead className={`${isHeaderHidden ? 'hidden' : ''}`}>
-        {headerGroups.map((headerGroup, index) => (
+        {headerGroups.map((headerGroup, index: number) => (
           <tr
             {...headerGroup.getHeaderGroupProps()}
             key={`head-row-${index}`}
           >
-            {headerGroup.headers.map((column, index) => (
+            {headerGroup.headers.map((column: any, index: number) => (
               <th
                 {...column.getHeaderProps(column.getSortByToggleProps())}
                 key={`head-col-${index}`}
@@ -44,7 +44,7 @@ const Table = ({ columns, data, isHeaderHidden = false }: { columns: Header[], d
         ))}
       </thead>
       <tbody {...getTableBodyProps()}>
-        {rows.map((row, index) => {
+        {rows.map((row, index: number) => {
           prepareRow(row)
           return (
             <tr
@@ -52,7 +52,7 @@ const Table = ({ columns, data, isHeaderHidden = false }: { columns: Header[], d
               key={`body-row-${index}`}
               className="bg-dark-1f"
             >
-              {row.cells.map((cell, index) => {
+              {row.cells.map((cell, index: number) => {
                 return (
                   <td
                     {...cell.getCellProps()}

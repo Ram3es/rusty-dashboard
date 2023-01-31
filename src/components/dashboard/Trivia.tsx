@@ -6,7 +6,7 @@ import Image from '../../assets/RustylootLogo.png'
 import SteamIcon from '../icons/SteamIcon'
 import CloseIcon from '../icons/CloseIcon'
 import ButtonsToggle from '../base/ButtonsToggle'
-import dayjs from 'dayjs'
+import * as dayjs from 'dayjs'
 import PopupWrapper from '../base/PopupWrapper'
 import InputWithLabel from '../base/InputWithLabel'
 
@@ -59,8 +59,13 @@ const Trivia = ({ name }: { name: string }) => {
   })
   const [createTriviaStage, setCreateTriviaStage] = useState<number>(1)
   const [questionsStage, setQuestionsStage] = useState<number>(0)
-
-  const initialFormErrors = {
+  interface FormErrors {
+    question: string
+    ansvers: string
+    reward: string
+    winnersCount: string
+  }
+  const initialFormErrors: FormErrors = {
     question: '',
     ansvers: '',
     reward: '',
@@ -117,8 +122,8 @@ const Trivia = ({ name }: { name: string }) => {
   }
 
   const resetAllAnsvers = (ansvers: TriviaRoundAnsvers) => {
-    for (const ansver in ansvers) {
-      ansvers[ansver].isCorrect = false
+    for (const ansverKey of Object.keys(ansvers)) {
+      ansvers[ansverKey as keyof TriviaRoundAnsvers].isCorrect = false
     }
   }
 
@@ -157,9 +162,9 @@ const Trivia = ({ name }: { name: string }) => {
   }, [scaduleTime])
 
   const foundCorrectAnsver = (triviaGame: TriviaRound) => {
-    const correctKey: string | undefined = Object.keys(triviaGame.ansvers).find((key: string) => triviaGame.ansvers[key].isCorrect === true)
+    const correctKey: string | undefined = Object.keys(triviaGame.ansvers).find((key: string) => triviaGame.ansvers[key as keyof TriviaRoundAnsvers].isCorrect)
     console.log(correctKey)
-    return (correctKey != null) ? triviaGame.ansvers[correctKey] : undefined
+    return (correctKey != null) ? triviaGame.ansvers[correctKey as keyof TriviaRoundAnsvers] : undefined
   }
 
   const triviaGamesSubmit = () => {
@@ -284,9 +289,9 @@ const Trivia = ({ name }: { name: string }) => {
                 <h4 className='text-white uppercase text-2xl text-center w-full mb-10'>Question {questionsStage}/{newTriviaGame.questions.length}</h4>
                 <div className='text-red-400'>
                   {Object.keys(formErrors).map((fieldName, i) => {
-                    if (formErrors[fieldName].length > 0) {
+                    if (formErrors[fieldName as keyof FormErrors].length > 0) {
                       return (
-                        <p key={i}>{formErrors[fieldName]}</p>
+                        <p key={i}>{formErrors[fieldName as keyof FormErrors]}</p>
                       )
                     } else {
                       return ''
@@ -523,7 +528,7 @@ const Trivia = ({ name }: { name: string }) => {
                       <tr className='bg-dark-1c text-gray-6' key={index}>
                         <td className='px-4 py-3'>#{index + 1}</td>
                         <td className='px-4 py-3'>{item.question}</td>
-                        <td className='px-4 py-3'>{foundCorrectAnsver(item).text}</td>
+                        <td className='px-4 py-3'>{foundCorrectAnsver(item)?.text}</td>
                         <td className='px-4 py-3 text-white'>{item.reward}</td>
                         <td className='px-4 py-3'>{item.winnersCount}</td>
                         <td

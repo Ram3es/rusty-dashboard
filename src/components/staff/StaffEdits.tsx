@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import Table from '../base/Table'
-import dayjs from 'dayjs'
+import * as dayjs from 'dayjs'
 import { User } from '../../types/User'
 import CoinceImage from '../../assets/coins.png'
 import InputWithLabel from '../base/InputWithLabel'
@@ -91,7 +91,7 @@ const StaffEdits = ({ name }: { name: string }) => {
         col7: { value: 1200, type: 'Edit Balance' },
         col8: new Date('2023-01-12T16:51:16.919Z')
       }
-    ].filter((i) => i.col3.includes(searchObj.col3)),
+    ].filter((i) => i.col3.includes(searchObj.col3.toString())),
     [searchObj.col3]
   )
 

@@ -10,6 +10,7 @@ import Users from '../routes/Users'
 import { Context } from '../store/GlobalStatisticStore'
 
 const RoutersContainer = ({ socket }: { socket: any }) => {
+  /** @ts-expect-error */
   const [state, dispatch] = useContext(Context)
 
   useEffect(() => {
