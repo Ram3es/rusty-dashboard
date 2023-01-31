@@ -7,7 +7,7 @@ import ButtonsToggle from './ButtonsToggle'
 
 const graphVariants = ['line graph', 'bar chart']
 
-const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, name, labels }: { data: GraphData[], timePeriodOptions: any[], currentTimePeriod: any, changeTimePeriod: Function, name: string, labels: React.ReactElement[] }) => {
+const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, names, labels }: { data: GraphData[], timePeriodOptions: any[], currentTimePeriod: any, changeTimePeriod: Function, names: Array<{ name: string, value: number | string, color: string }>, labels: React.ReactElement[] }) => {
   const [menegedGraphData, setMenegedGraphData] = useState<object[]>()
   const [currentGraphVariant, setCurrentGraphVariant] = useState<string>(graphVariants[0])
   const [middlePercent, setMiddlePercent] = useState<string>('50%')
@@ -67,8 +67,14 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
       <div className='flex justify-between mb-9'>
         <div className='w-full flex justify-between'>
           <div className='flex items-center gap-5'>
-            <h4 className='text-white uppercase text-2xl'>{name}</h4>
-            <div className='text-green-39 text-2xl'>$13,298</div>
+            {names.map(name => {
+              return (
+                <div className='flex items-center gap-3' key={`title-${name.name}`}>
+                  <h4 className='text-white uppercase text-2xl'>{name.name}</h4>
+                  <div className='text-2xl' style={{ color: name.color }}>{name.value}</div>
+                </div>
+              )
+            })}
           </div>
           <div className='flex gap-4 relative'>
             <ButtonsToggle options={graphVariants} currentSelect={currentGraphVariant} peackFunction={setCurrentGraphVariant} />
@@ -107,8 +113,8 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
               <YAxis axisLine={false} tickLine={false} />
               {data[0]?.value.map((item, index) => {
                 return !isContainsNegativeVal
-                  ? <Bar key={`positive-${name}-${index}`} dataKey={`val${index}`} stackId="stack" fill={ item >= 0 ? data[0]?.colors[index].postitveColor ?? 'blue' : data[0]?.colors[index].negativeColor ?? 'red' } />
-                  : <Bar key={`negative-${name}-${index}`} dataKey={`val${index}`} shape={props => <CustomBar {...props} colorIndex={index} />} />
+                  ? <Bar key={`positive-${index}`} dataKey={`val${index}`} stackId="stack" fill={ item >= 0 ? data[0]?.colors[index].postitveColor ?? 'blue' : data[0]?.colors[index].negativeColor ?? 'red' } />
+                  : <Bar key={`negative-${index}`} dataKey={`val${index}`} shape={props => <CustomBar {...props} colorIndex={index} />} />
               })}
               <Tooltip cursor={false} wrapperStyle={{
                 outline: 'none'
@@ -126,7 +132,7 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
               <YAxis axisLine={false} tickLine={false} />
               <defs>
                 {data[0]?.value.map((item, index) => (
-                  <linearGradient key={`gradient-${name}-${index}`} id={`gradient-fill-${name}-${index}`} x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient key={`gradient-${index}`} id={`gradient-fill-${index}`} x1="0" y1="0" x2="0" y2="1">
                     {isContainsNegativeVal
                       ? <>
                         <stop
@@ -161,10 +167,10 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
               </defs>
               {data[0]?.value.map((item, index) => (
                 <Area
-                  key={`gradient-area-${name}-${index}`}
+                  key={`gradient-area-${index}`}
                   type="linear"
                   dataKey={`val${index}`}
-                  fill={`url(#gradient-fill-${name}-${index})`}
+                  fill={`url(#gradient-fill-${index})`}
                   stroke={ data[0]?.colors[index].postitveColor ?? 'blue' } />
               ))}
               <Tooltip wrapperStyle={{

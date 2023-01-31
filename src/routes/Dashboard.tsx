@@ -17,7 +17,7 @@ import Trivia from '../components/dashboard/Trivia'
 import Trades from '../components/dashboard/Trades'
 import CoinFlipIcon from '../components/icons/CoinFlipIcon'
 import JackpotIcon from '../components/icons/JackpotIcon'
-import MinesIson from '../components/icons/MinesIson'
+import MinesIcon from '../components/icons/MinesIcon'
 import PlinkoIcon from '../components/icons/PlinkoIcon'
 import PvpMinesIcon from '../components/icons/PvpMinesIcon'
 import UpgraderIcon from '../components/icons/UpgraderIcon'
@@ -110,7 +110,7 @@ const Dashboard = ({ data }: { data: any }) => {
       },
       {
         name: '16.11',
-        value: [10, 1000, 500],
+        value: [60, 1000, 500],
         colors: [
           {
             postitveColor: '#E4164A'
@@ -125,7 +125,7 @@ const Dashboard = ({ data }: { data: any }) => {
       },
       {
         name: '17.11',
-        value: [0, 800, 0],
+        value: [50, 800, 50],
         colors: [
           {
             postitveColor: '#E4164A'
@@ -195,7 +195,7 @@ const Dashboard = ({ data }: { data: any }) => {
       case 'jackpot':
         return <JackpotIcon iconCalsses='w-6' />
       case 'mines':
-        return <MinesIson iconCalsses='w-6' />
+        return <MinesIcon iconCalsses='w-6' />
       case 'plinko':
         return <PlinkoIcon iconCalsses='w-6' />
       case 'pvp-mines':
@@ -393,10 +393,10 @@ const Dashboard = ({ data }: { data: any }) => {
           <GamesStatistic periodOptions={timePeriodOptions} currentGame={game} setCurrentGame={setGame} />
         </div>
         <div className="col-span-6 2xl:col-span-3 rounded-lg bg-dark-1">
-          <Graph timePeriodOptions={timePeriodOptions} currentTimePeriod={depositDataStatisticPeriod} changeTimePeriod={setDepositDataStatisticPeriod} data={dataDeposit.data} name={dataDeposit.name} labels={dataDeposit.labels} />
+          <Graph timePeriodOptions={timePeriodOptions} currentTimePeriod={depositDataStatisticPeriod} changeTimePeriod={setDepositDataStatisticPeriod} data={dataDeposit.data} names={[{ name: dataDeposit.name, value: 1000, color: 'green' }]} labels={dataDeposit.labels} />
         </div>
         <div className="col-span-6 2xl:col-span-3 rounded-lg bg-dark-1">
-          <Graph timePeriodOptions={timePeriodOptions} currentTimePeriod={depositDataStatisticPeriod} changeTimePeriod={setDepositDataStatisticPeriod} data={dataDeposit.data} name={'Deposit'} labels={dataDeposit.labels} />
+          <Graph timePeriodOptions={timePeriodOptions} currentTimePeriod={depositDataStatisticPeriod} changeTimePeriod={setDepositDataStatisticPeriod} data={dataDeposit.data} names={[{ name: 'Deposit', value: 1000, color: 'green' }]} labels={dataDeposit.labels} />
         </div>
         <div className="col-span-6 2xl:col-span-3 grid grid-cols-3 gap-6">
           <div className='col-span-2 rounded-lg bg-dark-1 px-8 py-10'>

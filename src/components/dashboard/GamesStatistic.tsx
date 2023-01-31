@@ -199,8 +199,8 @@ const GamesStatistic = ({ periodOptions, currentGame, setCurrentGame }: { period
         )}
       </div>
       <div className='flex flex-col justify-between'>
-        <Graph timePeriodOptions={periodOptions} currentTimePeriod={selectedPeriod} changeTimePeriod={setSelectedPeriod} data={dataWagers.data} name={dataWagers.name} labels={dataWagers.labels} />
-        <Graph timePeriodOptions={periodOptions} currentTimePeriod={selectedPeriod} changeTimePeriod={setSelectedPeriod} data={dataProfit.data} name={dataProfit.name} labels={dataProfit.labels} />
+        <Graph timePeriodOptions={periodOptions} currentTimePeriod={selectedPeriod} changeTimePeriod={setSelectedPeriod} data={dataWagers.data} names={[{ name: dataWagers.name, value: 1000, color: 'green' }]} labels={dataWagers.labels} />
+        <Graph timePeriodOptions={periodOptions} currentTimePeriod={selectedPeriod} changeTimePeriod={setSelectedPeriod} data={dataProfit.data} names={[{ name: dataProfit.name, value: 1000, color: 'green' }]} labels={dataProfit.labels} />
       </div>
     </div>
   )

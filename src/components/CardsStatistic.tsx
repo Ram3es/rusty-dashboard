@@ -1,15 +1,24 @@
 import { Listbox } from '@headlessui/react'
 import { StatisticCartItem } from '../types/StatisticCartItem'
 import { TimeOption } from '../types/TimeOption'
+import { User } from '../types/User'
 
 import StatisticCart from './base/StatisticCart'
 import ArrowIcon from './icons/ArrowIcon'
 
-const CardsStatistic = ({ title, periodOptions, selectedPeriod, changePeriod, items }: { title: string, periodOptions: TimeOption[], selectedPeriod: TimeOption, changePeriod: any, items: StatisticCartItem[] }) => {
+const CardsStatistic = ({ title, periodOptions, selectedPeriod, changePeriod, items, user }: { title?: string, periodOptions: TimeOption[], selectedPeriod: TimeOption, changePeriod: any, items: StatisticCartItem[], user?: User }) => {
   return (
     <>
       <div className="flex justify-between w-full mb-6">
-        <h3 className="uppercase text-2xl text-white">{title}</h3>
+        <div className='flex items-center gap-6'>
+          <h3 className="uppercase text-2xl text-white">{title}</h3>
+          {user !== undefined
+            ? <div className='flex items-center gap-3'>
+            <img className='rounded-full w-10' src={user.avatar} alt={user.name} />
+            <span className='text-gray-7 text-sm'>{user.name}</span>
+          </div>
+            : ''}
+        </div>
         <div className="relative">
           <Listbox value={selectedPeriod} onChange={changePeriod}>
             {({ open }) => (

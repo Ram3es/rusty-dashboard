@@ -1,5 +1,6 @@
 import { StatisticCartItem } from '../../types/StatisticCartItem'
 import CoinceImage from '../../assets/coins.png'
+import EditIcon from '../icons/EditIcon'
 
 const StatisticCart = ({ item }: { item: StatisticCartItem }) => {
   return (
@@ -21,6 +22,12 @@ const StatisticCart = ({ item }: { item: StatisticCartItem }) => {
           </span>
           {item.percent.toFixed(2)}%
         </div>}
+        {(item.canEdit ?? false)
+          ? <span className='text-gray-7 flex gap-2 px-2 py-1 rounded bg-dark-1f w-max' onClick={() => {
+            if (item.editFunction !== undefined) item.editFunction()
+          }
+        }><EditIcon iconCalsses="w-2" /> edit</span>
+          : ''}
       </div>
     </div>
   )
