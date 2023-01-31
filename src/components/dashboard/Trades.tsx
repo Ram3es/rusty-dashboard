@@ -5,7 +5,7 @@ import Image from '../../assets/RustylootLogo.png'
 import CoinceImage from '../../assets/coins.png'
 import ButtonsToggle from '../base/ButtonsToggle'
 import InputWithLabel from '../base/InputWithLabel'
-import dayjs from 'dayjs'
+import * as dayjs from 'dayjs'
 
 dayjs.extend(relativeTime)
 
@@ -16,7 +16,7 @@ const Trades = ({ name }: { name: string }) => {
     col8: ''
   })
 
-  const updateSearch = (name: string, value: string | number) => {
+  const updateSearch = (name: string, value: string) => {
     setSearchObj(() => {
       return { col8: value }
     })
@@ -72,7 +72,10 @@ const Trades = ({ name }: { name: string }) => {
           </div>
         </div>
       ))}
-      {items.length > 6 && <div className='w-8 h-8 bg-dark-1 flex justify-center items-center text-white text-sm rounded-full'>+{items.length - 6}</div>}
+      {items.length > 6 &&
+        <div className='w-8 h-8 bg-dark-1 flex justify-center items-center text-white text-sm rounded-full'>
+          +{items.length - 6}
+        </div>}
     </div>)
   }
 
@@ -174,7 +177,7 @@ const Trades = ({ name }: { name: string }) => {
         col7: '430',
         col8: '76561198880241741'
       }
-    ].filter((i) => i.col8.includes(searchObj.col8)),
+    ].filter((i) => i.col8.includes(searchObj.col8.toString())),
     [searchObj.col8]
   )
 

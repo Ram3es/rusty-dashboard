@@ -29,6 +29,7 @@ import DiceIcon from '../components/icons/DiceIcon'
 import StatisticIcon from '../components/icons/StatisticIcon'
 import { StatisticCartItem } from '../types/StatisticCartItem'
 import { TimeOption } from '../types/TimeOption'
+import { GamesData } from '../types/GamesData'
 
 const timePeriodOptions: TimeOption[] = [
   { id: 1, name: 'Today', unavailable: false },
@@ -41,7 +42,8 @@ const Dashboard = ({ data }: { data: any }) => {
   const [depositData, setDepositData] = useState<DepositBase[]>([])
   const [game, setGame] = useState<string>('jackpot')
   const [depositDataStatisticPeriod, setDepositDataStatisticPeriod] = useState(timePeriodOptions[0])
-  const [state, dispatch] = useContext(Context)
+  /** @ts-expect-error */
+  const [state] = useContext(Context)
   const [generalStatistic, setGeneralStatistic] = useState<StatisticCartItem[]>([])
   const [selectedGeneralStatisticPeriod, setSelectedGeneralStatisticPeriod] = useState(timePeriodOptions[0])
   // const [gamesStatistic, setGamesStatistic] = useState([])
