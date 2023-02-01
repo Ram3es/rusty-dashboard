@@ -1,10 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
-import dayjs from 'dayjs';
-
+import sortDataByDate from '../helpers/sotingByDate'
 import { Context } from '../store/GlobalStatisticStore'
 import CardsStatistic from '../components/CardsStatistic'
-import PipeChartWithTable from '../components/PipeChartWithTable'
-import { DepositBase } from '../types/Deposit'
 import GamesStatistic from '../components/dashboard/GamesStatistic'
 import Graph from '../components/base/Graph'
 import SkinsIcon from '../components/icons/SkinsIcon'
@@ -29,6 +26,7 @@ import DiceIcon from '../components/icons/DiceIcon'
 import StatisticIcon from '../components/icons/StatisticIcon'
 import { StatisticCartItem } from '../types/StatisticCartItem'
 import { TimeOption } from '../types/TimeOption'
+import DepositAndWithdrawPipeChart from '../components/dashboard/DepositAndWithdrawPipeChart'
 // import { GamesData } from '../types/GamesData'
 
 const timePeriodOptions: TimeOption[] = [
@@ -39,7 +37,6 @@ const timePeriodOptions: TimeOption[] = [
 ]
 
 const Dashboard = ({ data }: { data: any }) => {
-  const [depositData, setDepositData] = useState<DepositBase[]>([])
   const [game, setGame] = useState<string>('jackpot')
   const [depositDataStatisticPeriod, setDepositDataStatisticPeriod] = useState(timePeriodOptions[0])
   /** @ts-expect-error */
@@ -173,23 +170,6 @@ const Dashboard = ({ data }: { data: any }) => {
     ]
   }
 
-  useEffect(() => {
-    setDepositData([
-      {
-        name: 'skins',
-        value: 549.55
-      },
-      {
-        name: 'gift cards',
-        value: 3199.99
-      },
-      {
-        name: 'crypto',
-        value: 5233.31
-      }
-    ])
-  }, [data])
-
   const getGameIcon = (mode: string | undefined) => {
     switch (mode) {
       case 'coinflip':
@@ -208,58 +188,6 @@ const Dashboard = ({ data }: { data: any }) => {
         return <WheelIcon iconCalsses='w-6' />
       default:
         return undefined
-    }
-  }
-
-  const sortDataByDate = (timePeriod: string, data: any[]): { currentPeriod: any[], previousPeriod: any[] } => {
-    switch (timePeriod) {
-      case 'Today':
-        return {
-          currentPeriod: data.filter(i => {
-            const compareDate = dayjs(i.timestamp)
-            return compareDate.isAfter(dayjs().startOf('day')) && compareDate.isBefore(dayjs().endOf('day'))
-          }),
-          previousPeriod: data.filter(i => {
-            const compareDate = dayjs(i.timestamp)
-            return compareDate.isAfter(dayjs().add(-1, 'day').startOf('day')) && compareDate.isBefore(dayjs().add(-1, 'day').endOf('day'))
-          })
-        }
-      case 'Yesterday':
-        return {
-          currentPeriod: data.filter(i => {
-            const compareDate = dayjs(i.timestamp)
-            return compareDate.isAfter(dayjs().add(-1, 'day').startOf('day')) && compareDate.isBefore(dayjs().add(-1, 'day').endOf('day'))
-          }),
-          previousPeriod: data.filter(i => {
-            const compareDate = dayjs(i.timestamp)
-            return compareDate.isAfter(dayjs().add(-2, 'day').startOf('day')) && compareDate.isBefore(dayjs().add(-2, 'day').endOf('day'))
-          })
-        }
-      case 'This week':
-        return {
-          currentPeriod: data.filter(i => {
-            const compareDate = dayjs(i.timestamp)
-            return compareDate.isAfter(dayjs().startOf('week')) && compareDate.isBefore(dayjs().endOf('week'))
-          }),
-          previousPeriod: data.filter(i => {
-            const compareDate = dayjs(i.timestamp)
-            return compareDate.isAfter(dayjs().add(-1, 'week').startOf('week')) && compareDate.isBefore(dayjs().add(-1, 'week').endOf('week'))
-          })
-        }
-      case 'This month': {
-        return {
-          currentPeriod: data.filter(i => {
-            const compareDate = dayjs(i.timestamp)
-            return compareDate.isAfter(dayjs().startOf('month')) && compareDate.isBefore(dayjs().endOf('month'))
-          }),
-          previousPeriod: data.filter(i => {
-            const compareDate = dayjs(i.timestamp)
-            return compareDate.isAfter(dayjs().add(-1, 'month').startOf('month')) && compareDate.isBefore(dayjs().add(-1, 'month').endOf('month'))
-          })
-        }
-      }
-      default:
-        return { currentPeriod: data, previousPeriod: [] }
     }
   }
 
@@ -386,10 +314,7 @@ const Dashboard = ({ data }: { data: any }) => {
           />
         </div>
         <div className="col-span-6 2xl:col-span-3 rounded-lg bg-dark-1 px-8 py-10">
-          <PipeChartWithTable
-            periodOptions={timePeriodOptions}
-            depositData={depositData}
-          />
+          <DepositAndWithdrawPipeChart />
         </div>
         <div className="col-span-6 2xl:col-span-3 row-span-5 2xl:row-span-2 rounded-lg bg-dark-1">
           <GamesStatistic periodOptions={timePeriodOptions} currentGame={game} setCurrentGame={setGame} />
