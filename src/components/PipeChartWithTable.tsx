@@ -7,8 +7,7 @@ import GiftCardsIcon from './icons/GiftCardsIcon'
 import SkinsIcon from './icons/SkinsIcon'
 import { PieChart, Pie, Cell } from 'recharts'
 import ButtonsToggle from './base/ButtonsToggle'
-
-const depositOptions = ['deposit', 'withdraw']
+import { TimeOption } from '../types/TimeOption'
 
 const colorAndIconPeaker = (item: any) => {
   switch (item.name) {
@@ -42,9 +41,7 @@ const colorAndIconPeaker = (item: any) => {
   }
 }
 
-const PipeChartWithTable = ({ periodOptions, depositData }: { periodOptions: any[], depositData: any[] }) => {
-  const [selectedDepositPeriod, setSelectedDepositPeriod] = useState(periodOptions[0])
-  const [currentDepositSelect, setCurrentDepositSelect] = useState<string>(depositOptions[0])
+const PipeChartWithTable = ({ periodOptions, depositData, selectedPeriod, depositOptions, setSelectedDepositPeriod, currentDepositSelect, setCurrentDepositSelect }: { periodOptions: any[], depositData: any[], selectedPeriod: TimeOption, setSelectedDepositPeriod: (value: TimeOption) => void, depositOptions: string[], currentDepositSelect: string, setCurrentDepositSelect: (value: string) => void }) => {
   const [statisticData, setStatisticData] = useState<Deposit[]>([])
   const [total, setTotal] = useState<number>(0)
 
@@ -68,7 +65,7 @@ const PipeChartWithTable = ({ periodOptions, depositData }: { periodOptions: any
     <div className='flex gap-10 flex-wrap justify-around relative'>
       <div className="relative">
         <div className='absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-2'>
-          <div className='text-white text-2xl'>${total}</div>
+          <div className='text-white text-2xl'>${total.toFixed(2)}</div>
           <div className='text-gray-7 capitalize text-base'>total {currentDepositSelect}</div>
         </div>
         <PieChart width={279} height={279}>
@@ -86,11 +83,11 @@ const PipeChartWithTable = ({ periodOptions, depositData }: { periodOptions: any
             <ButtonsToggle options={depositOptions} currentSelect={currentDepositSelect} peackFunction={setCurrentDepositSelect} />
           </div>
           <div className="relative">
-              <Listbox value={selectedDepositPeriod} onChange={setSelectedDepositPeriod}>
+              <Listbox value={selectedPeriod} onChange={setSelectedDepositPeriod}>
                 {({ open }) => (
                   <>
                     <Listbox.Button className='w-36 h-10 flex items-center justify-between px-4 py-2 rounded bg-dark-17 text-gray-6'>
-                      <span>{selectedDepositPeriod.name}</span>
+                      <span>{selectedPeriod.name}</span>
                       <ArrowIcon iconCalsses={`w-4 transform ${open ? 'rotate-90' : ''}`} />
                     </Listbox.Button>
                     <Listbox.Options className="absolute left-0 top-full bg-dark-17 mt-1 w-full px-4 py-2 rounded">
@@ -130,7 +127,7 @@ const PipeChartWithTable = ({ periodOptions, depositData }: { periodOptions: any
                 {item.percent}%
               </div>
               <div className='col-span-1 p-3'>
-                ${item.value}
+                ${item.value.toFixed(2)}
               </div>
             </div>
           )}
