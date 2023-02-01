@@ -4,7 +4,7 @@ const InputWithLabel = ({ label, value, name, changeFunction, type, placeholder 
       {label !== undefined ? <span className="text-gray-6 text-xs mb-2">{label}</span> : ''}
       {type !== 'checkbox'
         ? <input
-        className="px-3 py-2 bg-dark-17 rounded text-white"
+        className="px-3 py-2 bg-dark-17 rounded text-gray-6"
         type={type}
         name={name}
         value={value}

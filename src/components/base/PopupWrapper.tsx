@@ -2,17 +2,17 @@ const PopupWrapper = ({ children, closePopup }: { children: JSX.Element | JSX.El
   return (
     <div className='fixed flex justify-center items-center left-0 top-0 w-full h-screen bg-black bg-opacity-30'>
         <div
-          className='p-12'
+          className='px-12 pb-12'
           style={{
             background: 'linear-gradient(0deg, #131620, #131620)',
             border: '2px solid rgba(102, 110, 151, 0.2)',
             backdropFilter: 'blur(20px)',
             borderRadius: '5px'
           }}>
-            <div className='flex justify-end'>
+            <div className='flex justify-end pt-12'>
               <button
                 type='button'
-                className='rounded-md p-2 text-gray-8 hover:text-gray-6 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500'
+                className='rounded-md p-2 z-10 text-gray-8 hover:text-gray-6 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500'
                 onClick={() => closePopup()}
               >
               <span className='sr-only'>Close menu</span>
@@ -21,7 +21,9 @@ const PopupWrapper = ({ children, closePopup }: { children: JSX.Element | JSX.El
               </svg>
             </button>
             </div>
-            {children}
+            <div className='-mt-8'>
+              {children}
+            </div>
           </div>
       </div>
   )
