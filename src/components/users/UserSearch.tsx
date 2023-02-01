@@ -11,7 +11,7 @@ const UserSearch = ({ submitFn }: { submitFn: Function }) => {
 
   const searchParametrsUpdate = (name: string, value: string) => {
     setUserSearchParametr(() => {
-      const parametr = {}
+      const parametr: Record<string, any> = {}
       parametr[name.toLocaleLowerCase()] = value
       return parametr
     })

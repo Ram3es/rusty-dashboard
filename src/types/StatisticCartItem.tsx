@@ -6,8 +6,6 @@ export interface StatisticCartItem {
   icon: ReactElement | undefined
   percent?: number
   isCoinceValue?: boolean
-}
-
-export interface UserstatisticCartIrem extends StatisticCartItem {
   canEdit?: boolean
+  editFunction?: Function
 }

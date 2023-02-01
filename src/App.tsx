@@ -10,6 +10,10 @@ import UsersIcon from './components/icons/UsersIcon'
 import { User } from './types/User'
 import RoutersContainer from './components/RoutersContainer'
 import Store from './store/GlobalStatisticStore'
+import StaffIcon from './components/icons/StaffIcon'
+import AffiliatesIcon from './components/icons/AffiliatesIcon'
+import BotsIcon from './components/icons/BotsIcon'
+import SponseeIcon from './components/icons/SponseeIcon'
 
 const socket = io(API_URLS.API_URL, {
   transports: ['websocket', 'polling'],
@@ -17,8 +21,12 @@ const socket = io(API_URLS.API_URL, {
 })
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: <DashboardIcon iconCalsses='w-4 h-4' /> },
-  { name: 'Users', href: '/users', icon: <UsersIcon iconCalsses='h-4' /> }
+  { name: 'Home', href: '/', icon: <DashboardIcon iconCalsses='w-4 h-4' /> },
+  { name: 'Users', href: '/users', icon: <UsersIcon iconCalsses='h-4' /> },
+  { name: 'Staff', href: '/staff', icon: <StaffIcon iconCalsses='w-4' /> },
+  { name: 'Affiliates', href: '/affiliates', icon: <AffiliatesIcon iconCalsses='w-4' /> },
+  { name: 'Bots', href: '/bots', icon: <BotsIcon iconCalsses='w-4' /> },
+  { name: 'Sponsee', href: '/sponsee', icon: <SponseeIcon iconCalsses='w-4' /> }
 ]
 
 function App (): JSX.Element {

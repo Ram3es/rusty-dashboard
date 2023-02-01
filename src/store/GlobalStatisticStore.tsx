@@ -1,9 +1,7 @@
 import { createContext, ReactElement, useReducer } from 'react'
 import Reducer from './GlobalStatisticReducer'
 
-const initialState = {
-  data: {}
-}
+const initialState = {}
 
 export const Context = createContext(initialState)
 

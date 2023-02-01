@@ -1,10 +1,16 @@
 import { useContext, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
+import Affiliateitem from '../routes/Affiliate/Affiliateitem'
+import Affiliates from '../routes/Affiliate/Affiliates'
+import Bots from '../routes/Bots'
 import Dashboard from '../routes/Dashboard'
+import Sponsee from '../routes/Sponsee'
+import Staff from '../routes/Staff'
 import Users from '../routes/Users'
 import { Context } from '../store/GlobalStatisticStore'
 
 const RoutersContainer = ({ socket }: { socket: any }) => {
+  /** @ts-expect-error */
   const [state, dispatch] = useContext(Context)
 
   useEffect(() => {
@@ -22,6 +28,11 @@ const RoutersContainer = ({ socket }: { socket: any }) => {
       <Routes>
         <Route path="/" element={<Dashboard data={state} />} />
         <Route path="/users" element={<Users />} />
+        <Route path="/staff" element={<Staff />} />
+        <Route path="/affiliates" element={<Affiliates />} />
+        <Route path="/affiliates/:name" element={<Affiliateitem />} />
+        <Route path="/bots" element={<Bots />} />
+        <Route path="/sponsee" element={<Sponsee />} />
       </Routes>
     </>
   )

@@ -4,7 +4,7 @@ import GrayButtonBg from '../../assets/animatedGrayButtonBg.jpg'
 const Button = ({ text, submitFunction, color = 'yellow' }: { text: string, submitFunction: Function, color?: string }) => {
   return (
     <button
-      className='relative group flex w-full p-3 overflow-hidden bg-yellow-f justify-center items-center text-black text-sm font-extrabold scrolling-btn-wrapper'
+      className={`relative group flex w-full p-3 overflow-hidden bg-yellow-f justify-center items-center text-black text-sm font-extrabold ${color === 'yellow' ? 'scrolling-btn-wrapper' : 'scrolling-btn-wrapper-gray'}`}
       style={{ backgroundImage: `url(${color === 'yellow' ? YellowButtonBg : GrayButtonBg})` }}
       onClick={() => submitFunction()}
     >

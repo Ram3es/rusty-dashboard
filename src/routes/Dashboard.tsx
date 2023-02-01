@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import * as dayjs from 'dayjs'
 
+import { Context } from '../store/GlobalStatisticStore'
 import CardsStatistic from '../components/CardsStatistic'
 import PipeChartWithTable from '../components/PipeChartWithTable'
 import { DepositBase } from '../types/Deposit'
@@ -13,8 +15,23 @@ import ExcludedAccounts from '../components/dashboard/ExcludedAccounts'
 import LivePlayers from '../components/dashboard/LivePlayers'
 import Trivia from '../components/dashboard/Trivia'
 import Trades from '../components/dashboard/Trades'
+import CoinFlipIcon from '../components/icons/CoinFlipIcon'
+import JackpotIcon from '../components/icons/JackpotIcon'
+import MinesIcon from '../components/icons/MinesIcon'
+import PlinkoIcon from '../components/icons/PlinkoIcon'
+import PvpMinesIcon from '../components/icons/PvpMinesIcon'
+import UpgraderIcon from '../components/icons/UpgraderIcon'
+import WheelIcon from '../components/icons/WheelIcon'
+import SessionIcon from '../components/icons/SessionIcon'
+import UsersIcon from '../components/icons/UsersIcon'
+import DepositIcon from '../components/icons/DepositIcon'
+import DiceIcon from '../components/icons/DiceIcon'
+import StatisticIcon from '../components/icons/StatisticIcon'
+import { StatisticCartItem } from '../types/StatisticCartItem'
+import { TimeOption } from '../types/TimeOption'
+// import { GamesData } from '../types/GamesData'
 
-const timePeriodOptions = [
+const timePeriodOptions: TimeOption[] = [
   { id: 1, name: 'Today', unavailable: false },
   { id: 2, name: 'Yesterday', unavailable: false },
   { id: 3, name: 'This week', unavailable: false },
@@ -25,6 +42,10 @@ const Dashboard = ({ data }: { data: any }) => {
   const [depositData, setDepositData] = useState<DepositBase[]>([])
   const [game, setGame] = useState<string>('jackpot')
   const [depositDataStatisticPeriod, setDepositDataStatisticPeriod] = useState(timePeriodOptions[0])
+  /** @ts-expect-error */
+  const [state] = useContext(Context)
+  const [generalStatistic, setGeneralStatistic] = useState<StatisticCartItem[]>([])
+  const [selectedGeneralStatisticPeriod, setSelectedGeneralStatisticPeriod] = useState(timePeriodOptions[0])
   // const [gamesStatistic, setGamesStatistic] = useState([])
 
   const dataDeposit = {
@@ -91,7 +112,7 @@ const Dashboard = ({ data }: { data: any }) => {
       },
       {
         name: '16.11',
-        value: [10, 1000, 500],
+        value: [60, 1000, 500],
         colors: [
           {
             postitveColor: '#E4164A'
@@ -106,7 +127,7 @@ const Dashboard = ({ data }: { data: any }) => {
       },
       {
         name: '17.11',
-        value: [0, 800, 0],
+        value: [50, 800, 50],
         colors: [
           {
             postitveColor: '#E4164A'
@@ -169,13 +190,199 @@ const Dashboard = ({ data }: { data: any }) => {
     ])
   }, [data])
 
+  const getGameIcon = (mode: string | undefined) => {
+    switch (mode) {
+      case 'coinflip':
+        return <CoinFlipIcon iconCalsses='w-6' />
+      case 'jackpot':
+        return <JackpotIcon iconCalsses='w-6' />
+      case 'mines':
+        return <MinesIcon iconCalsses='w-6' />
+      case 'plinko':
+        return <PlinkoIcon iconCalsses='w-6' />
+      case 'pvp-mines':
+        return <PvpMinesIcon iconCalsses='w-6' />
+      case 'upgrader':
+        return <UpgraderIcon iconCalsses='w-6' />
+      case 'wheel':
+        return <WheelIcon iconCalsses='w-6' />
+      default:
+        return undefined
+    }
+  }
+
+  const sortDataByDate = (timePeriod: string, data: any[]): { currentPeriod: any[], previousPeriod: any[] } => {
+    switch (timePeriod) {
+      case 'Today':
+        return {
+          currentPeriod: data.filter(i => {
+            const compareDate = dayjs(i.timestamp)
+            return compareDate.isAfter(dayjs().startOf('day')) && compareDate.isBefore(dayjs().endOf('day'))
+          }),
+          previousPeriod: data.filter(i => {
+            const compareDate = dayjs(i.timestamp)
+            return compareDate.isAfter(dayjs().add(-1, 'day').startOf('day')) && compareDate.isBefore(dayjs().add(-1, 'day').endOf('day'))
+          })
+        }
+      case 'Yesterday':
+        return {
+          currentPeriod: data.filter(i => {
+            const compareDate = dayjs(i.timestamp)
+            return compareDate.isAfter(dayjs().add(-1, 'day').startOf('day')) && compareDate.isBefore(dayjs().add(-1, 'day').endOf('day'))
+          }),
+          previousPeriod: data.filter(i => {
+            const compareDate = dayjs(i.timestamp)
+            return compareDate.isAfter(dayjs().add(-2, 'day').startOf('day')) && compareDate.isBefore(dayjs().add(-2, 'day').endOf('day'))
+          })
+        }
+      case 'This week':
+        return {
+          currentPeriod: data.filter(i => {
+            const compareDate = dayjs(i.timestamp)
+            return compareDate.isAfter(dayjs().startOf('week')) && compareDate.isBefore(dayjs().endOf('week'))
+          }),
+          previousPeriod: data.filter(i => {
+            const compareDate = dayjs(i.timestamp)
+            return compareDate.isAfter(dayjs().add(-1, 'week').startOf('week')) && compareDate.isBefore(dayjs().add(-1, 'week').endOf('week'))
+          })
+        }
+      case 'This month': {
+        return {
+          currentPeriod: data.filter(i => {
+            const compareDate = dayjs(i.timestamp)
+            return compareDate.isAfter(dayjs().startOf('month')) && compareDate.isBefore(dayjs().endOf('month'))
+          }),
+          previousPeriod: data.filter(i => {
+            const compareDate = dayjs(i.timestamp)
+            return compareDate.isAfter(dayjs().add(-1, 'month').startOf('month')) && compareDate.isBefore(dayjs().add(-1, 'month').endOf('month'))
+          })
+        }
+      }
+      default:
+        return { currentPeriod: data, previousPeriod: [] }
+    }
+  }
+
+  const getPercentages = (prev: number, cur: number) => {
+    if (prev > 0 && cur > 0) {
+      return prev > cur ? cur / prev : -(prev / cur)
+    } else if (prev > 0 && cur <= 0) {
+      return -100
+    } else if (prev <= 0 && cur > 0) {
+      return 100
+    } else {
+      return 0
+    }
+  }
+
+  const getConversionedUsers = (users: any[], deposits: any[]) => {
+    if (users.length === 0 || deposits.length === 0) return []
+
+    return [...users].filter(u => deposits.findIndex(i => i.user_id === u.id) >= 0)
+  }
+
+  useEffect(() => {
+    if (state?.data?.data) {
+      console.log('dashboard data', state.data.data)
+      const { user, gameHistory, trades } = state.data.data
+      const deposit = trades.filter((t: any) => t.type === 'deposit')
+      const depositSortedByDate = sortDataByDate(selectedGeneralStatisticPeriod.name, deposit)
+      const sortedHistoryByDate = sortDataByDate(selectedGeneralStatisticPeriod.name, gameHistory)
+      const sortedUsersByDate = sortDataByDate(selectedGeneralStatisticPeriod.name, user)
+      const conversionedUsersCurrentPeriod = getConversionedUsers(sortedUsersByDate.currentPeriod, depositSortedByDate.currentPeriod)
+      const conversionedUsersPrevPeriod = getConversionedUsers(sortedUsersByDate.previousPeriod, depositSortedByDate.previousPeriod)
+      let avarage = 0
+      let averagePrev = 0
+      let gamesCount: Record<string, number>
+      let topGame
+      let depositCurrentPeriod = 0
+      let depositPrevPeriod = 0
+
+      if (sortedHistoryByDate.currentPeriod.length > 0) {
+        avarage = sortedHistoryByDate.currentPeriod.reduce((prev, cur) => {
+          const total = parseInt(cur.bet_value) + parseInt(prev)
+          return total
+        }, 0) / sortedHistoryByDate.currentPeriod.length
+        gamesCount = sortedHistoryByDate.currentPeriod.reduce((prev, cur) => {
+          const count = prev[cur.mode] !== undefined ? parseInt(prev[cur.mode]) + 1 : 1
+          prev[cur.mode] = count
+          return prev
+        }, {})
+        topGame = Object.keys(gamesCount).reduce((a, b) => gamesCount[a] > gamesCount[b] ? a : b)
+      }
+      if (sortedHistoryByDate.previousPeriod.length > 0) {
+        averagePrev = sortedHistoryByDate.previousPeriod.reduce((prev, cur) => {
+          const total = parseInt(cur.bet_value) + parseInt(prev)
+          return total
+        }, 0) / sortedHistoryByDate.previousPeriod.length
+      }
+      if (depositSortedByDate.currentPeriod.length > 0) {
+        depositCurrentPeriod = depositSortedByDate.currentPeriod.reduce((prev, cur) => {
+          const total = parseInt(cur.value) + parseInt(prev)
+          return total
+        }, 0)
+      }
+      if (depositSortedByDate.previousPeriod.length > 0) {
+        depositPrevPeriod = depositSortedByDate.previousPeriod.reduce((prev, cur) => {
+          const total = parseInt(cur.value) + parseInt(prev)
+          return total
+        }, 0)
+      }
+
+      const currentSessions = sortedHistoryByDate.currentPeriod.length
+      const previousSessions = sortedHistoryByDate.previousPeriod.length
+
+      setGeneralStatistic([
+        {
+          icon: <SessionIcon iconCalsses='w-3' />,
+          text: currentSessions.toString(),
+          subtext: 'Sessions',
+          percent: getPercentages(previousSessions, currentSessions)
+        },
+        {
+          icon: <UsersIcon iconCalsses='w-4' />,
+          text: sortedUsersByDate.currentPeriod.length.toString(),
+          subtext: 'New Sign Ups',
+          percent: getPercentages(sortedUsersByDate.previousPeriod.length, sortedUsersByDate.currentPeriod.length)
+        },
+        {
+          icon: <DepositIcon iconCalsses='w-5' />,
+          text: `$${(depositCurrentPeriod / 1000).toFixed(2)}`,
+          subtext: 'Avg. Deposit',
+          percent: getPercentages(depositPrevPeriod, depositCurrentPeriod)
+        },
+        {
+          icon: <DiceIcon iconCalsses='w-4' />,
+          text: avarage.toFixed(0).toString(),
+          subtext: 'Avg. Bet Amount',
+          percent: getPercentages(averagePrev, avarage),
+          isCoinceValue: true
+        },
+        {
+          icon: <StatisticIcon iconCalsses='w-4' />,
+          text: `${getPercentages(sortedUsersByDate.currentPeriod.length, conversionedUsersCurrentPeriod.length).toFixed(2)}%`,
+          subtext: 'Conversion',
+          percent: getPercentages(conversionedUsersPrevPeriod.length, conversionedUsersCurrentPeriod.length)
+        },
+        {
+          icon: getGameIcon(topGame),
+          text: topGame !== undefined ? topGame.replace(/([A-Z]+)/g, '-$1').replace(/([A-Z][a-z])/g, '-$1') : '',
+          subtext: 'Top Game'
+        }
+      ])
+    }
+  }, [state, selectedGeneralStatisticPeriod])
+
   return (
     <>
       <div className="p-6 grid grid-cols-6 gap-6">
         <div className="col-span-6 flex flex-col rounded-lg bg-dark-1 px-8 py-10">
           <CardsStatistic
             title="GENERAL STATISTICS"
-            statisticOptions={timePeriodOptions}
+            periodOptions={timePeriodOptions}
+            selectedPeriod={selectedGeneralStatisticPeriod}
+            changePeriod={(option: TimeOption) => setSelectedGeneralStatisticPeriod(option)}
+            items={generalStatistic}
           />
         </div>
         <div className="col-span-6 2xl:col-span-3 rounded-lg bg-dark-1 px-8 py-10">
@@ -188,10 +395,10 @@ const Dashboard = ({ data }: { data: any }) => {
           <GamesStatistic periodOptions={timePeriodOptions} currentGame={game} setCurrentGame={setGame} />
         </div>
         <div className="col-span-6 2xl:col-span-3 rounded-lg bg-dark-1">
-          <Graph timePeriodOptions={timePeriodOptions} currentTimePeriod={depositDataStatisticPeriod} changeTimePeriod={setDepositDataStatisticPeriod} data={dataDeposit.data} name={dataDeposit.name} labels={dataDeposit.labels} />
+          <Graph timePeriodOptions={timePeriodOptions} currentTimePeriod={depositDataStatisticPeriod} changeTimePeriod={setDepositDataStatisticPeriod} data={dataDeposit.data} names={[{ name: dataDeposit.name, value: 1000, color: 'green' }]} labels={dataDeposit.labels} />
         </div>
         <div className="col-span-6 2xl:col-span-3 rounded-lg bg-dark-1">
-          <Graph timePeriodOptions={timePeriodOptions} currentTimePeriod={depositDataStatisticPeriod} changeTimePeriod={setDepositDataStatisticPeriod} data={dataDeposit.data} name={'Deposit'} labels={dataDeposit.labels} />
+          <Graph timePeriodOptions={timePeriodOptions} currentTimePeriod={depositDataStatisticPeriod} changeTimePeriod={setDepositDataStatisticPeriod} data={dataDeposit.data} names={[{ name: 'Deposit', value: 1000, color: 'green' }]} labels={dataDeposit.labels} />
         </div>
         <div className="col-span-6 2xl:col-span-3 grid grid-cols-3 gap-6">
           <div className='col-span-2 rounded-lg bg-dark-1 px-8 py-10'>
