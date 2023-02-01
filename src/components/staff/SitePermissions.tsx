@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import Table from '../base/Table'
-import * as dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import { User } from '../../types/User'
 import Button from '../base/Button'
 import { Listbox } from '@headlessui/react'

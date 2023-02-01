@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import Table from '../base/Table'
-import * as dayjs from 'dayjs'
+import dayjs from 'dayjs';
 import { User } from '../../types/User'
 import CoinceImage from '../../assets/coins.png'
 import InputWithLabel from '../base/InputWithLabel'

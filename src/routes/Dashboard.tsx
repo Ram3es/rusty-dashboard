@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import * as dayjs from 'dayjs'
+import dayjs from 'dayjs';
 
 import { Context } from '../store/GlobalStatisticStore'
 import CardsStatistic from '../components/CardsStatistic'
