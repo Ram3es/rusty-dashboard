@@ -35,6 +35,8 @@ const Users = () => {
           </div>
           {/* /End replace */}
         </div>
+      </div>
+      <div className="p-6 grid grid-cols-6 gap-6">
         <div className="col-span-3 flex flex-col rounded-lg bg-dark-1 px-8 py-10">
           <UserAccountInformation timePeriodOptions={timePeriodOptions}/>
         </div>
