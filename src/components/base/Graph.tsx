@@ -132,7 +132,7 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
               <YAxis axisLine={false} tickLine={false} />
               <defs>
                 {data[0]?.value.map((item, index) => (
-                  <linearGradient key={`gradient-${index}`} id={`gradient-fill-${index}`} x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient key={`gradient-${index}`} id={`gradient-fill-${names[0]?.name}-${index}`} x1="0" y1="0" x2="0" y2="1">
                     {isContainsNegativeVal
                       ? <>
                         <stop
@@ -170,7 +170,7 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
                   key={`gradient-area-${index}`}
                   type="linear"
                   dataKey={`val${index}`}
-                  fill={`url(#gradient-fill-${index})`}
+                  fill={`url(#gradient-fill-${names[0]?.name}-${index})`}
                   stroke={ data[0]?.colors[index].postitveColor ?? 'blue' } />
               ))}
               <Tooltip wrapperStyle={{

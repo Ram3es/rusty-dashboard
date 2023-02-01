@@ -21,12 +21,12 @@ const socket = io(API_URLS.API_URL, {
 })
 
 const navigation = [
-  { name: 'Home', href: '/', icon: <DashboardIcon iconCalsses='w-4 h-4' /> },
-  { name: 'Users', href: '/users', icon: <UsersIcon iconCalsses='h-4' /> },
-  { name: 'Staff', href: '/staff', icon: <StaffIcon iconCalsses='w-4' /> },
-  { name: 'Affiliates', href: '/affiliates', icon: <AffiliatesIcon iconCalsses='w-4' /> },
-  { name: 'Bots', href: '/bots', icon: <BotsIcon iconCalsses='w-4' /> },
-  { name: 'Sponsee', href: '/sponsee', icon: <SponseeIcon iconCalsses='w-4' /> }
+  { name: 'Home', href: '/admin/', icon: <DashboardIcon iconCalsses='w-4 h-4' /> },
+  { name: 'Users', href: '/admin/users', icon: <UsersIcon iconCalsses='h-4' /> },
+  { name: 'Staff', href: '/admin/staff', icon: <StaffIcon iconCalsses='w-4' /> },
+  { name: 'Affiliates', href: '/admin/affiliates', icon: <AffiliatesIcon iconCalsses='w-4' /> },
+  { name: 'Bots', href: '/admin/bots', icon: <BotsIcon iconCalsses='w-4' /> },
+  { name: 'Sponsee', href: '/admin/sponsee', icon: <SponseeIcon iconCalsses='w-4' /> }
 ]
 
 function App (): JSX.Element {

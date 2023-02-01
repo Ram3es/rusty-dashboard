@@ -26,13 +26,13 @@ const RoutersContainer = ({ socket }: { socket: any }) => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Dashboard data={state} />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/staff" element={<Staff />} />
-        <Route path="/affiliates" element={<Affiliates />} />
-        <Route path="/affiliates/:name" element={<Affiliateitem />} />
-        <Route path="/bots" element={<Bots />} />
-        <Route path="/sponsee" element={<Sponsee />} />
+        <Route path="/admin/" element={<Dashboard data={state} />} />
+        <Route path="/admin/users" element={<Users />} />
+        <Route path="/admin/staff" element={<Staff />} />
+        <Route path="/admin/affiliates" element={<Affiliates />} />
+        <Route path="/admin/affiliates/:name" element={<Affiliateitem />} />
+        <Route path="/admin/bots" element={<Bots />} />
+        <Route path="/admin/sponsee" element={<Sponsee />} />
       </Routes>
     </>
   )
