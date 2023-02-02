@@ -55,7 +55,7 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
             background: item.color
           }}></span>
           <div className='flex items-center gap-2'>
-            {labels[index]} - <span className='text-white'>{(item.value / sumOfPosition * 100).toFixed()}% ({item.value}$)</span>
+            {labels[index]} - <span className='text-white'>{(item.value > 0 ? item.value / sumOfPosition * 100 : 0).toFixed()}% ({item.value.toFixed(2)}$)</span>
           </div>
         </div>
       ))}
@@ -71,7 +71,7 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
               return (
                 <div className='flex items-center gap-3' key={`title-${name.name}`}>
                   <h4 className='text-white uppercase text-2xl'>{name.name}</h4>
-                  <div className='text-2xl' style={{ color: name.color }}>{name.value}</div>
+                  <div className='text-2xl' style={{ color: name.color }}>{typeof name.value === 'number' ? name.value.toFixed(2) : name.value }</div>
                 </div>
               )
             })}
@@ -79,14 +79,14 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
           <div className='flex gap-4 relative'>
             <ButtonsToggle options={graphVariants} currentSelect={currentGraphVariant} peackFunction={setCurrentGraphVariant} />
             <div className='relative'>
-              <Listbox value={currentTimePeriod.name} onChange={(option) => changeTimePeriod(option.name)}>
+              <Listbox value={currentTimePeriod.name} onChange={(option) => changeTimePeriod(option)}>
                 {({ open }) => (
                   <>
                     <Listbox.Button className='w-36 h-10 flex items-center justify-between px-4 py-2 rounded bg-dark-17 text-gray-6'>
                       <span>{currentTimePeriod.name}</span>
                       <ArrowIcon iconCalsses={`w-4 transform ${open ? 'rotate-90' : ''}`} />
                     </Listbox.Button>
-                    <Listbox.Options className="absolute left-0 top-full bg-dark-17 mt-1 w-full px-4 py-2 rounded">
+                    <Listbox.Options className="absolute left-0 top-full bg-dark-17 mt-1 w-full px-4 py-2 rounded z-20">
                       {timePeriodOptions.map((option) => (
                         <Listbox.Option
                           className="cursor-pointer text-gray-6 hover:text-white"
@@ -113,7 +113,7 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
               <YAxis axisLine={false} tickLine={false} />
               {data[0]?.value.map((item, index) => {
                 return !isContainsNegativeVal
-                  ? <Bar key={`positive-${index}`} dataKey={`val${index}`} stackId="stack" fill={ item >= 0 ? data[0]?.colors[index].postitveColor ?? 'blue' : data[0]?.colors[index].negativeColor ?? 'red' } />
+                  ? <Bar key={`positive-${index}`} dataKey={`val${index}`} stackId="stack" fill={ item >= 0 ? data[0]?.colors[index]?.postitveColor ?? 'blue' : data[0]?.colors[index].negativeColor ?? 'red' } />
                   : <Bar key={`negative-${index}`} dataKey={`val${index}`} shape={props => <CustomBar {...props} colorIndex={index} />} />
               })}
               <Tooltip cursor={false} wrapperStyle={{
@@ -137,7 +137,7 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
                       ? <>
                         <stop
                           offset="10%"
-                          stopColor={ data[0]?.colors[index].postitveColor ?? 'blue' }
+                          stopColor={ data[0]?.colors[index]?.postitveColor ?? 'blue' }
                           stopOpacity={0.9}
                         />
                         <stop
@@ -146,19 +146,19 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
                         />
                         <stop
                           offset="90%"
-                          stopColor={ data[0]?.colors[index].negativeColor ?? 'red' }
+                          stopColor={ data[0]?.colors[index]?.negativeColor ?? 'red' }
                           stopOpacity={0.9}
                         />
                       </>
                       : <>
                         <stop
                           offset="5%"
-                          stopColor={ data[0]?.colors[index].postitveColor ?? 'blue' }
+                          stopColor={ data[0]?.colors[index]?.postitveColor ?? 'blue' }
                           stopOpacity={0.9}
                         />
                         <stop
                           offset="95%"
-                          stopColor={ data[0]?.colors[index].postitveColor ?? 'blue' }
+                          stopColor={ data[0]?.colors[index]?.postitveColor ?? 'blue' }
                           stopOpacity={0}
                         />
                       </>}
@@ -171,7 +171,7 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
                   type="linear"
                   dataKey={`val${index}`}
                   fill={`url(#gradient-fill-${names[0]?.name}-${index})`}
-                  stroke={ data[0]?.colors[index].postitveColor ?? 'blue' } />
+                  stroke={ data[0]?.colors[index]?.postitveColor ?? 'blue' } />
               ))}
               <Tooltip wrapperStyle={{
                 outline: 'none'

@@ -55,7 +55,7 @@ const PipeChartWithTable = ({ periodOptions, depositData, selectedPeriod, deposi
     setStatisticData(() => {
       return depositData.map(item => {
         const statisticItem = colorAndIconPeaker(item)
-        statisticItem.percent = (item.value / total).toFixed(2)
+        statisticItem.percent = item.value ? (item.value / total) * 100 : 0
         return statisticItem
       })
     })
