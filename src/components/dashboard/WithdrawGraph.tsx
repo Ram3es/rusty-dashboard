@@ -88,7 +88,7 @@ const WithdrawGraph = () => {
         })
       }
       [...trades].forEach((cur: any) => {
-        const dateVal = depositDataStatisticPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('DD/MM/YYYY') : dayjs(cur.timestamp).format('DD/MM/YYYYTHH')
+        const dateVal = depositDataStatisticPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('DD/MM/YYYY') : dayjs(cur.timestamp).format('DD/MM/YYYY HH')
         const foundIndex = monthData.findIndex((item: any) => item.name === dateVal)
         if (foundIndex >= 0 && cur.type === 'withdraw') {
           totalSum += Number(cur.value) / 100

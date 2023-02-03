@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import io from 'socket.io-client'
-import { API_URLS } from './constants'
+import socket from './Middleware/socket'
 import { BrowserRouter } from 'react-router-dom'
 import MenuMobile from './components/nav/MenuMobile'
 import MenuDesktop from './components/nav/MenuDesktop'
@@ -14,11 +13,6 @@ import StaffIcon from './components/icons/StaffIcon'
 import AffiliatesIcon from './components/icons/AffiliatesIcon'
 import BotsIcon from './components/icons/BotsIcon'
 import SponseeIcon from './components/icons/SponseeIcon'
-
-const socket = io(API_URLS.API_URL, {
-  transports: ['websocket', 'polling'],
-  upgrade: true
-})
 
 const navigation = [
   { name: 'Home', href: '/admin/', icon: <DashboardIcon iconCalsses='w-4 h-4' /> },

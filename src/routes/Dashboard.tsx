@@ -42,7 +42,7 @@ const Dashboard = ({ data }: { data: any }) => {
         </div>
         <div className="col-span-6 2xl:col-span-3 grid grid-cols-3 gap-6">
           <div className='col-span-2 rounded-lg bg-dark-1 px-8 py-10'>
-            <FlashCodes name="CREATE FLASH CODE" />
+            <FlashCodes />
           </div>
           <div className='col-span-1 rounded-lg bg-dark-1 px-8 py-10'>
             <ExcludedAccounts name="EXCLUDED ACCOUNTS" />
