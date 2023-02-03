@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
+import { User } from '../../types/User'
 import Button from '../base/Button'
 import ButtonsToggle from '../base/ButtonsToggle'
 import InputWithLabel from '../base/InputWithLabel'
 import PopupWrapper from '../base/PopupWrapper'
+import UserAvatarWithName from '../base/UserAvatarWithName'
 
 interface ICheckBoxState {
   dashboard: boolean
@@ -17,7 +19,8 @@ interface ICheckBoxState {
 const label = ['Dashboard', 'Staff', 'Bots', 'Games', 'Users']
 const options = ['View Access', 'Edit Access']
 
-const EditPermissions = ({ onClose }: { onClose: Function }) => {
+const EditPermissions = ({ user, submitFunction }: { user?: User, submitFunction: Function }) => {
+  const [isOpenPopup, setOpenPopup] = useState(false)
   const [currentSelected, setCurrentSelect] = useState(options[0])
   const [isChecked, setChecked] = useState<ICheckBoxState>({ dashboard: false, staff: true, bots: true, games: false, users: false })
 
@@ -25,20 +28,22 @@ const EditPermissions = ({ onClose }: { onClose: Function }) => {
     const { name, isChecked } = params
     setChecked(prev => ({ ...prev, [name]: isChecked }))
   }
-  return (
-        <PopupWrapper closePopup={ onClose }>
+
+  const onTogglePopup = useCallback(() => {
+    setOpenPopup(state => !state)
+  }, [])
+
+  useEffect(() => {
+    user && setOpenPopup(true)
+  }, [user])
+  return (isOpenPopup
+    ? (
+        <PopupWrapper closePopup={ onTogglePopup }>
             <div className=' flex flex-col items-center w-[400px]'>
               <h4 className='text-white uppercase text-3xl font-medium mb-2'>Edit Permission</h4>
               <p className='text-center text-gray-6 font-normal text-sm leading-5 px-10'>Select the pages which this user can view as well as their permissions</p>
               <div className='flex items-center pt-5'>
-                <div className='p-0.5 rounded-full border-2 border-gray-3b'>
-                  <img
-                    className="inline-block h-9 w-9 rounded-full"
-                    src={''}
-                    alt={''}
-                  />
-                </div>
-                <span className='text-base font-semibold text-gray-6 pl-3'>Grodslaktaren</span>
+                <UserAvatarWithName user={user} isBorderShown avatarClasses='flex gap-2 items-center text-base font-semibold text-gray-6 pl-3' />
               </div>
               <h6 className='text-white text-base  mt-8'>Pages</h6>
               <div className='grid grid-cols-2 gap-x-[120px] gap-y-4 mt-2' >
@@ -49,7 +54,9 @@ const EditPermissions = ({ onClose }: { onClose: Function }) => {
                        key={key}
                        name={key}
                        type='checkbox'
-                       labelRight={item}
+                       labelClasses={`flex flex-row-reverse justify-end items-center w-full ${isChecked[key] ? 'text-white' : 'text-gray-6'} `}
+                       inputClasses='px-3 py-2  accent-yellow-f rounded text-white w-5 h-5 mr-2 '
+                       label={item}
                        value={isChecked[key]}
                        changeFunction={ handleCheckBox }/>)
                 })}
@@ -70,10 +77,11 @@ const EditPermissions = ({ onClose }: { onClose: Function }) => {
               <ButtonsToggle options={options} currentSelect={currentSelected} peackFunction={setCurrentSelect} />
               </div>
               <div className='flex w-[80%] gap-5 mt-6' >
-              <Button text='Cancel' color='default' submitFunction={() => { '' }} />
-              <Button text='Confirm' submitFunction={() => { '' }} />
+              <Button text='Cancel' color='default' submitFunction={onTogglePopup} />
+              <Button text='Confirm' submitFunction={() => { submitFunction(); onTogglePopup() }} />
               </div>
             </div>
         </PopupWrapper>)
+    : null)
 }
 export default EditPermissions
