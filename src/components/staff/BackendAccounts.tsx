@@ -1,16 +1,23 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import Table from '../base/Table'
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 import { User } from '../../types/User'
 import Button from '../base/Button'
 import CoinceImage from '../../assets/coins.png'
 import EditIcon from '../icons/EditIcon'
 import LockIcon from '../icons/LockIcon'
+import EditPermissions from '../pop-up/EditPermissions'
 
 dayjs.extend(relativeTime)
 
 const BackendAccounts = ({ name }: { name: string }) => {
+  const [isShowPopup, setShowPopup] = useState(false)
+
+  const onTogglePopup = useCallback(() => {
+    setShowPopup(state => !state)
+  }, [])
+
   const getUserComponent = (user: User) => {
     return (
       <div className='flex gap-2 items-center'>
@@ -31,7 +38,7 @@ const BackendAccounts = ({ name }: { name: string }) => {
 
   const getPermisionsPopup = (id: string) => {
     return (
-      <div className='flex gap-3 cursor-pointer items-center text-yellow-f' onClick={() => console.log('View Permissions ', id)}>
+      <div className='flex gap-3 cursor-pointer items-center text-yellow-f' onClick={() => { console.log('View Permissions ', id); onTogglePopup() }}>
         <LockIcon />
         View Permissions
       </div>
@@ -113,6 +120,7 @@ const BackendAccounts = ({ name }: { name: string }) => {
           <div className='w-full flex flex-col mb-4'>
             <Table columns={columns} data={data} />
           </div>
+          {isShowPopup && <EditPermissions onClose={onTogglePopup} />}
         </div>
       </div>
     </>
