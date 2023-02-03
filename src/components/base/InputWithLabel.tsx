@@ -1,10 +1,10 @@
-const InputWithLabel = ({ label, value, name, changeFunction, type, placeholder }: { label?: string, value: any, name: string, changeFunction: Function, type: string, placeholder?: string }) => {
+const InputWithLabel = ({ label, value, name, changeFunction, type, placeholder, labelClasses, inputClasses }: { label?: string, value: any, name: string, changeFunction: Function, type: string, placeholder?: string, labelRight?: string, labelClasses?: string, inputClasses?: string }) => {
   return (
-    <label className="flex flex-col w-full">
-      {label !== undefined ? <span className="text-gray-6 text-xs mb-2">{label}</span> : ''}
+    <label className={ labelClasses ?? 'flex flex-col w-full text-gray-6 text-xs mb-2'}>
+      {label !== undefined ? <span>{label}</span> : ''}
       {type !== 'checkbox'
         ? <input
-        className="px-3 py-2 bg-dark-17 rounded text-white"
+        className={inputClasses ?? 'px-3 py-2 bg-dark-17 rounded text-white'}
         type={type}
         name={name}
         value={value}
@@ -12,11 +12,11 @@ const InputWithLabel = ({ label, value, name, changeFunction, type, placeholder 
         placeholder={placeholder}
       />
         : <input
-      className="px-3 py-2 accent-yellow-f rounded text-white"
+      className={inputClasses ?? 'px-3 py-2  accent-yellow-f rounded text-white'}
       type={type}
       name={name}
       checked={value}
-      onChange={(e) => changeFunction(e.target.name, e.target.checked)}
+      onChange={(e) => changeFunction({ name: e.target.name, isChecked: e.target.checked })}
       placeholder={placeholder}
     />}
     </label>
