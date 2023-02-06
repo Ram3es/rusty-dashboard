@@ -1,4 +1,4 @@
-const InputWithLabel = ({ label, value, name, changeFunction, type, placeholder, labelClasses, inputClasses }: { label?: string, value: any, name: string, changeFunction: Function, type: string, placeholder?: string, labelRight?: string, labelClasses?: string, inputClasses?: string }) => {
+const InputWithLabel = ({ label, value, name, changeFunction, type, placeholder, labelClasses, inputClasses }: { label?: string, value: any, name: string, changeFunction: Function, type: string, placeholder?: string, labelClasses?: string, inputClasses?: string }) => {
   return (
     <label className={ labelClasses ?? 'flex flex-col w-full text-gray-6 text-xs mb-2'}>
       {label !== undefined ? <span>{label}</span> : ''}
@@ -16,7 +16,7 @@ const InputWithLabel = ({ label, value, name, changeFunction, type, placeholder,
       type={type}
       name={name}
       checked={value}
-      onChange={(e) => changeFunction({ name: e.target.name, isChecked: e.target.checked })}
+      onChange={(e) => changeFunction(e.target.name, e.target.checked)}
       placeholder={placeholder}
     />}
     </label>
