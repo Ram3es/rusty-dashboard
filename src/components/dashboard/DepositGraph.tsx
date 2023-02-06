@@ -91,16 +91,16 @@ const DepositGraph = () => {
         const dateVal = depositDataStatisticPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('DD/MM/YYYY') : dayjs(cur.timestamp).format('DD/MM/YYYY HH')
         const foundIndex = monthData.findIndex((item: any) => item.name === dateVal)
         if (foundIndex >= 0) {
-          totalSum += Number(cur.value) / 100
+          totalSum += Number(cur.value) / 1000
           switch (cur.type) {
             case 'steam-deposit':
-              monthData[foundIndex].value[0] = Number(monthData[foundIndex].value[0]) + (Number(cur.value) / 100)
+              monthData[foundIndex].value[0] = Number(monthData[foundIndex].value[0]) + (Number(cur.value) / 1000)
               break
             case 'deposit-giftcards':
-              monthData[foundIndex].value[2] = Number(monthData[foundIndex].value[2]) + (Number(cur.value) / 100)
+              monthData[foundIndex].value[2] = Number(monthData[foundIndex].value[2]) + (Number(cur.value) / 1000)
               break
             default:
-              monthData[foundIndex].value[1] = Number(monthData[foundIndex].value[1]) + (Number(cur.value) / 100)
+              monthData[foundIndex].value[1] = Number(monthData[foundIndex].value[1]) + (Number(cur.value) / 1000)
               break
           }
         }

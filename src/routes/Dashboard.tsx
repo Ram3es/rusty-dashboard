@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import GamesStatistic from '../components/dashboard/GamesStatistic'
 import FlashCodes from '../components/dashboard/FlashCodes'
 import ExcludedAccounts from '../components/dashboard/ExcludedAccounts'
@@ -20,8 +19,6 @@ const timePeriodOptions: TimeOption[] = [
 ]
 
 const Dashboard = ({ data }: { data: any }) => {
-  const [game, setGame] = useState<string>('jackpot')
-
   return (
     <>
       <div className="p-6 grid grid-cols-6 gap-6">
@@ -32,7 +29,7 @@ const Dashboard = ({ data }: { data: any }) => {
           <DepositAndWithdrawPipeChart />
         </div>
         <div className="col-span-6 2xl:col-span-3 row-span-5 2xl:row-span-2 rounded-lg bg-dark-1">
-          <GamesStatistic periodOptions={timePeriodOptions} currentGame={game} setCurrentGame={setGame} />
+          <GamesStatistic periodOptions={timePeriodOptions} />
         </div>
         <div className="col-span-6 2xl:col-span-3 rounded-lg bg-dark-1">
           <DepositGraph />
