@@ -1,23 +1,24 @@
-import { useMemo, useState } from 'react'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import Table from '../base/Table'
-import dayjs from 'dayjs'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 import { User } from '../../types/User'
+import PopupWrapper from '../base/PopupWrapper'
+import Table from '../base/Table'
+import UserAvatarWithName from '../base/UserAvatarWithName'
 import CoinceImage from '../../assets/coins.png'
-import InputWithLabel from '../base/InputWithLabel'
+import dayjs from 'dayjs'
+interface IViewEditPrpops {
+  user?: User
+}
 
-dayjs.extend(relativeTime)
+const ViewEditsPopup: FC<IViewEditPrpops> = ({ user }) => {
+  const [isOpenPopup, setOpenPopup] = useState(false)
 
-const StaffEdits = ({ name }: { name: string }) => {
-  const [searchObj, setSearchObj] = useState<{ col3: string | number }>({
-    col3: ''
-  })
-
-  const updateSearch = (name: string, value: string | number) => {
-    setSearchObj(() => {
-      return { col3: value }
-    })
+  const closePopup = () => {
+    setOpenPopup(false)
   }
+
+  useEffect(() => {
+    user && setOpenPopup(true)
+  }, [user])
 
   const getUserComponent = (user: User) => {
     return (
@@ -41,11 +42,6 @@ const StaffEdits = ({ name }: { name: string }) => {
       {
         header: 'Editor',
         accessor: 'col1',
-        Cell: (props: any) => getUserComponent(props.value)
-      },
-      {
-        header: 'Affected',
-        accessor: 'col2',
         Cell: (props: any) => getUserComponent(props.value)
       },
       {
@@ -90,28 +86,33 @@ const StaffEdits = ({ name }: { name: string }) => {
         col6: { value: 1000, type: 'Edit Balance' },
         col7: { value: 1200, type: 'Edit Balance' },
         col8: new Date('2023-01-12T16:51:16.919Z')
+      },
+      {
+        col1: { name: 'DerWeißWizard 1', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
+        col2: { name: 'DerWeißWizard 1', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
+        col3: '1',
+        col4: '1000',
+        col5: 'Edit Balance',
+        col6: { value: 1000, type: 'Edit Balance' },
+        col7: { value: 1200, type: 'Edit Balance' },
+        col8: new Date('2023-01-12T16:51:16.919Z')
       }
-    ].filter((i) => i.col3.includes(searchObj.col3.toString())),
-    [searchObj.col3]
+    ], []
   )
 
-  return (
-    <>
-      <div className='flex flex-col justify-between h-full rounded-lg bg-dark-1 px-8 py-10'>
-        <div className='w-full'>
-          <div className='flex justify-between items-center mb-6'>
-            <h4 className='text-white uppercase text-2xl'>{name}</h4>
-            <div className='flex gap-6'>
-              <InputWithLabel type='text' value={searchObj.col3} name="steamId" changeFunction={updateSearch} placeholder="Search By Steam ID" />
-            </div>
-          </div>
-          <div className='w-full flex flex-col mb-4'>
+  return (isOpenPopup
+    ? <PopupWrapper closePopup={closePopup}>
+        <div className={ 'flex flex-col items-start'}>
+          <h4 className='text-white uppercase text-3xl font-medium mb-2'>Edits</h4>
+          <UserAvatarWithName
+            user={user}
+            avatarClasses='flex gap-2 items-center text-base font-semibold text-gray-6 mt-4'
+            isBorderShown />
             <Table columns={columns} data={data} />
-          </div>
         </div>
-      </div>
-    </>
+        </PopupWrapper>
+    : null
   )
 }
 
-export default StaffEdits
+export default ViewEditsPopup
