@@ -19,6 +19,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
 
   useEffect(() => {
     if (state?.data?.data) {
+      console.log('state?.data?.data', state?.data?.data)
       const { gameHistory, userBots, jackpots } = state.data.data
       const monthData: any[] = []
       let historyData = gameHistory.filter((game: any) => game.mode !== 'jackpot' && game.mode !== 'coinflip')

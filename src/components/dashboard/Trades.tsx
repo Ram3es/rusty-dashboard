@@ -5,7 +5,7 @@ import Image from '../../assets/RustylootLogo.png'
 import CoinceImage from '../../assets/coins.png'
 import ButtonsToggle from '../base/ButtonsToggle'
 import InputWithLabel from '../base/InputWithLabel'
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 
 dayjs.extend(relativeTime)
 
@@ -84,7 +84,7 @@ const Trades = ({ name }: { name: string }) => {
       {
         header: 'Items',
         accessor: 'col1',
-        Cell: (props: any) => getItems(props.value),
+        Cell: (props: any) => getItems(props.value)
       },
       {
         header: 'Value',
