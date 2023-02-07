@@ -2,15 +2,20 @@ import { useState } from 'react'
 import { UserWithFields } from '../../types/User'
 import PopupWrapper from '../base/PopupWrapper'
 import UserAccountField from '../base/UserAccountField'
-import TextareaWithLabel from '../base/TextareaWithLabel'
 import Button from '../base/Button'
-import TimeInput from '../base/TimeInput'
 import { Time } from '../../types/Time'
 import ArrowIcon from '../icons/ArrowIcon'
 import { Listbox } from '@headlessui/react'
 import AvatarImage from '../../assets/avatar.png'
 import ProfilePicture from '../../assets/profilePicture.png'
 import InputWithLabel from '../base/InputWithLabel'
+
+const statisticOptions = [
+  { id: 1, name: 'Active', unavailable: false },
+  { id: 2, name: 'Disabled', unavailable: false },
+  { id: 3, name: 'Disabled - System AI', unavailable: false },
+  { id: 4, name: 'Whitlisted Bypass', unavailable: false }
+]
 
 const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[] }) => {
   const [user, setUser] = useState<UserWithFields>({
@@ -42,18 +47,23 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
     lattestIp: '82.76.4.6',
     lattestLogin: new Date('2023-01-12T16:51:16.919Z')
   })
-
-  const statisticOptions = [
-    { id: 1, name: 'Active', unavailable: false },
-    { id: 2, name: 'Disabled', unavailable: false },
-    { id: 3, name: 'Disabled - System AI', unavailable: false },
-    { id: 4, name: 'Whitlisted Bypass', unavailable: false }
-  ]
-
   const [selectedGeneralStatisticPeriod, setSelectedGeneralStatisticPeriod] = useState(statisticOptions[0])
-
   const [affiliateCode, setAffiliateCode] = useState<string>(user.affiliateCode)
   const [isAffiliateCodePopupOpen, setAffiliateCodePopupOpen] = useState<boolean>(false)
+  const [mutedLength, setMuteLength] = useState<Time>(user.mutedLength)
+  const [mutedReason, setMutedReason] = useState<string>(user.mutedReason)
+  const [isMutedPopupOpen, setMutedPopupOpen] = useState<boolean>(false)
+  const [isMutedEditPopupOpen, setMutedEditPopupOpen] = useState<boolean>(false)
+  const [bannedLength, setBannedLength] = useState<Time>(user.bannedLength)
+  const [bannedReason, setBannedReason] = useState<string>(user.bannedReason)
+  const [isBannedPopupOpen, setBannedPopupOpen] = useState<boolean>(false)
+  const [isBannedEditPopupOpen, setBannedEditPopupOpen] = useState<boolean>(false)
+  const [isConfirmationAfCodePopupOpen, setConfirmationAfCodePopupOpen] = useState<boolean>(false)
+  const [isEditMutedConfirmationPopupOpen, setEditMutedConfirmationPopupOpen] = useState<boolean>(false)
+  const [isSetMutedConfirmationPopupOpen, setSetMutedConfirmationPopupOpen] = useState<boolean>(false)
+  const [isEditBannedConfirmationPopupOpen, setEditBannedConfirmationPopupOpen] = useState<boolean>(false)
+  const [isSetBannedConfirmationPopupOpen, setSetBannedConfirmationPopupOpen] = useState<boolean>(false)
+
   const submitUserAffiliateCode = () => {
     setUser((prev) => {
       return { ...prev, affiliateCode }
@@ -62,10 +72,6 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
     setConfirmationAfCodePopupOpen(false)
   }
 
-  const [mutedLength, setMuteLength] = useState<Time>(user.mutedLength)
-  const [mutedReason, setMutedReason] = useState<string>(user.mutedReason)
-  const [isMutedPopupOpen, setMutedPopupOpen] = useState<boolean>(false)
-  const [isMutedEditPopupOpen, setMutedEditPopupOpen] = useState<boolean>(false)
   const submitUserMuted = () => {
     setUser((prev) => {
       return { ...prev, muted: true, mutedLength, mutedReason }
@@ -76,10 +82,6 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
     setSetMutedConfirmationPopupOpen(false)
   }
 
-  const [bannedLength, setBannedLength] = useState<Time>(user.bannedLength)
-  const [bannedReason, setBannedReason] = useState<string>(user.bannedReason)
-  const [isBannedPopupOpen, setBannedPopupOpen] = useState<boolean>(false)
-  const [isBannedEditPopupOpen, setBannedEditPopupOpen] = useState<boolean>(false)
   const submitUserBanned = () => {
     setUser((prev) => {
       return { ...prev, banned: true, bannedLength, bannedReason }
@@ -90,17 +92,10 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
     setSetBannedConfirmationPopupOpen(false)
   }
 
-  const [isConfirmationAfCodePopupOpen, setConfirmationAfCodePopupOpen] = useState<boolean>(false)
-  const [isEditMutedConfirmationPopupOpen, setEditMutedConfirmationPopupOpen] = useState<boolean>(false)
-  const [isSetMutedConfirmationPopupOpen, setSetMutedConfirmationPopupOpen] = useState<boolean>(false)
-
-  const [isEditBannedConfirmationPopupOpen, setEditBannedConfirmationPopupOpen] = useState<boolean>(false)
-  const [isSetBannedConfirmationPopupOpen, setSetBannedConfirmationPopupOpen] = useState<boolean>(false)
-
   return (
     <>
       <div className="w-full mb-6 ">
-        <h3 className="uppercase text-2xl text-white">Account Information</h3>
+        <h3 className="uppercase text-2xl text-white mb-6">Account Information</h3>
         <div className='w-full flex flex-col mb-4 text-gray-6 text-sm'>
           <div className='w-full flex flex-row'>
             <div className='w-full flex flex-col'>
@@ -192,7 +187,7 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
                 name="affiliateCode"
                 label='New Code'
                 placeholder='Enter Amount'
-                changeFunction={setAffiliateCode}
+                changeFunction={(name: string, value: string) => setAffiliateCode(value)}
               />
             </div>
             <div className='mt-10 mx-auto flex justify-center items-center gap-4 w-36'>
@@ -214,7 +209,7 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
             <div className='w-1/2 m-auto mb-6'>
               <div className='text-white text-base pb-2'>Length of mute</div>
               <div className='flex justify-center items-center gap-2'>
-                <TimeInput
+                  <InputWithLabel
                     value={mutedLength.days}
                     name="muteLength"
                     changeFunction={(name: any, value: number) => {
@@ -225,7 +220,7 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
                     type='number'
                     label='Days'
                   />
-                  <TimeInput
+                  <InputWithLabel
                     value={mutedLength.hours}
                     name="muteLength"
                     changeFunction={(name: any, value: number) => {
@@ -236,7 +231,7 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
                     type='number'
                     label='Hours'
                   />
-                  <TimeInput
+                  <InputWithLabel
                     value={mutedLength.minutes}
                     name="muteLength"
                     changeFunction={(name: any, value: number) => {
@@ -250,7 +245,8 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
               </div>
             </div>
             <div className='text-white text-base pb-2'>Reason for Mute</div>
-            <TextareaWithLabel
+            <InputWithLabel
+              type="textarea"
               value={mutedReason}
               name="mutedReason"
               label='Reason for Mute'
@@ -282,7 +278,7 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
             <div className='w-1/2 m-auto'>
               <div className='text-white text-base pb-2'>New Length of mute</div>
               <div className='flex justify-center items-center gap-2'>
-                <TimeInput
+                <InputWithLabel
                     value={mutedLength.days}
                     name="muteLength"
                     changeFunction={(name: any, value: number) => {
@@ -293,7 +289,7 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
                     type='number'
                     label='Days'
                   />
-                  <TimeInput
+                  <InputWithLabel
                     value={mutedLength.hours}
                     name="muteLength"
                     changeFunction={(name: any, value: number) => {
@@ -304,7 +300,7 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
                     type='number'
                     label='Hours'
                   />
-                  <TimeInput
+                  <InputWithLabel
                     value={mutedLength.minutes}
                     name="muteLength"
                     changeFunction={(name: any, value: number) => {
@@ -336,7 +332,7 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
             <div className='w-1/2 m-auto mb-6'>
               <div className='text-white text-base pb-2'>Length of ban</div>
               <div className='flex justify-center items-center gap-2'>
-                <TimeInput
+                <InputWithLabel
                     value={bannedLength.days}
                     name="bannedLength"
                     changeFunction={(name: any, value: number) => {
@@ -347,7 +343,7 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
                     type='number'
                     label='Days'
                   />
-                  <TimeInput
+                  <InputWithLabel
                     value={bannedLength.hours}
                     name="bannedLength"
                     changeFunction={(name: any, value: number) => {
@@ -358,7 +354,7 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
                     type='number'
                     label='Hours'
                   />
-                  <TimeInput
+                  <InputWithLabel
                     value={bannedLength.minutes}
                     name="bannedLength"
                     changeFunction={(name: any, value: number) => {
@@ -372,7 +368,8 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
               </div>
             </div>
             <div className='text-white text-base pb-2'>Reason for ban</div>
-            <TextareaWithLabel
+            <InputWithLabel
+              type="textarea"
               value={bannedReason}
               name="bannedReason"
               label='Reason for ban'
@@ -401,7 +398,7 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
                 <p className='text-gray-7'>{user.bannedLength.days}D {user.bannedLength.hours}hrs {user.bannedLength.minutes}m</p>
               </div>
               <div className='flex justify-center items-center gap-2'>
-                <TimeInput
+                <InputWithLabel
                     value={bannedLength.days}
                     name="bannedLength"
                     changeFunction={(name: any, value: number) => {
@@ -412,7 +409,7 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
                     type='number'
                     label='Days'
                   />
-                  <TimeInput
+                  <InputWithLabel
                     value={bannedLength.hours}
                     name="bannedLength"
                     changeFunction={(name: any, value: number) => {
@@ -423,7 +420,7 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
                     type='number'
                     label='Hours'
                   />
-                  <TimeInput
+                  <InputWithLabel
                     value={bannedLength.minutes}
                     name="bannedLength"
                     changeFunction={(name: any, value: number) => {
