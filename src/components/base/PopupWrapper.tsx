@@ -12,7 +12,7 @@ const PopupWrapper = ({ children, closePopup }: { children: JSX.Element | JSX.El
             <div className='absolute right-5 top-6'>
               <button
                 type='button'
-                className='rounded-md p-2 text-gray-8 hover:text-gray-6 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500'
+                className='rounded-md p-2 z-10 text-gray-8 hover:text-gray-6 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500'
                 onClick={() => closePopup()}
               >
               <span className='sr-only'>Close menu</span>
@@ -21,7 +21,9 @@ const PopupWrapper = ({ children, closePopup }: { children: JSX.Element | JSX.El
               </svg>
             </button>
             </div>
-            {children}
+            <div className='-mt-8'>
+              {children}
+            </div>
           </div>
       </div>
   )
