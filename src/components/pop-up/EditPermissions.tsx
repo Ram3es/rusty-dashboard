@@ -26,7 +26,7 @@ const EditPermissions: FC<IEditPermissProps> = (props) => {
   return (isOpenPopup
     ? (
         <PopupWrapper closePopup={ onTogglePopup }>
-            <PermissionTemplate {...props} toggleTooltip={onTogglePopup} />
+            <PermissionTemplate {...props} togglePopup={onTogglePopup} />
         </PopupWrapper>)
     : null)
 }

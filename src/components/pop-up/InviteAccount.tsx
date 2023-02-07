@@ -4,6 +4,7 @@ import Button from '../base/Button'
 import InputWithLabel from '../base/InputWithLabel'
 import PopupWrapper from '../base/PopupWrapper'
 import PermissionTemplate from './templates/PermissionTemplate'
+import Divider from '../base/Divider'
 
 interface IInviteAccountProps {
   isOpenPopupAddUser: boolean
@@ -49,9 +50,8 @@ const InviteAccount: FC<IInviteAccountProps> = ({ isOpenPopupAddUser, onClosePop
     <div className=' flex flex-col items-center w-[450px]'>
       <h4 className='text-white uppercase text-3xl font-medium mb-2'>Invite Dashboard Account</h4>
       <p className='text-center text-gray-6 font-normal text-sm leading-5 px-14'>A user will be able to login to the dashboard withthe following details you create below</p>
-
-      <div className='w-full h-0.5 absolute top-[200px] left-0 bg-yellow-f' />
-        <div className=' w-[300px] mt-[80px]'>
+      <Divider />
+        <div className=' w-[300px] mt-[100px]'>
           <form className='w-full [&>label]:mb-4'>
             <InputWithLabel
                type='text'
@@ -89,10 +89,10 @@ const InviteAccount: FC<IInviteAccountProps> = ({ isOpenPopupAddUser, onClosePop
         return (
        <PermissionTemplate
             user={user}
-            title={'Invite Dashboard Account'}
+            title={'Create Dashboard Account'}
             submitFunction={submitCreateAccount}
-            toggleTooltip={cancelSubmit}
-            popupClasses='flex flex-col items-center w-[450px] [&>p]:px-20' />)
+            togglePopup={cancelSubmit}
+            popupClasses='flex flex-col items-center w-[450px] h-[520px] [&>p]:mb-[80px]' />)
     }
   }
 
