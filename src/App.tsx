@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import io from 'socket.io-client'
-import { API_URLS } from './constants'
+import socket from './Middleware/socket'
 import { BrowserRouter } from 'react-router-dom'
 import MenuMobile from './components/nav/MenuMobile'
 import MenuDesktop from './components/nav/MenuDesktop'
@@ -15,18 +14,13 @@ import AffiliatesIcon from './components/icons/AffiliatesIcon'
 import BotsIcon from './components/icons/BotsIcon'
 import SponseeIcon from './components/icons/SponseeIcon'
 
-const socket = io(API_URLS.API_URL, {
-  transports: ['websocket', 'polling'],
-  upgrade: true
-})
-
 const navigation = [
-  { name: 'Home', href: '/', icon: <DashboardIcon iconCalsses='w-4 h-4' /> },
-  { name: 'Users', href: '/users', icon: <UsersIcon iconCalsses='h-4' /> },
-  { name: 'Staff', href: '/staff', icon: <StaffIcon iconCalsses='w-4' /> },
-  { name: 'Affiliates', href: '/affiliates', icon: <AffiliatesIcon iconCalsses='w-4' /> },
-  { name: 'Bots', href: '/bots', icon: <BotsIcon iconCalsses='w-4' /> },
-  { name: 'Sponsee', href: '/sponsee', icon: <SponseeIcon iconCalsses='w-4' /> }
+  { name: 'Home', href: '/admin/', icon: <DashboardIcon iconCalsses='w-4 h-4' /> },
+  { name: 'Users', href: '/admin/users', icon: <UsersIcon iconCalsses='h-4' /> },
+  { name: 'Staff', href: '/admin/staff', icon: <StaffIcon iconCalsses='w-4' /> },
+  { name: 'Affiliates', href: '/admin/affiliates', icon: <AffiliatesIcon iconCalsses='w-4' /> },
+  { name: 'Bots', href: '/admin/bots', icon: <BotsIcon iconCalsses='w-4' /> },
+  { name: 'Sponsee', href: '/admin/sponsee', icon: <SponseeIcon iconCalsses='w-4' /> }
 ]
 
 function App (): JSX.Element {

@@ -5,7 +5,7 @@ import Image from '../../assets/RustylootLogo.png'
 import CoinceImage from '../../assets/coins.png'
 import ButtonsToggle from '../base/ButtonsToggle'
 import InputWithLabel from '../base/InputWithLabel'
-import * as dayjs from 'dayjs'
+import dayjs from 'dayjs';
 
 dayjs.extend(relativeTime)
 

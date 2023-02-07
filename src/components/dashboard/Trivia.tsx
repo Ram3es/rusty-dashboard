@@ -6,7 +6,7 @@ import Image from '../../assets/RustylootLogo.png'
 import SteamIcon from '../icons/SteamIcon'
 import CloseIcon from '../icons/CloseIcon'
 import ButtonsToggle from '../base/ButtonsToggle'
-import * as dayjs from 'dayjs'
+import dayjs from 'dayjs'
 import PopupWrapper from '../base/PopupWrapper'
 import InputWithLabel from '../base/InputWithLabel'
 

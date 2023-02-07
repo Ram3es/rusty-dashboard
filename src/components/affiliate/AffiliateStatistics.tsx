@@ -16,7 +16,7 @@ const AffiliateStatistics = ({ name }: { name: string }) => {
   }
 
   const getCodeWithLink = (value: string) => {
-    return <Link to={`/affiliates/${value}`}>{value}</Link>
+    return <Link to={`/admin/affiliates/${value}`}>{value}</Link>
   }
 
   const getPriceFormated = (value: number) => {

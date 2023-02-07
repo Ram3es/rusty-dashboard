@@ -3,6 +3,7 @@ import { Time } from './Time'
 export interface User {
   name: string
   email?: string
+  password?: string
   avatar: string
 }
 

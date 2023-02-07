@@ -1,15 +1,21 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import Table from '../base/Table'
-import * as dayjs from 'dayjs'
+import dayjs from 'dayjs'
 import { User } from '../../types/User'
 import Button from '../base/Button'
 import { Listbox } from '@headlessui/react'
 import ArrowIcon from '../icons/ArrowIcon'
+import SearchForUsersPopup from '../pop-up/SearchForUsersPopup'
 
 dayjs.extend(relativeTime)
 
 const SitePermissions = ({ name }: { name: string }) => {
+  const [isOpenPopupAddUser, setOpenPopupAddUser] = useState<boolean>(false)
+
+  const togglePopup = () => {
+    setOpenPopupAddUser(prev => !prev)
+  }
   const getUserComponent = (user: User) => {
     return (
       <div className='flex gap-2 items-center'>
@@ -119,13 +125,14 @@ const SitePermissions = ({ name }: { name: string }) => {
           <div className='flex justify-between items-center mb-6'>
             <h4 className='text-white uppercase text-2xl'>{name}</h4>
             <div className='flex gap-6'>
-              <Button text='Add User' submitFunction={() => console.log('add')} color="gray" />
+              <Button text='Add User' submitFunction={() => { console.log('add'); togglePopup() }} color="gray" />
             </div>
           </div>
           <div className='w-full flex flex-col mb-4'>
             <Table columns={columns} data={data} />
           </div>
         </div>
+        <SearchForUsersPopup isOpenPopup={isOpenPopupAddUser} closePopup={togglePopup} />
       </div>
     </>
   )

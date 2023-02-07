@@ -1,37 +1,46 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import Table from '../base/Table'
-import * as dayjs from 'dayjs'
+import dayjs from 'dayjs'
 import { User } from '../../types/User'
 import Button from '../base/Button'
 import CoinceImage from '../../assets/coins.png'
 import EditIcon from '../icons/EditIcon'
 import LockIcon from '../icons/LockIcon'
+import EditPermissions from '../pop-up/EditPermissions'
+import UserAvatarWithName from '../base/UserAvatarWithName'
+import InviteAccount from '../pop-up/InviteAccount'
+import ViewEditsPopup from '../pop-up/ViewEditsPopup'
 
 dayjs.extend(relativeTime)
 
 const BackendAccounts = ({ name }: { name: string }) => {
+  const [userToPermissionEdit, setUserToPermissionEdit] = useState<User>()
+  const [userToEdit, setUserToEdit] = useState<User>()
+  const [isOpenPopupAddUser, setOpenPopupAddUser] = useState<boolean>(false)
+
+  const togglePopupAddUser = () => {
+    setOpenPopupAddUser(prev => !prev)
+  }
+
   const getUserComponent = (user: User) => {
-    return (
-      <div className='flex gap-2 items-center'>
-        <img className='w-6 rounded-full' src={user.avatar} alt={user.name} />
-        <div>{user.name}</div>
-      </div>
-    )
+    return <UserAvatarWithName user={user}/>
   }
 
   const getPermisionsEditButton = (id: string) => {
+    const mock = { name: 'DerWeißWizard', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' }
     return (
-      <div className='flex gap-3 cursor-pointer items-center text-yellow-f' onClick={() => console.log('edit permissions ', id)}>
+      <div className='flex gap-3 cursor-pointer items-center text-yellow-f' onClick={() => { console.log('edit permissions ', id); setUserToEdit(mock) } }>
         <EditIcon iconCalsses='w-5' />
         View Edits
       </div>
     )
   }
 
-  const getPermisionsPopup = (id: string) => {
+  const getPermisionsPopup = (user: User) => {
+    const mock = { name: 'DerWeißWizard', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' }
     return (
-      <div className='flex gap-3 cursor-pointer items-center text-yellow-f' onClick={() => console.log('View Permissions ', id)}>
+      <div className='flex gap-3 cursor-pointer items-center text-yellow-f' onClick={() => { console.log('View Permissions ', user); setUserToPermissionEdit(mock) }}>
         <LockIcon />
         View Permissions
       </div>
@@ -100,6 +109,10 @@ const BackendAccounts = ({ name }: { name: string }) => {
     []
   )
 
+  const submitPermission = () => {
+    console.log('submited')
+  }
+
   return (
     <>
       <div className='flex flex-col justify-between h-full rounded-lg bg-dark-1 px-8 py-10'>
@@ -107,12 +120,19 @@ const BackendAccounts = ({ name }: { name: string }) => {
           <div className='flex justify-between items-center mb-6'>
             <h4 className='text-white uppercase text-2xl'>{name}</h4>
             <div className='flex gap-6'>
-              <Button text='Add User' submitFunction={() => console.log('add')} color="gray" />
+              <Button text='Add User' submitFunction={() => { console.log('add'); togglePopupAddUser() }} color="gray" />
             </div>
           </div>
           <div className='w-full flex flex-col mb-4'>
             <Table columns={columns} data={data} />
           </div>
+          <EditPermissions
+            title='Edit Permission'
+            isEdit
+            user={userToPermissionEdit}
+            submitFunction={submitPermission} />
+          <InviteAccount isOpenPopupAddUser={isOpenPopupAddUser} onClosePopup={togglePopupAddUser} />
+          <ViewEditsPopup user={userToEdit} />
         </div>
       </div>
     </>
