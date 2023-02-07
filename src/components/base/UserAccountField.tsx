@@ -4,7 +4,7 @@ import MuteIcon from '../icons/MuteIcon'
 import EditButton from './EditButton'
 
 const UserAccountField = ({ value, label, editFieldValue, setFieldValue, icon }:
-{ value: string | boolean | null | undefined, label: string | null | undefined, editFieldValue?: Function, setFieldValue?: Function, icon?: string }) => {
+{ value?: string | boolean, label?: string, editFieldValue?: Function, setFieldValue?: Function, icon?: string }) => {
   return (
   <div className='w-full grid grid-cols-8 p-1'>
     <div className='col-span-3 p-1'>{ label }</div>
@@ -15,7 +15,7 @@ const UserAccountField = ({ value, label, editFieldValue, setFieldValue, icon }:
       <div className='col-span-2 flex justify-end items-center'>
         {
           (editFieldValue != null)
-            ? <EditButton editFieldValue={() => editFieldValue(true)} />
+            ? <EditButton editFieldFunction={() => editFieldValue(true)} />
             : null
         }
         { (setFieldValue === undefined)
