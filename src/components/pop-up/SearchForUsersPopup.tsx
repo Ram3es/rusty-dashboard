@@ -60,7 +60,7 @@ const SearchForUsersPopup: FC<ISearchUsersProps> = ({ isOpenPopup, closePopup })
           <h4 className='text-white uppercase  text-3xl font-medium mb-8'>Search for users</h4>
             <UserSearch submitFn={() => { '' }} />
             <div className=' w-full mt-5'>
-              <div className='flex items-center w-full my-3'>
+              <div className='flex items-center w-full my-3 text-gray-4'>
                 <h6 className='text-white text-base mr-2 '>Select Permission</h6>
                 <QuestionMarkRounded tooltipId='tooltip-permission'/>
               </div>
@@ -72,7 +72,7 @@ const SearchForUsersPopup: FC<ISearchUsersProps> = ({ isOpenPopup, closePopup })
               <Button text='Add' submitFunction={() => { submitFunction() }} />
             </div>
         </div>
-         <TooltipElement anchorId='tooltip-permission' tooltipClasses='bg-dark-22 opacity-100 w-[450px] border-[1.5px] border-dark-37 text-center text-gray-8 text-sm' >
+         <TooltipElement anchorId='tooltip-permission' tooltipClasses='bg-dark-22 opacity-100 w-[450px] border-[1.5px] border-dark-37 text-center text-gray-8 text-sm shadow-tooltip' >
            <p>Basic on-site permissions gives the user access to /mute and delete messages </p>
            <p>Advanced on-site permissions gives the user access to /ban and clear site chat, as well as Basic on-site permissions</p>
          </TooltipElement>

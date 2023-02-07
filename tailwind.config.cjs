@@ -18,6 +18,7 @@ module.exports = {
         'dark-171': '#171D2B',
         'dark-22': '#22273E',
         'gray-6': '#666E97',
+        'gray-4': '#4F5677',
         'gray-3b': '#3B436B',
         'gray-7': '#7A81A5',
         'gray-8': '#8C98A9',

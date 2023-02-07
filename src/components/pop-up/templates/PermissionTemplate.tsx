@@ -49,7 +49,7 @@ const PermissionTemplate: FC<IPermissionProps> = ({ title, isEdit, user, submitF
           </div>)
           : (
             <Divider
-            progressClasses='absolute h-[100%] w-2/3 left-0' />
+            progressClasses='absolute h-full w-2/3 left-0' />
             )}
 
         <h6 className='text-white text-base  mt-8'>Pages</h6>
@@ -71,7 +71,7 @@ const PermissionTemplate: FC<IPermissionProps> = ({ title, isEdit, user, submitF
           <TooltipElement anchorId='tooltip-permission' >
             <p className='text-gray-8 text-sm'>View Access only allows the user to view pages but not edit anything. Edit access allows the user to view the page and edit it.</p>
           </TooltipElement>
-        <div className='flex items-center mt-3 gap-2' >
+        <div className='flex items-center mt-3 gap-2 text-gray-4' >
           <h6 className='text-white text-base '>Permissions</h6>
           <QuestionMarkRounded tooltipId='tooltip-permission' />
         </div>

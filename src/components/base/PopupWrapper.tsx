@@ -21,7 +21,7 @@ const PopupWrapper = ({ children, closePopup }: { children: JSX.Element | JSX.El
               </svg>
             </button>
             </div>
-            <div className='-mt-8'>
+            <div>
               {children}
             </div>
           </div>
