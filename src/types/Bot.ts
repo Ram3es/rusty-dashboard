@@ -9,6 +9,5 @@ export interface Bot {
   proxy: string
   userName: string
   userPassword: string
-  actionId: string
-  isBotPublished: boolean
+  actionState: { id: string, isBotPublished: boolean }
 }

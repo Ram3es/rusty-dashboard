@@ -4,6 +4,8 @@ import EditButton from '../base/EditButton'
 import InputWithLabel from '../base/InputWithLabel'
 import Table from '../base/Table'
 import UserAvatarWithName from '../base/UserAvatarWithName'
+import CheckIcon from '../icons/CheckIcon'
+import CopyIcon from '../icons/CopyIcon'
 
 const updateInput = (valueToEdit: string) => {
   const [editValue, setEditValue] = useState<string>(valueToEdit)
@@ -13,14 +15,71 @@ const updateInput = (valueToEdit: string) => {
   return (
     <div className='relative'>
       <InputWithLabel inputClasses="px-3 py-2 bg-dark-17 rounded text-white pr-16" type="text" name="proxy" value={editValue} changeFunction={editFunction} />
-      <div className='absolute right-2 top-1/2 transform -translate-y-1/2'>
-        {valueToEdit === editValue ? <EditButton editFieldFunction={() => console.log("edit proxy")} /> : 'submit'}
+      <div className='absolute flex right-2 top-1/2 transform -translate-y-1/2'>
+        {valueToEdit === editValue ? 
+          <EditButton
+            iconClasses='w-5 h-5 flex justify-center items-center mr-1 rounded bg-dark-1f text-gray-6 cursor-pointer'
+            
+          /> 
+        : <div
+            onClick={() => {
+              console.log('submit')
+            }}
+            className='w-5 h-5 flex justify-center items-center mr-1 rounded bg-dark-1f text-gray-6 cursor-pointer'
+          >
+            <svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6.11572 9.12019L6.11579 9.12026C6.21522 9.2089 6.31461 9.29753 6.41398 9.38615C7.11145 10.0081 7.808 10.6293 8.50964 11.2449L8.5097 11.245C8.57971 11.3064 8.66851 11.3544 8.74417 11.372C8.81989 11.3896 8.89965 11.3676 9.00005 11.2573C9.75271 10.4305 10.5067 9.60467 11.2605 8.77915C11.3482 8.68303 11.436 8.58692 11.5237 8.49081L6.11572 9.12019ZM6.11572 9.12019C5.98644 9.00504 5.79965 8.86958 5.54818 8.87688C5.15918 8.87803 4.8354 9.13474 4.76437 9.51374L6.11572 9.12019ZM14.6734 5.8133L14.6734 5.81331C14.9668 5.93576 15.2001 6.24383 15.141 6.60495C15.1139 6.7705 15.034 6.94868 14.9161 7.07929C14.1441 7.93549 13.3672 8.78734 12.5907 9.6387C12.398 9.84999 12.2053 10.0613 12.0127 10.2726C11.1442 11.2255 10.2754 12.1784 9.40662 13.1314L9.40654 13.1314C9.2408 13.3131 9.03843 13.4389 8.80349 13.4493C8.56812 13.4598 8.35624 13.352 8.17707 13.1851C7.95124 12.9748 7.72545 12.7645 7.49966 12.5543C6.67796 11.7891 5.85635 11.024 5.03369 10.26C5.03369 10.26 5.03369 10.26 5.03368 10.26L5.2038 10.0768L14.6734 5.8133ZM14.6734 5.8133C14.3487 5.67784 14.0132 5.76405 13.7725 6.02731L14.6734 5.8133ZM11.9732 7.99803C12.5726 7.34095 13.1721 6.68372 13.7724 6.02735L11.9732 7.99803ZM11.9732 7.99803C11.8234 8.16228 11.6736 8.32652 11.5238 8.49074L11.9732 7.99803Z" fill="#666E97" stroke="#666E97" strokeWidth="0.5"/>
+            </svg>
+          </div>
+        }
+        <div
+          onClick={() => {
+            if (editValue) {
+              void navigator.clipboard.writeText(editValue.toString())
+            }
+          }}
+          className='w-5 h-5 flex justify-center items-center mr-1 rounded bg-dark-1f text-gray-6 cursor-pointer'
+        >
+          <CopyIcon />
+        </div>
       </div>
     </div>
   )
 }
 
-const BotsTable = ({ name, userData, onUpdate }: { name: string, userData: Bot[], onUpdate: (bot: Bot) => void }) => {
+const BotsTable = ({ name, botsData, onUpdate, onRemove }: { name: string, botsData: Bot[], onUpdate: (bot: Bot) => void, onRemove: (id:string) => void}) => {
+  const getActionButtons = ({id, isBotPublished} : {id: string, isBotPublished: boolean}) => {
+    return (
+      <div className='flex gap-6'>
+        {isBotPublished ? <div className='text-yellow-f text-base flex gap-2 items-center'>
+            <span>Push</span>
+            <svg width="19" height="15" viewBox="0 0 19 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.00646 6.37264L10.7277 6.37264L7.47072 3.11563C7.20461 2.84952 7.20461 2.41814 7.47072 2.15203C7.73684 1.88591 8.16837 1.88591 8.43448 2.15203L12.8547 6.57231C13.1208 6.83842 13.1208 7.26995 12.8547 7.53592C12.8547 7.53592 12.8547 7.53593 12.8547 7.53593L8.43448 11.9562C8.30144 12.0892 8.1269 12.1559 7.95252 12.1559C7.77829 12.1559 7.60376 12.0892 7.47072 11.9562C7.20462 11.6901 7.2046 11.2586 7.47072 10.9926C7.47073 10.9926 7.47073 10.9926 7.47074 10.9926L10.7277 7.73558L1.00646 7.73558C0.630287 7.73558 0.325 7.43046 0.325 7.05411C0.325 6.67777 0.630121 6.37264 1.00646 6.37264Z" fill="#FFC701" stroke="#FFC701" strokeWidth="0.1"/>
+              <rect x="-0.05" y="-0.05" width="13.9922" height="1.36293" rx="0.681464" transform="matrix(0 1 1 0 16.7363 0.10791)" fill="#FFC701" stroke="#FFC701" strokeWidth="0.1"/>
+            </svg>
+          </div>
+        : <div className='text-yellow-f text-base flex gap-2 items-center'>
+            <svg className='transform rotate-180' width="19" height="15" viewBox="0 0 19 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1.00646 6.37264L10.7277 6.37264L7.47072 3.11563C7.20461 2.84952 7.20461 2.41814 7.47072 2.15203C7.73684 1.88591 8.16837 1.88591 8.43448 2.15203L12.8547 6.57231C13.1208 6.83842 13.1208 7.26995 12.8547 7.53592C12.8547 7.53592 12.8547 7.53593 12.8547 7.53593L8.43448 11.9562C8.30144 12.0892 8.1269 12.1559 7.95252 12.1559C7.77829 12.1559 7.60376 12.0892 7.47072 11.9562C7.20462 11.6901 7.2046 11.2586 7.47072 10.9926C7.47073 10.9926 7.47073 10.9926 7.47074 10.9926L10.7277 7.73558L1.00646 7.73558C0.630287 7.73558 0.325 7.43046 0.325 7.05411C0.325 6.67777 0.630121 6.37264 1.00646 6.37264Z" fill="#FFC701" stroke="#FFC701" strokeWidth="0.1"/>
+              <rect x="-0.05" y="-0.05" width="13.9922" height="1.36293" rx="0.681464" transform="matrix(0 1 1 0 16.7363 0.10791)" fill="#FFC701" stroke="#FFC701" strokeWidth="0.1"/>
+            </svg>
+            <span>Push</span>
+          </div>
+        }
+        <div className='text-gray-6 text-base flex gap-2 items-center cursor-pointer' onClick={() => onRemove(id)}>
+          <svg width="15" height="17" viewBox="0 0 15 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10.0637 16.7729H4.69639C3.80669 16.7729 2.95344 16.4194 2.32433 15.7903C1.69523 15.1612 1.3418 14.308 1.3418 13.4183V4.02541C1.3418 3.84747 1.41248 3.67682 1.5383 3.551C1.66413 3.42518 1.83478 3.35449 2.01271 3.35449C2.19065 3.35449 2.3613 3.42518 2.48713 3.551C2.61295 3.67682 2.68363 3.84747 2.68363 4.02541V13.4183C2.68363 13.9521 2.89569 14.464 3.27315 14.8415C3.65062 15.219 4.16257 15.431 4.69639 15.431H10.0637C10.5975 15.431 11.1095 15.219 11.487 14.8415C11.8644 14.464 12.0765 13.9521 12.0765 13.4183V4.02541C12.0765 3.84747 12.1472 3.67682 12.273 3.551C12.3988 3.42518 12.5695 3.35449 12.7474 3.35449C12.9253 3.35449 13.096 3.42518 13.2218 3.551C13.3476 3.67682 13.4183 3.84747 13.4183 4.02541V13.4183C13.4183 14.308 13.0649 15.1612 12.4358 15.7903C11.8067 16.4194 10.9534 16.7729 10.0637 16.7729Z" fill="#666E97"/>
+            <path d="M14.0893 4.02543H0.670918C0.492979 4.02543 0.322329 3.95474 0.196507 3.82892C0.0706859 3.7031 0 3.53245 0 3.35451C0 3.17657 0.0706859 3.00592 0.196507 2.8801C0.322329 2.75428 0.492979 2.68359 0.670918 2.68359H14.0893C14.2672 2.68359 14.4379 2.75428 14.5637 2.8801C14.6895 3.00592 14.7602 3.17657 14.7602 3.35451C14.7602 3.53245 14.6895 3.7031 14.5637 3.82892C14.4379 3.95474 14.2672 4.02543 14.0893 4.02543Z" fill="#666E97"/>
+            <path d="M10.0637 4.02551H4.69631C4.51837 4.02551 4.34772 3.95482 4.2219 3.829C4.09608 3.70318 4.02539 3.53253 4.02539 3.35459V2.01275C4.02539 1.47894 4.23745 0.966987 4.61491 0.589522C4.99238 0.212057 5.50433 0 6.03814 0H8.72182C9.25563 0 9.76758 0.212057 10.145 0.589522C10.5225 0.966987 10.7346 1.47894 10.7346 2.01275V3.35459C10.7346 3.53253 10.6639 3.70318 10.5381 3.829C10.4122 3.95482 10.2416 4.02551 10.0637 4.02551ZM5.36723 2.68367H9.39273V2.01275C9.39273 1.83482 9.32205 1.66416 9.19623 1.53834C9.07041 1.41252 8.89975 1.34184 8.72182 1.34184H6.03814C5.86021 1.34184 5.68956 1.41252 5.56373 1.53834C5.43791 1.66416 5.36723 1.83482 5.36723 2.01275V2.68367Z" fill="#666E97"/>
+            <path d="M6.03811 12.7477C5.86017 12.7477 5.68952 12.677 5.56369 12.5512C5.43787 12.4254 5.36719 12.2548 5.36719 12.0768V7.38039C5.36719 7.20245 5.43787 7.0318 5.56369 6.90598C5.68952 6.78016 5.86017 6.70947 6.03811 6.70947C6.21604 6.70947 6.38669 6.78016 6.51252 6.90598C6.63834 7.0318 6.70902 7.20245 6.70902 7.38039V12.0768C6.70902 12.2548 6.63834 12.4254 6.51252 12.5512C6.38669 12.677 6.21604 12.7477 6.03811 12.7477Z" fill="#666E97"/>
+            <path d="M8.72365 12.7477C8.54571 12.7477 8.37506 12.677 8.24924 12.5512C8.12342 12.4254 8.05273 12.2548 8.05273 12.0768V7.38039C8.05273 7.20245 8.12342 7.0318 8.24924 6.90598C8.37506 6.78016 8.54571 6.70947 8.72365 6.70947C8.90159 6.70947 9.07224 6.78016 9.19806 6.90598C9.32388 7.0318 9.39457 7.20245 9.39457 7.38039V12.0768C9.39457 12.2548 9.32388 12.4254 9.19806 12.5512C9.07224 12.677 8.90159 12.7477 8.72365 12.7477Z" fill="#666E97"/>
+          </svg>
+          <span>Remove</span>
+        </div>
+      </div>
+    )
+  }
+
   const getUserComponent = (props: any) => {
     return <UserAvatarWithName user={props.value}/>
   }
@@ -86,7 +145,8 @@ const BotsTable = ({ name, userData, onUpdate }: { name: string, userData: Bot[]
       },
       {
         header: 'Action',
-        accessor: 'actionId'
+        accessor: 'actionState',
+        Cell: (props: any) => getActionButtons(props.value)
       }
     ],
     []
@@ -100,7 +160,7 @@ const BotsTable = ({ name, userData, onUpdate }: { name: string, userData: Bot[]
             <h4 className='text-white uppercase text-2xl'>{name}</h4>
           </div>
           <div className='w-full flex flex-col mb-4'>
-            <Table columns={columns} data={userData} />
+            <Table columns={columns} data={botsData} />
           </div>
         </div>
       </div>
