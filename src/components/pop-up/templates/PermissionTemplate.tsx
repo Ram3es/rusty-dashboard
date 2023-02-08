@@ -4,10 +4,11 @@ import { User } from '../../../types/User'
 import InputWithLabel from '../../base/InputWithLabel'
 import UserAvatarWithName from '../../base/UserAvatarWithName'
 import 'react-tooltip/dist/react-tooltip.css'
-import { Tooltip } from 'react-tooltip'
 import ButtonsToggle from '../../base/ButtonsToggle'
 import Button from '../../base/Button'
 import QuestionMarkRounded from '../../icons/QuestionMarkRounded'
+import TooltipElement from '../../base/TooltipWrapper'
+import Divider from '../../base/Divider'
 
 interface ICheckBoxState {
   dashboard: boolean
@@ -22,14 +23,14 @@ interface IPermissionProps {
   title: string
   isEdit?: boolean
   submitFunction: Function
-  toggleTooltip: Function
+  togglePopup: Function
   popupClasses?: string
 }
 
 const label = ['Dashboard', 'Staff', 'Bots', 'Games', 'Users']
 const options = ['View Access', 'Edit Access']
 
-const PermissionTemplate: FC<IPermissionProps> = ({ title, isEdit, user, submitFunction, toggleTooltip, popupClasses }) => {
+const PermissionTemplate: FC<IPermissionProps> = ({ title, isEdit, user, submitFunction, togglePopup, popupClasses }) => {
   const [isChecked, setChecked] = useState<ICheckBoxState>({ dashboard: false, staff: true, bots: true, games: false, users: false })
   const [currentSelected, setCurrentSelect] = useState(options[0])
 
@@ -47,7 +48,8 @@ const PermissionTemplate: FC<IPermissionProps> = ({ title, isEdit, user, submitF
             <UserAvatarWithName user={user} isBorderShown avatarClasses='flex gap-2 items-center text-base font-semibold text-gray-6 pl-3' />
           </div>)
           : (
-            <div className='w-full h-0.5 absolute top-[190px] left-0 bg-yellow-f' />
+            <Divider
+            progressClasses='absolute h-full w-2/3 left-0' />
             )}
 
         <h6 className='text-white text-base  mt-8'>Pages</h6>
@@ -66,20 +68,20 @@ const PermissionTemplate: FC<IPermissionProps> = ({ title, isEdit, user, submitF
                  changeFunction={ handleCheckBox }/>)
           })}
         </div>
-          <Tooltip anchorId='tooltip' events={['hover']} delayHide={500} style={{ backgroundColor: '#22273E', opacity: 1, width: '310px', border: '1.5px solid rgba(140, 152, 169, 0.2)', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.4)', borderRadius: '4px' }} >
-            <p className=' text-gray-8 text-sm'>View Access only allows the user to view pages but not edit anything. Edit access allows the user to view the page and edit it.</p>
-          </Tooltip>
-        <div className='flex items-center mt-3 gap-2' >
+          <TooltipElement anchorId='tooltip-permission' >
+            <p className='text-gray-8 text-sm'>View Access only allows the user to view pages but not edit anything. Edit access allows the user to view the page and edit it.</p>
+          </TooltipElement>
+        <div className='flex items-center mt-3 gap-2 text-gray-4' >
           <h6 className='text-white text-base '>Permissions</h6>
-          < QuestionMarkRounded />
+          <QuestionMarkRounded tooltipId='tooltip-permission' />
         </div>
         <div className='mt-3'>
           <span className='text-gray-500 text-xs'>Tab Bar AutoWidth</span>
         <ButtonsToggle options={options} currentSelect={currentSelected} peackFunction={setCurrentSelect} />
         </div>
         <div className='flex w-[80%] gap-5 mt-6' >
-        <Button text='Cancel' color='default' submitFunction={toggleTooltip} />
-        <Button text='Confirm' submitFunction={() => { submitFunction(); toggleTooltip() }} />
+        <Button text='Cancel' color='default' submitFunction={togglePopup} />
+        <Button text='Confirm' submitFunction={() => { submitFunction(); togglePopup() }} />
         </div>
       </div>
   )

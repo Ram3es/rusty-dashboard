@@ -1,6 +1,6 @@
 const InputWithLabel = ({ label, value, name, changeFunction, type, placeholder, labelClasses, inputClasses }: { label?: string, value: any, name: string, changeFunction: Function, type: string, placeholder?: string, labelClasses?: string, inputClasses?: string }) => {
   return (
-    <label className={ labelClasses ?? 'flex flex-col w-full text-gray-6 text-xs mb-2'}>
+    <label className={ labelClasses ?? 'flex flex-col w-full text-gray-6 text-xs mb-2 '}>
       {label !== undefined ? <span>{label}</span> : ''}
       {type === 'textarea'
         ? <textarea
@@ -16,7 +16,7 @@ const InputWithLabel = ({ label, value, name, changeFunction, type, placeholder,
           />
         : type !== 'checkbox'
           ? <input
-              className={inputClasses ?? 'px-3 py-2 bg-dark-17 rounded text-white'}
+              className={inputClasses ?? 'px-3 py-2 bg-dark-17 rounded text-white h-11'}
               type={type}
               name={name}
               value={value}

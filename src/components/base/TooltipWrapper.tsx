@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from 'react'
-// import { Tooltip } from 'react-tooltip'
+import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
 
 interface ITooltipProps {
@@ -9,13 +9,17 @@ interface ITooltipProps {
 
 }
 
-const TooltipWrapper: FC<ITooltipProps> = ({ anchorId, children, tooltipClasses }) => {
+const TooltipElement: FC<ITooltipProps> = ({ anchorId, children, tooltipClasses }) => {
   return (
-        // <Tooltip anchorId={anchorId} events={['hover']} className={tooltipClasses ?? 'bg-dark-22 opacity-100 w-[310px] border-[1.5px] border-dark-8'}>
-        //   {children}
-        // </Tooltip>
-        <div></div>
+        <Tooltip
+        anchorId={anchorId}
+        events={['hover']}
+        className={tooltipClasses ?? 'bg-dark-22 opacity-100 w-[310px] border-[1.5px] border-dark-37 shadow-tooltip'}
+        >
+          {children}
+        </Tooltip>
+
   )
 }
 
-export default TooltipWrapper
+export default TooltipElement
