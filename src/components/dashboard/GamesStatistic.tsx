@@ -46,7 +46,7 @@ const gameModes = [
 ]
 
 const GamesStatistic = ({ periodOptions }: { periodOptions: any[] }) => {
-  const [currentGame, setCurrentGame] = useState<string>('wheel')
+  const [currentGame, setCurrentGame] = useState<string>('all')
 
   return (
     <div className="flex flex-col">

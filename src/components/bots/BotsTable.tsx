@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Bot } from '../../types/Bot'
+import EditButton from '../base/EditButton'
 import InputWithLabel from '../base/InputWithLabel'
 import Table from '../base/Table'
 import UserAvatarWithName from '../base/UserAvatarWithName'
@@ -13,7 +14,7 @@ const updateInput = (valueToEdit: string) => {
     <div className='relative'>
       <InputWithLabel inputClasses="px-3 py-2 bg-dark-17 rounded text-white pr-16" type="text" name="proxy" value={editValue} changeFunction={editFunction} />
       <div className='absolute right-2 top-1/2 transform -translate-y-1/2'>
-        {valueToEdit === editValue ? 'edit' : 'submit'}
+        {valueToEdit === editValue ? <EditButton editFieldFunction={() => console.log("edit proxy")} /> : 'submit'}
       </div>
     </div>
   )
