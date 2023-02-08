@@ -65,7 +65,7 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
   return (
     <div className='p-8 flex flex-col'>
       <div className='flex justify-between mb-9'>
-        <div className='w-full flex justify-between'>
+        <div className='w-full flex flex-wrap justify-between gap-2'>
           <div className='flex items-center gap-5'>
             {names.map(name => {
               return (
@@ -76,7 +76,7 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
               )
             })}
           </div>
-          <div className='flex gap-4 relative'>
+          <div className='flex gap-4 relative w-full justify-between'>
             <ButtonsToggle options={graphVariants} currentSelect={currentGraphVariant} peackFunction={setCurrentGraphVariant} />
             <div className='relative'>
               <Listbox value={currentTimePeriod.name} onChange={(option) => changeTimePeriod(option)}>
@@ -132,7 +132,7 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
               <YAxis axisLine={false} tickLine={false} />
               <defs>
                 {data[0]?.value.map((item, index) => (
-                  <linearGradient key={`gradient-${index}`} id={`gradient-fill-${names[0]?.name}-${index}`} x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient key={`gradient-${index}`} id={`gradient-fill-${names[0]?.name.replaceAll(' ', '')}-${index}`} x1="0" y1="0" x2="0" y2="1">
                     {isContainsNegativeVal
                       ? <>
                         <stop
@@ -170,7 +170,7 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
                   key={`gradient-area-${index}`}
                   type="linear"
                   dataKey={`val${index}`}
-                  fill={`url(#gradient-fill-${names[0]?.name}-${index})`}
+                  fill={`url(#gradient-fill-${names[0]?.name.replaceAll(' ', '')}-${index})`}
                   stroke={ data[0]?.colors[index]?.postitveColor ?? 'blue' } />
               ))}
               <Tooltip wrapperStyle={{
