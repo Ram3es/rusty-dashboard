@@ -4,7 +4,7 @@ import EditButton from '../base/EditButton'
 import InputWithLabel from '../base/InputWithLabel'
 import Table from '../base/Table'
 import UserAvatarWithName from '../base/UserAvatarWithName'
-import CheckIcon from '../icons/CheckIcon'
+// import CheckIcon from '../icons/CheckIcon'
 import CopyIcon from '../icons/CopyIcon'
 
 const updateInput = (valueToEdit: string) => {
@@ -16,12 +16,12 @@ const updateInput = (valueToEdit: string) => {
     <div className='relative'>
       <InputWithLabel inputClasses="px-3 py-2 bg-dark-17 rounded text-white pr-16" type="text" name="proxy" value={editValue} changeFunction={editFunction} />
       <div className='absolute flex right-2 top-1/2 transform -translate-y-1/2'>
-        {valueToEdit === editValue ? 
-          <EditButton
+        {valueToEdit === editValue
+          ? <EditButton
             iconClasses='w-5 h-5 flex justify-center items-center mr-1 rounded bg-dark-1f text-gray-6 cursor-pointer'
-            
-          /> 
-        : <div
+
+          />
+          : <div
             onClick={() => {
               console.log('submit')
             }}
@@ -47,18 +47,19 @@ const updateInput = (valueToEdit: string) => {
   )
 }
 
-const BotsTable = ({ name, botsData, onUpdate, onRemove }: { name: string, botsData: Bot[], onUpdate: (bot: Bot) => void, onRemove: (id:string) => void}) => {
-  const getActionButtons = ({id, isBotPublished} : {id: string, isBotPublished: boolean}) => {
+const BotsTable = ({ name, botsData, selectBot, onRemove }: { name: string, botsData: Bot[], selectBot: (id: string) => void, onRemove: (id: string) => void }) => {
+  const getActionButtons = ({ id, isBotPublished }: { id: string, isBotPublished: boolean }) => {
     return (
       <div className='flex gap-6'>
-        {isBotPublished ? <div className='text-yellow-f text-base flex gap-2 items-center'>
+        {isBotPublished
+          ? <div onClick={() => selectBot(id)} className='text-yellow-f text-base flex gap-2 items-center cursor-pointer'>
             <span>Push</span>
             <svg width="19" height="15" viewBox="0 0 19 15" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M1.00646 6.37264L10.7277 6.37264L7.47072 3.11563C7.20461 2.84952 7.20461 2.41814 7.47072 2.15203C7.73684 1.88591 8.16837 1.88591 8.43448 2.15203L12.8547 6.57231C13.1208 6.83842 13.1208 7.26995 12.8547 7.53592C12.8547 7.53592 12.8547 7.53593 12.8547 7.53593L8.43448 11.9562C8.30144 12.0892 8.1269 12.1559 7.95252 12.1559C7.77829 12.1559 7.60376 12.0892 7.47072 11.9562C7.20462 11.6901 7.2046 11.2586 7.47072 10.9926C7.47073 10.9926 7.47073 10.9926 7.47074 10.9926L10.7277 7.73558L1.00646 7.73558C0.630287 7.73558 0.325 7.43046 0.325 7.05411C0.325 6.67777 0.630121 6.37264 1.00646 6.37264Z" fill="#FFC701" stroke="#FFC701" strokeWidth="0.1"/>
               <rect x="-0.05" y="-0.05" width="13.9922" height="1.36293" rx="0.681464" transform="matrix(0 1 1 0 16.7363 0.10791)" fill="#FFC701" stroke="#FFC701" strokeWidth="0.1"/>
             </svg>
           </div>
-        : <div className='text-yellow-f text-base flex gap-2 items-center'>
+          : <div onClick ={() => selectBot(id) } className='text-yellow-f text-base flex gap-2 items-center cursor-pointer'>
             <svg className='transform rotate-180' width="19" height="15" viewBox="0 0 19 15" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M1.00646 6.37264L10.7277 6.37264L7.47072 3.11563C7.20461 2.84952 7.20461 2.41814 7.47072 2.15203C7.73684 1.88591 8.16837 1.88591 8.43448 2.15203L12.8547 6.57231C13.1208 6.83842 13.1208 7.26995 12.8547 7.53592C12.8547 7.53592 12.8547 7.53593 12.8547 7.53593L8.43448 11.9562C8.30144 12.0892 8.1269 12.1559 7.95252 12.1559C7.77829 12.1559 7.60376 12.0892 7.47072 11.9562C7.20462 11.6901 7.2046 11.2586 7.47072 10.9926C7.47073 10.9926 7.47073 10.9926 7.47074 10.9926L10.7277 7.73558L1.00646 7.73558C0.630287 7.73558 0.325 7.43046 0.325 7.05411C0.325 6.67777 0.630121 6.37264 1.00646 6.37264Z" fill="#FFC701" stroke="#FFC701" strokeWidth="0.1"/>
               <rect x="-0.05" y="-0.05" width="13.9922" height="1.36293" rx="0.681464" transform="matrix(0 1 1 0 16.7363 0.10791)" fill="#FFC701" stroke="#FFC701" strokeWidth="0.1"/>
@@ -120,7 +121,8 @@ const BotsTable = ({ name, botsData, onUpdate, onRemove }: { name: string, botsD
       },
       {
         header: 'Type',
-        accessor: 'type'
+        accessor: 'type',
+        Cell: (props: any) => props.value ?? 'N/A'
       },
       {
         header: 'ID',
