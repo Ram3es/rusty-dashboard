@@ -67,7 +67,7 @@ const GeneralStatistic = () => {
   const getConversionedUsers = (users: any[], deposits: any[]) => {
     if (users.length === 0 || deposits.length === 0) return []
 
-    return [...users].filter(u => deposits.findIndex(i => i.user_id === u.id) >= 0)
+    return [...users].filter(u => deposits?.findIndex(i => i.user_id === u.id) >= 0)
   }
 
   useEffect(() => {

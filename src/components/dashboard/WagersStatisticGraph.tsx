@@ -24,9 +24,9 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       let totalSum = 0
       let sortedData = []
       if (currentGame !== 'all') {
-        sortedData = gameHistory.filter((game: any) => game.mode === currentGame && userBots.findIndex((bot: any) => game.userid === bot.id) < 0)
+        sortedData = gameHistory.filter((game: any) => game.mode === currentGame && userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)
       } else {
-        sortedData = [...gameHistory].filter((game: any) => userBots.findIndex((bot: any) => game.userid === bot.id) < 0)
+        sortedData = [...gameHistory].filter((game: any) => userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)
       }
       const wagersSortedByDate = sortDataByDate(selectedWagersPeriod.name, sortedData)
       console.log('wagersSortedByDate', wagersSortedByDate.currentPeriod)
@@ -90,7 +90,7 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       }
       [...wagersSortedByDate.currentPeriod].forEach((cur: any) => {
         const dateVal = selectedWagersPeriod.name !== 'Today' && selectedWagersPeriod.name !== 'Yesterday' ? dayjs(cur.timestamp).format('DD/MM/YYYY') : dayjs(cur.timestamp).format('DD/MM/YYYY HH')
-        const foundIndex = monthData.findIndex((item: any) => item.name === dateVal)
+        const foundIndex = monthData?.findIndex((item: any) => item.name === dateVal)
         if (foundIndex >= 0) {
           totalSum += Number(cur.bet_value) / 1000
           monthData[foundIndex].value[0] = Number(monthData[foundIndex].value[0]) + (Number(cur.bet_value) / 1000)

@@ -61,7 +61,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       })
       const pvpMinesData = pvpMines.map((game: any) => {
         return {
-          bet_value: game.value * game.players,
+          bet_value: game.value * (game.players - game.botqty),
           oponent_bet: game.value * game.botqty,
           id: game.id,
           mode: 'pvp-mines',
@@ -74,9 +74,9 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       let totalSum = 0
       let sortedData = []
       if (currentGame !== 'all') {
-        sortedData = historyData.filter((game: any) => game.mode === currentGame && userBots.findIndex((bot: any) => game.userid === bot.id) < 0)
+        sortedData = historyData.filter((game: any) => game.mode === currentGame && userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)
       } else {
-        sortedData = [...historyData].filter((game: any) => userBots.findIndex((bot: any) => game.userid === bot.id) < 0)
+        sortedData = [...historyData].filter((game: any) => userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)
       }
       const wagersSortedByDate = sortDataByDate(selectedProfitPeriod.name, sortedData)
       switch (selectedProfitPeriod.name) {
@@ -139,7 +139,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       }
       [...wagersSortedByDate.currentPeriod].forEach((cur: any) => {
         const dateVal = selectedProfitPeriod.name !== 'Today' && selectedProfitPeriod.name !== 'Yesterday' ? dayjs(cur.timestamp).format('DD/MM/YYYY') : dayjs(cur.timestamp).format('DD/MM/YYYY HH')
-        const foundIndex = monthData.findIndex((item: any) => item.name === dateVal)
+        const foundIndex = monthData?.findIndex((item: any) => item.name === dateVal)
 
         if (cur.mode === 'jackpot') {
           if (foundIndex >= 0) {
@@ -162,7 +162,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
             let profit = 0
             if (cur.isBotWon) {
               profit = cur.oponent_bet
-            } else if (cur.isOponentBot) {
+            } else if (!cur.isOponentBot) {
               profit = cur.house_edge
             } else {
               profit = cur.house_edge - cur.oponent_bet
