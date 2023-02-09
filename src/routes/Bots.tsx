@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import AddBotsForm from '../components/bots/AddBotsForm'
 import BotsTable from '../components/bots/BotsTable'
 import RemoveBotPopup from '../components/pop-up/RemoveBotPopup'
 import SelectBotType from '../components/pop-up/SelectBotTypes'
@@ -70,6 +71,7 @@ const Bots = () => {
       <div className="p-6 grid grid-cols-6 gap-6">
         <BotsTable name="ACTIVE BOTS" botsData={data} selectBot={(id: string) => setBotToUpdate(getBotById(data, id))} onRemove={(id: string) => setBotToRemove(getBotById(data, id)) }/>
         <BotsTable name="RESERVE BOTS" botsData={dataTypeNone} selectBot={(id: string) => setBotToUpdate(getBotById(dataTypeNone, id))} onRemove={(id: string) => setBotToRemove(getBotById(dataTypeNone, id)) } />
+        <AddBotsForm />
       </div>
       <RemoveBotPopup bot={botToRemove} onClose={() => {
         setBotToRemove(undefined)
