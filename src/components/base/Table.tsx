@@ -1,7 +1,7 @@
 import { useTable, useSortBy, useFilters } from 'react-table'
 import { Header } from '../../types/Table'
 
-const Table = ({ columns, data, isHeaderHidden = false }: { columns: Header[], data: Array<Record<string, any>>, isHeaderHidden?: boolean, searchObj?: { col8: string | number } }) => {
+const Table = ({ columns, data, isHeaderHidden = false }: { columns: Header[], data: Array<Record<string, any>>, isHeaderHidden?: boolean }) => {
   const {
     getTableProps,
     getTableBodyProps,

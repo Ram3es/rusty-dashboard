@@ -1,3 +1,4 @@
+import RecentStaffEdits from '../components/staff/RecentStaffEdits'
 import MainStatistic from '../components/users/MainStatistic'
 import UserAccountInformation from '../components/users/UserAccountInformation'
 import UserSearch from '../components/users/UserSearch'
@@ -25,6 +26,9 @@ const Users = () => {
         </div>
         <div className="col-span-3 flex flex-col rounded-lg bg-dark-1 px-8 py-10">
           <UserAccountInformation timePeriodOptions={timePeriodOptions}/>
+        </div>
+        <div className="col-span-3 flex flex-col rounded-lg bg-dark-1 px-8 py-10">
+          <RecentStaffEdits />
         </div>
       </div>
     </>

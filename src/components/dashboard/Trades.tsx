@@ -193,7 +193,7 @@ const Trades = ({ name }: { name: string }) => {
             </div>
           </div>
           <div className='w-full flex flex-col mb-4'>
-            <Table columns={columns} data={data} searchObj={searchObj} />
+            <Table columns={columns} data={data} />
           </div>
         </div>
       </div>
