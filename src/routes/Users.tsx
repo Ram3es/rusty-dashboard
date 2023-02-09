@@ -1,5 +1,6 @@
 import RecentStaffEdits from '../components/staff/RecentStaffEdits'
 import MainStatistic from '../components/users/MainStatistic'
+import RecentWagers from '../components/users/RecentWagers'
 import UserAccountInformation from '../components/users/UserAccountInformation'
 import UserSearch from '../components/users/UserSearch'
 
@@ -29,6 +30,9 @@ const Users = () => {
         </div>
         <div className="col-span-3 flex flex-col rounded-lg bg-dark-1 px-8 py-10">
           <RecentStaffEdits />
+        </div>
+        <div className="col-span-3 flex flex-col rounded-lg bg-dark-1 px-8 py-10">
+          <RecentWagers />
         </div>
       </div>
     </>
