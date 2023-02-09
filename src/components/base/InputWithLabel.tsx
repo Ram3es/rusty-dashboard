@@ -14,23 +14,32 @@ const InputWithLabel = ({ label, value, name, changeFunction, type, placeholder,
             }}
             placeholder={placeholder}
           />
-        : type !== 'checkbox'
+        : type === 'checkbox'
           ? <input
-              className={inputClasses ?? 'px-3 py-2 bg-dark-17 rounded text-white h-11'}
-              type={type}
-              name={name}
-              value={value}
-              onChange={(e) => changeFunction(e.target.name, e.target.value)}
-              placeholder={placeholder}
-            />
-          : <input
               className={inputClasses ?? 'px-3 py-2  accent-yellow-f rounded text-white'}
               type={type}
               name={name}
               checked={value}
               onChange={(e) => changeFunction(e.target.name, e.target.checked)}
               placeholder={placeholder}
-            />
+             />
+          : type !== 'radio'
+            ? <input
+               className={inputClasses ?? 'px-3 py-2 bg-dark-17 rounded text-white h-11'}
+               type={type}
+               name={name}
+               value={value}
+               onChange={(e) => changeFunction(e.target.name, e.target.value)}
+               placeholder={placeholder}
+              />
+            : <input
+                className={inputClasses ?? 'px-3 py-2  accent-yellow-f rounded text-white'}
+                type={type}
+                name={name}
+                checked={value}
+                onChange={(e) => changeFunction(e.target.name, e.target.value)}
+                placeholder={placeholder}
+               />
     }
     </label>
   )
