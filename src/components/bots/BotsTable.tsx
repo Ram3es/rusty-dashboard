@@ -121,7 +121,8 @@ const BotsTable = ({ name, botsData, selectBot, onRemove }: { name: string, bots
       },
       {
         header: 'Type',
-        accessor: 'type'
+        accessor: 'type',
+        Cell: (props: any) => props.value ?? 'N/A'
       },
       {
         header: 'ID',

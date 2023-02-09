@@ -3,7 +3,7 @@ import { User } from './User'
 export interface Bot {
   user: User
   status: string
-  type: string
+  type?: string
   id: string
   steamId: string
   proxy: string

@@ -6,7 +6,7 @@ import PopupWrapper from '../base/PopupWrapper'
 import ConfirmationRequired from './templates/ConfirmationRequired'
 
 interface IBotPopup {
-  bot: Bot | undefined
+  bot?: Bot
   onClose: Function
   updateBot: Function
 }
@@ -79,7 +79,7 @@ const SelectBotType: FC<IBotPopup> = ({ bot, onClose, updateBot }) => {
   }
   return (isOpenPopup
     ? <PopupWrapper closePopup={closePopup}>
-        { bot?.type !== 'N/A'
+        { bot?.type
           ? (
           <ConfirmationRequired
             cancelFunction={cancelConfirm}
