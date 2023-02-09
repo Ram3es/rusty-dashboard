@@ -1,3 +1,5 @@
+import InputFile from './InputFile'
+
 const InputWithLabel = ({ label, value, name, changeFunction, type, placeholder, labelClasses, inputClasses }: { label?: string, value: any, name: string, changeFunction: Function, type: string, placeholder?: string, labelClasses?: string, inputClasses?: string }) => {
   return (
     <label className={ labelClasses ?? 'flex flex-col w-full text-gray-6 text-xs mb-2 '}>
@@ -23,8 +25,10 @@ const InputWithLabel = ({ label, value, name, changeFunction, type, placeholder,
               onChange={(e) => changeFunction(e.target.name, e.target.checked)}
               placeholder={placeholder}
              />
-          : type !== 'radio'
-            ? <input
+          : type === 'file'
+            ? <InputFile onChange={(e) => changeFunction(e.target.files?.[0]) } />
+            : type !== 'radio'
+              ? <input
                className={inputClasses ?? 'px-3 py-2 bg-dark-17 rounded text-white h-11'}
                type={type}
                name={name}
@@ -32,7 +36,7 @@ const InputWithLabel = ({ label, value, name, changeFunction, type, placeholder,
                onChange={(e) => changeFunction(e.target.name, e.target.value)}
                placeholder={placeholder}
               />
-            : <input
+              : <input
                 className={inputClasses ?? 'px-3 py-2  accent-yellow-f rounded text-white'}
                 type={type}
                 name={name}
