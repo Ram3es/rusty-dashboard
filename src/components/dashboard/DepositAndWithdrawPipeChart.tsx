@@ -68,6 +68,32 @@ const DepositAndWithdrawPipeChart = () => {
     }
   }, [state, selectedDepositPeriod, currentDepositSelect])
 
+  const mock = [
+    {
+      name: 'skins',
+      value: 20
+    },
+    {
+      name: 'crypto',
+      value: 40
+    },
+    {
+      name: 'gift cards',
+      value: 55.8
+    }
+  ]
+
+  useEffect(() => {
+    if (currentDepositSelect === 'deposit') {
+      setDepositData(mock)
+    } else {
+      setDepositData([{
+        name: 'skins',
+        value: 20
+      }])
+    }
+  }, [currentDepositSelect])
+
   return (
     <>
       { depositData.length > 0

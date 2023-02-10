@@ -124,7 +124,7 @@ const PipeChartWithTable = ({ periodOptions, depositData, selectedPeriod, deposi
                 {item.name}
               </div>
               <div className='col-span-1 p-3'>
-                {item.percent}%
+                {Number.isInteger(item.percent) ? item.percent : item.percent.toFixed(1)}%
               </div>
               <div className='col-span-1 p-3'>
                 ${item.value.toFixed(2)}
