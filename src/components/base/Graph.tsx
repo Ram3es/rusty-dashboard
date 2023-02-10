@@ -4,10 +4,11 @@ import { Area, AreaChart, Bar, BarChart, CartesianGrid, Rectangle, ResponsiveCon
 import { GraphData } from '../../types/GraphData'
 import ArrowIcon from '../icons/ArrowIcon'
 import ButtonsToggle from './ButtonsToggle'
+import CoinceImage from '../../assets/coins.png'
 
 const graphVariants = ['line graph', 'bar chart']
 
-const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, names, labels }: { data: GraphData[], timePeriodOptions: any[], currentTimePeriod: any, changeTimePeriod: Function, names: Array<{ name: string, value: number | string, color: string }>, labels: React.ReactElement[] }) => {
+const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, names, labels }: { data: GraphData[], timePeriodOptions: any[], currentTimePeriod: any, changeTimePeriod: Function, names: Array<{ name: string, value: number | string, color: string, withIcon?: boolean }>, labels: React.ReactElement[] }) => {
   const [menegedGraphData, setMenegedGraphData] = useState<object[]>()
   const [currentGraphVariant, setCurrentGraphVariant] = useState<string>(graphVariants[0])
   const [middlePercent, setMiddlePercent] = useState<string>('50%')
@@ -72,6 +73,8 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
                 <div className='flex items-center gap-3' key={`title-${name.name}`}>
                   <h4 className='text-white uppercase text-2xl'>{name.name}</h4>
                   <div className='text-2xl' style={{ color: name.color }}>{typeof name.value === 'number' ? name.value.toFixed(2) : name.value }</div>
+                  <img className={name.withIcon ? 'block' : 'hidden'} src={ CoinceImage } />
+                  {/* {name.withIcon && (<img src={ CoinceImage } />)} */}
                 </div>
               )
             })}
