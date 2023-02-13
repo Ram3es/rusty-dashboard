@@ -1,7 +1,10 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import AffilateUserStatistics from '../../components/affiliate/AffiliateUserStatistics'
 import AffiliateMainItemStatistics from '../../components/affiliate/AffiliateMainItemStatistics'
-import GraphCodeDepositors from '../../components/affiliate/GraphCodeDepositors'
+import DepositBreakdown from '../../components/affiliate/DepositBreakdown'
+import GraphAffilateStatistic from '../../components/affiliate/GraphAffilateStatistic'
+import DepositAndWithdrawPipeChart from '../../components/dashboard/DepositAndWithdrawPipeChart'
 // import Graph from '../../components/base/Graph'
 import UserSearch from '../../components/users/UserSearch'
 
@@ -26,8 +29,24 @@ const Affiliateitem = () => {
           <AffiliateMainItemStatistics />
         </div>
         <div className="col-span-6 2xl:col-span-3 rounded-lg bg-dark-1">
-          <GraphCodeDepositors />
-          {/* <Graph timePeriodOptions={timePeriodOptions} currentTimePeriod={depositDataStatisticPeriod} changeTimePeriod={setDepositDataStatisticPeriod} data={dataDeposit.data} names={[{ name: 'Deposit', value: 1000, color: 'green' }]} labels={dataDeposit.labels} /> */}
+          <GraphAffilateStatistic
+          names={[{ name: 'Code Claims -', value: 98, color: '#FCA213' }, { name: 'Depositors -', value: 46, color: '#3790D4' }]}
+          graphColors={['#3790D4', '#FCA213']}
+          />
+        </div>
+        <div className='col-span-6 2xl:col-span-3 row-span-2 rounded-lg bg-dark-1 p-8'>
+          <DepositAndWithdrawPipeChart />
+        </div>
+        <div className="col-span-6 2xl:col-span-3 rounded-lg bg-dark-1">
+          <GraphAffilateStatistic
+            graphColors={['#374CD4', '#E4164A']}
+            names={[{ name: 'Wagers -', value: '3,942,234', color: '#E4164A', withIcon: true }, { name: 'Deposited -', value: '849,234', color: '#374CD4', withIcon: true }]} />
+        </div>
+        <div className='col-span-6 2xl:col-span-3  rounded-lg bg-dark-1 p-8'>
+          <DepositBreakdown />
+        </div>
+        <div className='col-span-6 rounded-lg bg-dark-1 p-8'>
+          <AffilateUserStatistics />
         </div>
       </div>
     </>
