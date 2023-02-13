@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import AffilateUserStatistics from '../../components/affiliate/AffilateUserStatistics'
 import AffiliateMainItemStatistics from '../../components/affiliate/AffiliateMainItemStatistics'
+import DepositBreakdown from '../../components/affiliate/DepositBreakdown'
 import GraphAffilateStatistic from '../../components/affiliate/GraphAffilateStatistic'
 import DepositAndWithdrawPipeChart from '../../components/dashboard/DepositAndWithdrawPipeChart'
 // import Graph from '../../components/base/Graph'
@@ -39,6 +41,12 @@ const Affiliateitem = () => {
           <GraphAffilateStatistic
             graphColors={['#374CD4', '#E4164A']}
             names={[{ name: 'Wagers -', value: '3,942,234', color: '#E4164A', withIcon: true }, { name: 'Deposited -', value: '849,234', color: '#374CD4', withIcon: true }]} />
+        </div>
+        <div className='col-span-6 2xl:col-span-3  rounded-lg bg-dark-1 p-8'>
+          <DepositBreakdown />
+        </div>
+        <div className='col-span-6 rounded-lg bg-dark-1 p-8'>
+          <AffilateUserStatistics />
         </div>
       </div>
     </>

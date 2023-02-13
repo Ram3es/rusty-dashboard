@@ -74,7 +74,6 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
                   <h4 className='text-white uppercase text-2xl'>{name.name}</h4>
                   <div className='text-2xl' style={{ color: name.color }}>{typeof name.value === 'number' ? name.value.toFixed(2) : name.value }</div>
                   <img className={name.withIcon ? 'block' : 'hidden'} src={ CoinceImage } />
-                  {/* {name.withIcon && (<img src={ CoinceImage } />)} */}
                 </div>
               )
             })}
