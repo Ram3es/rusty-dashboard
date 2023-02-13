@@ -7,8 +7,9 @@ import UserAvatarWithName from '../base/UserAvatarWithName'
 
 const options = [
   { id: 1, name: 'Show 10', unavailable: false },
-  { id: 2, name: 'Show 15', unavailable: false },
-  { id: 3, name: 'Show 25', unavailable: false }
+  { id: 2, name: 'Show 25', unavailable: false },
+  { id: 3, name: 'Show 50', unavailable: false },
+  { id: 4, name: 'Show 100', unavailable: false }
 ]
 
 const AffilateUserStatistics = () => {

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import AffilateUserStatistics from '../../components/affiliate/AffilateUserStatistics'
+import AffilateUserStatistics from '../../components/affiliate/AffiliateUserStatistics'
 import AffiliateMainItemStatistics from '../../components/affiliate/AffiliateMainItemStatistics'
 import DepositBreakdown from '../../components/affiliate/DepositBreakdown'
 import GraphAffilateStatistic from '../../components/affiliate/GraphAffilateStatistic'

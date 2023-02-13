@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { StatisticCartItem } from '../../types/StatisticCartItem'
 import { TimeOption } from '../../types/TimeOption'
+import { User } from '../../types/User'
 import CardsStatistic from '../CardsStatistic'
 import CheckIcon from '../icons/CheckIcon'
 import CoinceIcon from '../icons/CoinceIcon'
@@ -8,6 +9,7 @@ import DownloadIcon from '../icons/DownloadIcon'
 import LinkIcon from '../icons/LinkIcon'
 import SponseeIcon from '../icons/SponseeIcon'
 import WalletIcon from '../icons/WalletIcon'
+import EditAffiliateCode from '../pop-up/EditAffiliateCode'
 
 const timePeriodOptions: TimeOption[] = [
   { id: 1, name: 'Today', unavailable: false },
@@ -19,6 +21,15 @@ const timePeriodOptions: TimeOption[] = [
 const AffiliateMainItemStatistics = () => {
   const [selectedGeneralStatisticPeriod, setSelectedGeneralStatisticPeriod] = useState(timePeriodOptions[0])
   const [generalStatistic, setGeneralStatistic] = useState<StatisticCartItem[]>([])
+  const [editedUser, setEditedUSer] = useState<User>()
+
+  const editFunction = () => {
+    setEditedUSer({
+      name: 'Some user',
+      email: 'test@test.test',
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+    })
+  }
 
   useEffect(() => {
     setGeneralStatistic([
@@ -27,7 +38,7 @@ const AffiliateMainItemStatistics = () => {
         subtext: 'Code',
         icon: <LinkIcon iconCalsses='w-4'/>,
         canEdit: true,
-        editFunction: () => console.log('open edit popup')
+        editFunction: () => editFunction()
       },
       {
         text: '21 355',
@@ -60,7 +71,7 @@ const AffiliateMainItemStatistics = () => {
     ])
   }, [])
 
-  return (
+  return (<>
     <CardsStatistic
       title="AFFILIATE Statistics"
       periodOptions={timePeriodOptions}
@@ -73,6 +84,8 @@ const AffiliateMainItemStatistics = () => {
         avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
       }}
     />
+    <EditAffiliateCode user={editedUser} />
+    </>
   )
 }
 
