@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import Button from '../components/base/Button'
 import InputWithLabel from '../components/base/InputWithLabel'
 import AddUserInGroup from '../components/Sponsee/pop-up/AddUserInGroup'
-// import CreateGroupPopup from '../components/Sponsee/pop-up/CreateGroupPopup'
+import CreateGroupPopup from '../components/Sponsee/pop-up/CreateGroupPopup'
+import RemovePopup from '../components/Sponsee/pop-up/RemovePopup'
 import SponseeTableItem from '../components/Sponsee/SponseeTableItem'
 import { User } from '../types/User'
 
@@ -19,19 +20,31 @@ export interface SponseeUser {
   }
   id: string
 }
+interface IGroup {
+  id: string
+  name: string
+  users: SponseeUser[]
+}
 
 const Sponsee = () => {
   const [groupSearchName, setGroupSearchName] = useState<string>('')
-  const [data, setData] = useState<Array<{ id: string, name: string, users: SponseeUser[] }>>()
+  const [data, setData] = useState<IGroup[]>()
   const [isOpenPopupAddUser, setOpenPopupAddUser] = useState<boolean>(false)
+  const [isOpenCreateGroup, setOpenCreateGroup] = useState<boolean>(false)
   const [groupToEdit, setGroupToEdit] = useState<{ name: string, id: string }>()
+  const [removeItem, setRemoveItem] = useState<{ user?: User, groupName: string, groupId: string }>()
 
   const togglePopup = () => {
     setOpenPopupAddUser(prev => !prev)
     setGroupToEdit(undefined)
   }
 
+  const onCloseCeateGroupPopup = () => {
+    setOpenCreateGroup(false)
+  }
+
   const addGroup = () => {
+    setOpenCreateGroup(true)
     console.log('add group')
   }
 
@@ -51,11 +64,19 @@ const Sponsee = () => {
   }
 
   const removeUserGromGroup = (userId: string, groupId: string) => {
-    console.log('remove user', userId, 'from', groupId)
+    const group = data?.find(group => group.id === groupId) as IGroup
+    const user = group?.users.find(user => user.id === userId)?.user as User
+
+    setRemoveItem({ user, groupName: group.name, groupId: group.id })
   }
 
   const removeGroup = (groupId: string) => {
-    console.log('remove group', groupId)
+    const { id, name } = data?.find(group => group.id === groupId) as IGroup
+    setRemoveItem({ groupId: id, groupName: name })
+  }
+
+  const submitRemove = () => {
+    console.log(removeItem)
   }
 
   const updateUserInGroup = (id: string, updateOption: Record<string, string | number | boolean>) => {
@@ -154,7 +175,8 @@ const Sponsee = () => {
           {data ? data.filter(group => group.name?.includes(groupSearchName)).map(item => <SponseeTableItem key={item.id} groupId={item.id} name={item.name} users={item.users} onAddUser={addUserToGroup} onRemoveUser={removeUserGromGroup} onGroupRemove={removeGroup} userUpdate={updateUserInGroup} />) : null}
       </div>
       <AddUserInGroup isOpenPopup={isOpenPopupAddUser} closePopup={togglePopup} groupToEdit={groupToEdit} />
-      {/* <CreateGroupPopup onGroupCreate={(name: string) => console.log('create group ', name)} /> */}
+      <CreateGroupPopup onGroupCreate={(name: string) => console.log('create group ', name)} isPopupOpen={isOpenCreateGroup} onClose={onCloseCeateGroupPopup} />
+      <RemovePopup removeItem={removeItem} submitFunction={submitRemove} />
     </>
   )
 }
