@@ -18,16 +18,11 @@ const options = ['On-site Basic', 'On-site advanced']
 const SearchForUsersPopup: FC<ISearchUsersProps> = ({ isOpenPopup, closePopup }) => {
   const [currentSelected, setCurrentSelect] = useState(options[0])
   const [popupPermissinStage, setpopupPermissionStage] = useState<number>(1)
-  const [isChecked, setChecked] = useState({ user: false })
   const [user, setUser] = useState<{ name: string, avatar: string }>()
-
-  const handleCheckBox = (name: string, isChecked: boolean) => {
-    setChecked(prev => ({ ...prev, [name]: isChecked }))
-  }
 
   const submitFunction = () => {
     const selected = { name: 'DerWeißWizard', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' }
-    console.log('submited')
+    console.log(selected, 'selected')
     setpopupPermissionStage(2)
     setUser(selected)
   }
@@ -41,15 +36,23 @@ const SearchForUsersPopup: FC<ISearchUsersProps> = ({ isOpenPopup, closePopup })
     closePopup()
   }
 
-  const getCheckBoxComponent = () => (
+  const getCheckBoxComponent = (value: { isChecked: boolean }) => {
+    const [isChecked, setChecked] = useState(value.isChecked)
+
+    const handleCheckBox = (name: string, isChecked: boolean) => {
+      setChecked(isChecked)
+    }
+
+    return (
     <InputWithLabel
       type='checkbox'
       name='user'
-      value={isChecked.user}
+      value={isChecked}
       labelClasses='flex items-center justify-center'
       inputClasses='px-3 py-2  accent-yellow-f rounded text-white w-5 h-5 '
       changeFunction={handleCheckBox} />
-  )
+    )
+  }
 
   const getGivenPermissionPopup = () => {
     switch (popupPermissinStage) {
@@ -103,7 +106,7 @@ const SearchForUsersPopup: FC<ISearchUsersProps> = ({ isOpenPopup, closePopup })
       {
         header: '',
         accessor: 'col1',
-        Cell: (props: any) => getCheckBoxComponent()
+        Cell: (props: any) => getCheckBoxComponent(props.value)
       },
       {
         header: 'User',
@@ -121,23 +124,26 @@ const SearchForUsersPopup: FC<ISearchUsersProps> = ({ isOpenPopup, closePopup })
         accessor: 'col4'
       }
     ],
-    [isChecked]
+    []
   )
 
   const data = useMemo(
     () => [
       {
+        col1: { isChecked: false },
         col2: { name: 'DerWeißWizard', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
         col3: '7182317182913',
         col4: '9821'
 
       },
       {
+        col1: { isChecked: false },
         col2: { name: 'DerWeißWizard', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
         col3: '7182317182913',
         col4: '9821'
       },
       {
+        col1: { isChecked: false },
         col2: { name: 'DerWeißWizard', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
         col3: '7182317182913',
         col4: '9821'

@@ -1,8 +1,8 @@
 const PopupWrapper = ({ children, closePopup }: { children: JSX.Element | JSX.Element[] | undefined, closePopup: Function }) => {
   return (
-    <div className='fixed flex justify-center items-center left-0 top-0 w-full h-screen bg-black bg-opacity-30'>
+    <div className='fixed flex justify-center items-center left-0 top-0 w-full h-screen bg-black bg-opacity-30 z-20'>
         <div
-          className='py-12 px-16 '
+          className='py-12 px-16'
           style={{
             background: 'linear-gradient(0deg, #131620, #131620)',
             border: '2px solid rgba(102, 110, 151, 0.2)',

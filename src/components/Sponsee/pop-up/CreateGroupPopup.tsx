@@ -6,28 +6,29 @@ import PopupWrapper from '../../base/PopupWrapper'
 interface ISearchUsersProps {
   onGroupCreate: Function
   isPopupOpen: boolean
+  onClose: Function
 }
 
-const CreateGroupPopup: FC<ISearchUsersProps> = ({ onGroupCreate, isPopupOpen }) => {
+const CreateGroupPopup: FC<ISearchUsersProps> = ({ onGroupCreate, isPopupOpen, onClose }) => {
   const [groupName, setGroupName] = useState<string>('')
-  const [isCreateGroupOpen, setIsCreateGroupOpen] = useState<boolean>(isPopupOpen)
-
   const submitFunction = () => {
-    setGroupName('')
-    onGroupCreate(groupName)
-    setIsCreateGroupOpen(false)
+    if (groupName) {
+      onGroupCreate(groupName)
+      setGroupName('')
+      onClose()
+    }
   }
 
   const cancelConfimation = () => {
     setGroupName('')
-    onGroupCreate(groupName)
+    onClose()
   }
 
   return (
-    isCreateGroupOpen
-      ? <PopupWrapper closePopup={() => setIsCreateGroupOpen(false)}>
-      <div>
-        <h4 className='text-white uppercase text-2xl mb-4'>Create Grouping</h4>
+    isPopupOpen
+      ? <PopupWrapper closePopup={() => onClose()}>
+      <div className='flex flex-col items-center w-[350px]'>
+        <h4 className='text-white uppercase text-2xl mb-8'>Create Grouping</h4>
         <InputWithLabel
           value={groupName}
           name="rounds"
@@ -35,7 +36,7 @@ const CreateGroupPopup: FC<ISearchUsersProps> = ({ onGroupCreate, isPopupOpen })
           type='text'
           placeholder='Enter group name'
         />
-        <div className='mt-10 flex justify-center items-center gap-4'>
+        <div className='mt-10 flex justify-center items-center gap-4 w-full'>
           <Button color='gray' text='Cancel' submitFunction={() => cancelConfimation()} />
           <Button text='Create' submitFunction={() => submitFunction()} />
         </div>
