@@ -1,7 +1,8 @@
 import { ReactElement } from 'react'
 
 export interface NavItem {
-  href: string
+  href?: string
   name: string
   icon: ReactElement
+  subNavigation?: NavItem[]
 }

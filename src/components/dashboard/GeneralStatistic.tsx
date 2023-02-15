@@ -3,13 +3,6 @@ import { useContext, useEffect, useState } from 'react'
 import CardsStatistic from '../CardsStatistic'
 import { Context } from '../../store/GlobalStatisticStore'
 import { StatisticCartItem } from '../../types/StatisticCartItem'
-import CoinFlipIcon from '../icons/CoinFlipIcon'
-import JackpotIcon from '../icons/JackpotIcon'
-import MinesIcon from '../icons/MinesIcon'
-import PlinkoIcon from '../icons/PlinkoIcon'
-import PvpMinesIcon from '../icons/PvpMinesIcon'
-import UpgraderIcon from '../icons/UpgraderIcon'
-import WheelIcon from '../icons/WheelIcon'
 import SessionIcon from '../icons/SessionIcon'
 import UsersIcon from '../icons/UsersIcon'
 import DepositIcon from '../icons/DepositIcon'
@@ -17,6 +10,7 @@ import DiceIcon from '../icons/DiceIcon'
 import StatisticIcon from '../icons/StatisticIcon'
 import { TimeOption } from '../../types/TimeOption'
 import sortDataByDate from '../../helpers/sotingByDate'
+import { getGameIcon } from '../../helpers/componentsGetters'
 
 const timePeriodOptions: TimeOption[] = [
   { id: 1, name: 'Today', unavailable: false },
@@ -30,27 +24,6 @@ const GeneralStatistic = () => {
   const [state] = useContext(Context)
   const [generalStatistic, setGeneralStatistic] = useState<StatisticCartItem[]>([])
   const [selectedGeneralStatisticPeriod, setSelectedGeneralStatisticPeriod] = useState(timePeriodOptions[0])
-
-  const getGameIcon = (mode: string | undefined) => {
-    switch (mode) {
-      case 'coinflip':
-        return <CoinFlipIcon iconCalsses='w-6' />
-      case 'jackpot':
-        return <JackpotIcon iconCalsses='w-6' />
-      case 'mines':
-        return <MinesIcon iconCalsses='w-6' />
-      case 'plinko':
-        return <PlinkoIcon iconCalsses='w-6' />
-      case 'pvp-mines':
-        return <PvpMinesIcon iconCalsses='w-6' />
-      case 'upgrader':
-        return <UpgraderIcon iconCalsses='w-6' />
-      case 'wheel':
-        return <WheelIcon iconCalsses='w-6' />
-      default:
-        return undefined
-    }
-  }
 
   const getPercentages = (prev: number, cur: number) => {
     if (prev > 0 && cur > 0) {

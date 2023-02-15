@@ -1,11 +1,14 @@
-import { ReactElement } from 'react'
+import { ReactElement, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { NavItem } from '../../types/Nav'
 import RustylootLogo from '../../assets/RustylootLogo.png'
 import { User } from '../../types/User'
 import LogoutIcon from '../icons/LogoutIcon'
+import ArrowIcon from '../icons/ArrowIcon'
 
 const MenuDesktop = ({ navigation, user }: { navigation: NavItem[], user: User }): ReactElement => {
+  const [isSubmenuOpen, setIsSubmenuOpen] = useState<boolean>(false)
+
   return (
     <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64r md:flex-col w-64">
       <div className="flex min-h-0 flex-1 flex-col bg-dark-1">
@@ -19,7 +22,8 @@ const MenuDesktop = ({ navigation, user }: { navigation: NavItem[], user: User }
           </div>
           <nav className="mt-5 flex-1 space-y-1 px-6">
             {navigation.map((item: NavItem) => (
-              <NavLink
+              <>{ item.href
+                ? <NavLink
                 key={item.name}
                 to={item.href}
                 className="text-gray-6 hover:text-white hover:bg-dark-21 hover:bg-opacity-70 text-sm group gap-4 flex items-center px-4 py-3 font-medium rounded-lg"
@@ -28,6 +32,35 @@ const MenuDesktop = ({ navigation, user }: { navigation: NavItem[], user: User }
                 {item.icon}
                 {item.name}
               </NavLink>
+                : <div>
+                    <div
+                      className={`${isSubmenuOpen ? 'text-white' : 'text-gray-6'} cursor-pointer hover:text-white hover:bg-dark-21 hover:bg-opacity-70 text-sm group gap-4 flex justify-between items-center px-4 py-3 font-medium rounded-lg`}
+                      onClick={() => setIsSubmenuOpen((prev: boolean) => !prev)}
+                    >
+                      <span className='flex gap-4'>
+                        {item.icon}
+                        {item.name}
+                      </span>
+                      <span className={`${isSubmenuOpen ? 'transform rotate-180' : ''}`}>
+                        <ArrowIcon iconCalsses='w-2' />
+                      </span>
+                    </div>
+                    {item.subNavigation && item.subNavigation?.length > 0
+                      ? <div className={`${isSubmenuOpen ? 'block' : 'hidden'}`}>
+                          {item.subNavigation.map((sublink: NavItem) => (
+                            <NavLink
+                              key={sublink.name}
+                              to={sublink.href ?? ''}
+                              className="text-gray-6 hover:text-white hover:bg-dark-21 hover:bg-opacity-70 text-sm group gap-4 flex items-center px-4 py-3 font-medium rounded-lg"
+                              style={({ isActive }) => isActive ? { backgroundColor: 'rgba(255, 194, 57, 0.1)', color: '#ffc239' } : undefined}
+                            >
+                              {sublink.icon}
+                              {sublink.name}
+                            </NavLink>
+                          ))}
+                        </div>
+                      : null}
+                  </div>}</>
             ))}
           </nav>
         </div>

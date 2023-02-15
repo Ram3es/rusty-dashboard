@@ -4,6 +4,7 @@ import Affiliateitem from '../routes/Affiliate/Affiliateitem'
 import Affiliates from '../routes/Affiliate/Affiliates'
 import Bots from '../routes/Bots'
 import Dashboard from '../routes/Dashboard'
+import Game from '../routes/Games/Game'
 import Sponsee from '../routes/Sponsee'
 import Staff from '../routes/Staff'
 import Users from '../routes/Users'
@@ -33,6 +34,7 @@ const RoutersContainer = ({ socket }: { socket: any }) => {
         <Route path="/admin/affiliates/:name" element={<Affiliateitem />} />
         <Route path="/admin/bots" element={<Bots />} />
         <Route path="/admin/sponsee" element={<Sponsee />} />
+        <Route path="/admin/game/:game" element={<Game />} />
       </Routes>
     </>
   )

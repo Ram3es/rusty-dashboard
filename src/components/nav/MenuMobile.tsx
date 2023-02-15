@@ -1,10 +1,12 @@
-import { Fragment, ReactElement } from 'react'
+import { Fragment, ReactElement, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { NavLink } from 'react-router-dom'
 import CloseIcon from '../icons/CloseIcon'
 import { NavItem } from '../../types/Nav'
 
 const MenuMobile = ({ isOpen, setSidebarOpen, navigation }: { isOpen: boolean, setSidebarOpen: (value: boolean) => void, navigation: NavItem[] }): ReactElement => {
+  const [isSubmenuOpen, setIsSubmenuOpen] = useState<boolean>(false)
+
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-40 md:hidden" onClose={setSidebarOpen}>
@@ -61,7 +63,8 @@ const MenuMobile = ({ isOpen, setSidebarOpen, navigation }: { isOpen: boolean, s
                 </div>
                 <nav className="mt-5 space-y-1 px-2">
                   {navigation.map((item: NavItem) => (
-                    <NavLink
+                    <>{ item.href
+                      ? <NavLink
                       key={item.name}
                       to={item.href}
                       className="text-gray-300 hover:text-white group flex items-center px-2 py-2 text-base font-medium rounded-md"
@@ -69,6 +72,15 @@ const MenuMobile = ({ isOpen, setSidebarOpen, navigation }: { isOpen: boolean, s
                     >
                       {item.name}
                     </NavLink>
+                      : <div>
+                          <div
+                            className="text-gray-300 hover:text-white group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                            onClick={() => setIsSubmenuOpen(prev => !prev)}
+                          >
+                            {item.name}
+                          </div>
+                          <div className={`${isSubmenuOpen ? 'block' : 'hidden'}`}></div>
+                        </div>}</>
                   ))}
                 </nav>
               </div>
