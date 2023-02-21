@@ -34,7 +34,7 @@ const Affiliateitem = () => {
           graphColors={['#3790D4', '#FCA213']}
           />
         </div>
-        <div className='col-span-6 2xl:col-span-3 row-span-2 rounded-lg bg-dark-1 p-8'>
+        <div className='col-span-6 2xl:col-span-3 rounded-lg bg-dark-1 p-8'>
           <DepositAndWithdrawPipeChart />
         </div>
         <div className="col-span-6 2xl:col-span-3 rounded-lg bg-dark-1">

@@ -23,7 +23,6 @@ const DepositAndWithdrawPipeChart = () => {
 
   useEffect(() => {
     if (state?.data?.data) {
-      console.log(state, selectedDepositPeriod)
       const { crypto, depositsItems, giftcards, trades } = state.data.data
       if (currentDepositSelect === 'deposit') {
         const cryptoSortedByDate = sortDataByDate(selectedDepositPeriod.name, crypto)
@@ -65,34 +64,30 @@ const DepositAndWithdrawPipeChart = () => {
           }
         ])
       }
+    } else {
+      if (currentDepositSelect === 'deposit') {
+        setDepositData([
+          {
+            name: 'skins',
+            value: 20
+          },
+          {
+            name: 'crypto',
+            value: 40
+          },
+          {
+            name: 'gift cards',
+            value: 55.8
+          }
+        ])
+      } else {
+        setDepositData([{
+          name: 'skins',
+          value: 20
+        }])
+      }
     }
   }, [state, selectedDepositPeriod, currentDepositSelect])
-
-  // const mock = [
-  //   {
-  //     name: 'skins',
-  //     value: 20
-  //   },
-  //   {
-  //     name: 'crypto',
-  //     value: 40
-  //   },
-  //   {
-  //     name: 'gift cards',
-  //     value: 55.8
-  //   }
-  // ]
-
-  // useEffect(() => {
-  //   if (currentDepositSelect === 'deposit') {
-  //     setDepositData(mock)
-  //   } else {
-  //     setDepositData([{
-  //       name: 'skins',
-  //       value: 20
-  //     }])
-  //   }
-  // }, [currentDepositSelect])
 
   return (
     <>

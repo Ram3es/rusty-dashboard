@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
 import socket from './Middleware/socket'
 import { BrowserRouter } from 'react-router-dom'
-import MenuMobile from './components/nav/MenuMobile'
 import MenuDesktop from './components/nav/MenuDesktop'
-import MenuIcon from './components/icons/MenuIcon'
 import DashboardIcon from './components/icons/DashboardIcon'
 import UsersIcon from './components/icons/UsersIcon'
 import { User } from './types/User'
@@ -45,7 +43,6 @@ const navigation = [
 ]
 
 function App (): JSX.Element {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [user, setUser] = useState<User>({
     name: 'Some user',
     email: 'test@test.test',
@@ -66,19 +63,8 @@ function App (): JSX.Element {
 
   return (
     <BrowserRouter>
-      <MenuMobile isOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} navigation={navigation} />
       <MenuDesktop navigation={navigation} user={user} />
       <div className="flex flex-1 flex-col md:pl-270px">
-        <div className="sticky top-0 z-10 bg-gray-100 pl-1 pt-1 sm:pl-3 sm:pt-3 md:hidden">
-          <button
-            type="button"
-            className="-ml-0.5 -mt-0.5 inline-flex h-12 w-12 items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <span className="sr-only">Open sidebar</span>
-            <MenuIcon />
-          </button>
-        </div>
         <main className="flex-1 min-h-screen">
           <Store>
             <RoutersContainer socket={socket} />

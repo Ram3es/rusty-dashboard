@@ -75,6 +75,7 @@ const MenuMobile = ({ isOpen, setSidebarOpen, navigation }: { isOpen: boolean, s
                       : <div>
                           <div
                             className="text-gray-300 hover:text-white group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                            key={item.name}
                             onClick={() => setIsSubmenuOpen(prev => !prev)}
                           >
                             {item.name}

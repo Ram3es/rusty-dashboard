@@ -11,7 +11,7 @@ const Table = ({
   columns: Header[]
   data: Array<Record<string, any>>
   isHeaderHidden?: boolean
-  itemsNumberOnPage: number
+  itemsNumberOnPage?: number
 }) => {
   const {
     getTableProps,

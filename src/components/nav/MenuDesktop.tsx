@@ -35,6 +35,7 @@ const MenuDesktop = ({ navigation, user }: { navigation: NavItem[], user: User }
                 : <div>
                     <div
                       className={`${isSubmenuOpen ? 'text-white' : 'text-gray-6'} cursor-pointer hover:text-white hover:bg-dark-21 hover:bg-opacity-70 text-sm group gap-4 flex justify-between items-center px-4 py-3 font-medium rounded-lg`}
+                      key={item.name}
                       onClick={() => setIsSubmenuOpen((prev: boolean) => !prev)}
                     >
                       <span className='flex gap-4'>
