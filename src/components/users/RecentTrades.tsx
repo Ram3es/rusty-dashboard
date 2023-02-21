@@ -160,7 +160,7 @@ const RecentTrades = () => {
       <div className='flex flex-col justify-between h-full rounded-lg bg-dark-1'>
         <div className='w-full'>
           <div className='flex justify-between items-center mb-6'>
-            <h4 className='text-white uppercase text-2xl'>Recent STAFF EDITS</h4>
+            <h4 className='text-white uppercase text-2xl'>Recent Trades</h4>
             <div className='flex gap-6'>
               <ButtonsToggle options={tradesVariants} currentSelect={currentTradeVariant} peackFunction={setCurrentTradeVariant} />
             </div>
