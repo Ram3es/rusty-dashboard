@@ -7,6 +7,11 @@ export interface User {
   avatar: string
 }
 
+export interface UserWithBalance extends User {
+  balance: number
+  wager: number
+}
+
 export interface UserWithFields extends User {
   steam64Id: string
   uid: string

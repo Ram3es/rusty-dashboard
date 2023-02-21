@@ -1,42 +1,97 @@
-import { Listbox } from '@headlessui/react'
-import { useState } from 'react'
-import ArrowIcon from '../icons/ArrowIcon'
+import { useEffect, useState } from 'react'
+import { StatisticCartItem } from '../../types/StatisticCartItem'
+import { TimeOption } from '../../types/TimeOption'
+import { UserWithBalance } from '../../types/User'
+import CardsStatistic from '../CardsStatistic'
+import CheckIcon from '../icons/CheckIcon'
+import DownloadIcon from '../icons/DownloadIcon'
+import SponseeIcon from '../icons/SponseeIcon'
+import UploadIcon from '../icons/UploadIcon'
+import WalletIcon from '../icons/WalletIcon'
+import EditBalanceModal from './EditBalanceModal'
+import EditWagerModal from './EditWagerModal'
 
 const MainStatistic = ({ timePeriodOptions }: { timePeriodOptions: any[] }) => {
   const [selectedGeneralStatisticPeriod, setSelectedGeneralStatisticPeriod] = useState(timePeriodOptions[0])
+  const [generalStatistic, setGeneralStatistic] = useState<StatisticCartItem[]>([])
+  const [editedUserBalanceItem, setEditedUserBalanceItem] = useState<UserWithBalance>()
+  const [editedUserWagerItem, setEditedUserWagerItem] = useState<UserWithBalance>()
+
+  const editBalance = () => {
+    setEditedUserBalanceItem({
+      name: 'Some user',
+      email: 'test@test.test',
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+      balance: 10000,
+      wager: 100000
+    })
+  }
+
+  const editWager = () => {
+    setEditedUserWagerItem({
+      name: 'Some user',
+      email: 'test@test.test',
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+      balance: 10000,
+      wager: 100000
+    })
+  }
+
+  useEffect(() => {
+    setGeneralStatistic([
+      {
+        text: '1,386,222',
+        subtext: 'Balance',
+        icon: <WalletIcon iconCalsses='w-5' />,
+        canEdit: true,
+        isCoinceValue: true,
+        editFunction: () => editBalance()
+      },
+      {
+        text: '100,000',
+        subtext: 'Wager Requirement',
+        icon: <CheckIcon iconCalsses='w-5' />,
+        canEdit: true,
+        isCoinceValue: true,
+        editFunction: () => editWager()
+      },
+      {
+        text: '831,386,222',
+        subtext: 'Total Wagered',
+        icon: <SponseeIcon iconCalsses='w-8' />,
+        isCoinceValue: true
+      },
+      {
+        text: '101,386,222',
+        subtext: 'Total Deposited',
+        icon: <DownloadIcon iconCalsses='w-4' />,
+        isCoinceValue: true
+      },
+      {
+        text: '93,386,222',
+        subtext: 'Total Withdrawn',
+        icon: <UploadIcon iconCalsses='w-4' />,
+        isCoinceValue: true
+      }
+    ])
+  }, [])
 
   return (
     <>
-      <div className="flex justify-between w-full mb-6">
-        <h3 className="uppercase text-2xl text-white">Statistics</h3>
-        <div className="relative">
-          <Listbox value={selectedGeneralStatisticPeriod} onChange={setSelectedGeneralStatisticPeriod}>
-            {({ open }) => (
-              <>
-                <Listbox.Button className='w-36 h-10 flex items-center justify-between px-4 py-2 rounded bg-dark-17 text-gray-6'>
-                  <span>{selectedGeneralStatisticPeriod.name}</span>
-                  <ArrowIcon iconCalsses={`w-4 transform ${open ? 'rotate-90' : ''}`} />
-                </Listbox.Button>
-                <Listbox.Options className="absolute left-0 top-full bg-dark-17 mt-1 w-full px-4 py-2 rounded">
-                  {timePeriodOptions.map((option) => (
-                    <Listbox.Option
-                      className="cursor-pointer text-gray-6 hover:text-white"
-                      key={option.id}
-                      value={option}
-                      disabled={option.unavailable}
-                    >
-                      {option.name}
-                    </Listbox.Option>
-                  ))}
-                </Listbox.Options>
-              </>
-            )}
-          </Listbox>
-        </div>
-      </div>
-      {/* <div className='flex gap-10 flex-wrap justify-between'>
-          {generalStatistic.map((item, index) => <StatisticCart key={index} item={item} />)}
-      </div> */}
+      <CardsStatistic
+        title="Statistics"
+        periodOptions={timePeriodOptions}
+        selectedPeriod={selectedGeneralStatisticPeriod}
+        changePeriod={(option: TimeOption) => setSelectedGeneralStatisticPeriod(option)}
+        items={generalStatistic}
+        user={{
+          name: 'Some user',
+          email: 'test@test.test',
+          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+        }}
+      />
+      <EditBalanceModal user={editedUserBalanceItem} />
+      <EditWagerModal user={editedUserWagerItem} />
     </>
   )
 }

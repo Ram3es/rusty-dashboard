@@ -21,10 +21,10 @@ const MenuDesktop = ({ navigation, user }: { navigation: NavItem[], user: User }
             />
           </div>
           <nav className="mt-5 flex-1 space-y-1 px-6">
-            {navigation.map((item: NavItem) => (
-              <>{ item.href
+            {navigation.map((item: NavItem, index: number) => (
+              item.href
                 ? <NavLink
-                key={item.name}
+                key={`menu-${index}`}
                 to={item.href}
                 className="text-gray-6 hover:text-white hover:bg-dark-21 hover:bg-opacity-70 text-sm group gap-4 flex items-center px-4 py-3 font-medium rounded-lg"
                 style={({ isActive }) => isActive ? { backgroundColor: 'rgba(255, 194, 57, 0.1)', color: '#ffc239' } : undefined}
@@ -32,10 +32,9 @@ const MenuDesktop = ({ navigation, user }: { navigation: NavItem[], user: User }
                 {item.icon}
                 {item.name}
               </NavLink>
-                : <div>
+                : <div key={`dropdown-menu-${index}`}>
                     <div
                       className={`${isSubmenuOpen ? 'text-white' : 'text-gray-6'} cursor-pointer hover:text-white hover:bg-dark-21 hover:bg-opacity-70 text-sm group gap-4 flex justify-between items-center px-4 py-3 font-medium rounded-lg`}
-                      key={item.name}
                       onClick={() => setIsSubmenuOpen((prev: boolean) => !prev)}
                     >
                       <span className='flex gap-4'>
@@ -48,9 +47,9 @@ const MenuDesktop = ({ navigation, user }: { navigation: NavItem[], user: User }
                     </div>
                     {item.subNavigation && item.subNavigation?.length > 0
                       ? <div className={`${isSubmenuOpen ? 'block' : 'hidden'}`}>
-                          {item.subNavigation.map((sublink: NavItem) => (
+                          {item.subNavigation.map((sublink: NavItem, index: number) => (
                             <NavLink
-                              key={sublink.name}
+                              key={`submenu-${index}`}
                               to={sublink.href ?? ''}
                               className="text-gray-6 hover:text-white hover:bg-dark-21 hover:bg-opacity-70 text-sm group gap-4 flex items-center px-4 py-3 font-medium rounded-lg"
                               style={({ isActive }) => isActive ? { backgroundColor: 'rgba(255, 194, 57, 0.1)', color: '#ffc239' } : undefined}
@@ -61,7 +60,7 @@ const MenuDesktop = ({ navigation, user }: { navigation: NavItem[], user: User }
                           ))}
                         </div>
                       : null}
-                  </div>}</>
+                  </div>
             ))}
           </nav>
         </div>
