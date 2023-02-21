@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import { useState, useContext, useEffect } from 'react'
+import { getColorsArray, getGameIndex, getLabelsArray } from '../../helpers/gamesGetters'
 import sortDataByDate from '../../helpers/sotingByDate'
 import { Context } from '../../store/GlobalStatisticStore'
 import Graph from '../base/Graph'
@@ -11,9 +12,7 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
   const [wagersTitleData, setWagersTitleData] = useState([{ name: 'Wagers', value: 0, color: '#39C89D' }])
   const [dataWagers, setDataWagers] = useState({
     name: 'Wagers',
-    labels: [
-    <span key="dataWagers">Wagers</span>
-    ],
+    labels: [],
     data: []
   })
 
@@ -35,13 +34,8 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
           for (let i = 0; i < 24; i++) {
             monthData.push({
               name: dayjs().startOf('day').add(i, 'hour').format('DD/MM/YYYY HH'),
-              value: [0],
-              colors: [
-                {
-                  postitveColor: '#2E72C9',
-                  negativeColor: '#AF0A3B'
-                }
-              ]
+              value: currentGame !== 'all' ? [0] : [0, 0, 0, 0, 0, 0, 0],
+              colors: getColorsArray(currentGame)
             })
           }
           break
@@ -49,13 +43,8 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
           for (let i = 0; i < 24; i++) {
             monthData.push({
               name: dayjs().add(-24, 'hour').startOf('day').add(i, 'hour').format('DD/MM/YYYY HH'),
-              value: [0],
-              colors: [
-                {
-                  postitveColor: '#2E72C9',
-                  negativeColor: '#AF0A3B'
-                }
-              ]
+              value: currentGame !== 'all' ? [0] : [0, 0, 0, 0, 0, 0, 0],
+              colors: getColorsArray(currentGame)
             })
           }
           break
@@ -63,13 +52,8 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
           for (let i = 0; i < 7; i++) {
             monthData.push({
               name: dayjs().startOf('week').add(i, 'day').format('DD/MM/YYYY'),
-              value: [0],
-              colors: [
-                {
-                  postitveColor: '#2E72C9',
-                  negativeColor: '#AF0A3B'
-                }
-              ]
+              value: currentGame !== 'all' ? [0] : [0, 0, 0, 0, 0, 0, 0],
+              colors: getColorsArray(currentGame)
             })
           }
           break
@@ -77,13 +61,8 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
           for (let i = 0; i < dayjs().daysInMonth(); i++) {
             monthData.push({
               name: dayjs().startOf('month').add(i, 'day').format('DD/MM/YYYY'),
-              value: [0],
-              colors: [
-                {
-                  postitveColor: '#2E72C9',
-                  negativeColor: '#AF0A3B'
-                }
-              ]
+              value: currentGame !== 'all' ? [0] : [0, 0, 0, 0, 0, 0, 0],
+              colors: getColorsArray(currentGame)
             })
           }
           break
@@ -93,13 +72,14 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
         const foundIndex = monthData?.findIndex((item: any) => item.name === dateVal)
         if (foundIndex >= 0) {
           totalSum += Number(cur.bet_value) / 1000
-          monthData[foundIndex].value[0] = Number(monthData[foundIndex].value[0]) + (Number(cur.bet_value) / 1000)
+          monthData[foundIndex].value[getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[getGameIndex(currentGame, cur.mode)]) + (Number(cur.bet_value) / 1000)
         }
       })
       setDataWagers((prev: any) => {
         return {
           ...prev,
-          data: monthData
+          data: monthData,
+          labels: getLabelsArray(currentGame)
         }
       })
       setWagersTitleData(prev => [{ ...prev[0], value: totalSum }])

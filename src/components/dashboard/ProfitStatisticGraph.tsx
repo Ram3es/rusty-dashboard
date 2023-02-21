@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import { useState, useContext, useEffect } from 'react'
+import { getColorsArray, getGameIndex, getLabelsArray } from '../../helpers/gamesGetters'
 import sortDataByDate from '../../helpers/sotingByDate'
 import { Context } from '../../store/GlobalStatisticStore'
 import Graph from '../base/Graph'
@@ -12,23 +13,9 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
   const [profitTitleData, setProfitTitleData] = useState([{ name: 'PROFIT', value: 0, color: '#39C89D' }])
   const [dataProfit, setDataProfit] = useState({
     name: 'PROFIT',
-    labels: [
-      <span key="dataProfit">Profit</span>
-    ],
+    labels: [],
     data: []
   })
-
-  // const getLabels = () => {
-  //   switch (currentGame) {
-  //     case 'jackpot':
-  //       return [
-  //         <span className='flex items-center' key="val0">
-  //           <JackpotIcon iconCalsses="h-3" />
-  //           Jackpot
-  //         </span>
-  //       ]
-  //   }
-  // }
 
   useEffect(() => {
     if (state?.data?.data) {
@@ -84,13 +71,8 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
           for (let i = 0; i < 24; i++) {
             monthData.push({
               name: dayjs().startOf('day').add(i, 'hour').format('DD/MM/YYYY HH'),
-              value: [0],
-              colors: [
-                {
-                  postitveColor: '#2E72C9',
-                  negativeColor: '#AF0A3B'
-                }
-              ]
+              value: currentGame !== 'all' ? [0] : [0, 0, 0, 0, 0, 0, 0],
+              colors: getColorsArray(currentGame)
             })
           }
           break
@@ -98,13 +80,8 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
           for (let i = 0; i < 24; i++) {
             monthData.push({
               name: dayjs().add(-24, 'hour').startOf('day').add(i, 'hour').format('DD/MM/YYYY HH'),
-              value: [0],
-              colors: [
-                {
-                  postitveColor: '#2E72C9',
-                  negativeColor: '#AF0A3B'
-                }
-              ]
+              value: currentGame !== 'all' ? [0] : [0, 0, 0, 0, 0, 0, 0],
+              colors: getColorsArray(currentGame)
             })
           }
           break
@@ -112,13 +89,8 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
           for (let i = 0; i < 7; i++) {
             monthData.push({
               name: dayjs().startOf('week').add(i, 'day').format('DD/MM/YYYY'),
-              value: [0],
-              colors: [
-                {
-                  postitveColor: '#2E72C9',
-                  negativeColor: '#AF0A3B'
-                }
-              ]
+              value: currentGame !== 'all' ? [0] : [0, 0, 0, 0, 0, 0, 0],
+              colors: getColorsArray(currentGame)
             })
           }
           break
@@ -126,13 +98,8 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
           for (let i = 0; i < dayjs().daysInMonth(); i++) {
             monthData.push({
               name: dayjs().startOf('month').add(i, 'day').format('DD/MM/YYYY'),
-              value: [0],
-              colors: [
-                {
-                  postitveColor: '#2E72C9',
-                  negativeColor: '#AF0A3B'
-                }
-              ]
+              value: currentGame !== 'all' ? [0] : [0, 0, 0, 0, 0, 0, 0],
+              colors: getColorsArray(currentGame)
             })
           }
           break
@@ -144,7 +111,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
         if (cur.mode === 'jackpot') {
           if (foundIndex >= 0) {
             totalSum += Number(cur.house_edge) / 1000
-            monthData[foundIndex].value[0] = Number(monthData[foundIndex].value[0]) + (Number(cur.house_edge) / 1000)
+            monthData[foundIndex].value[getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[getGameIndex(currentGame, cur.mode)]) + (Number(cur.house_edge) / 1000)
           }
         } else if (cur.mode === 'pvp-mines') {
           if (foundIndex >= 0) {
@@ -155,7 +122,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
               profit = cur.house_edge - cur.oponent_bet
             }
             totalSum += profit / 1000
-            monthData[foundIndex].value[0] = Number(monthData[foundIndex].value[0]) + (profit / 1000)
+            monthData[foundIndex].value[getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[getGameIndex(currentGame, cur.mode)]) + (profit / 1000)
           }
         } else if (cur.mode === 'coinflip') {
           if (foundIndex >= 0) {
@@ -168,20 +135,20 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
               profit = cur.house_edge - cur.oponent_bet
             }
             totalSum += profit / 1000
-            monthData[foundIndex].value[0] = Number(monthData[foundIndex].value[0]) + (profit / 1000)
+            monthData[foundIndex].value[getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[getGameIndex(currentGame, cur.mode)]) + (profit / 1000)
           }
         } else {
           if (foundIndex >= 0) {
             totalSum += (Number(cur.bet_value) - Number(cur.winnings)) / 1000
-            monthData[foundIndex].value[0] = Number(monthData[foundIndex].value[0]) + ((Number(cur.bet_value) - Number(cur.winnings)) / 1000)
+            monthData[foundIndex].value[getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[getGameIndex(currentGame, cur.mode)]) + ((Number(cur.bet_value) - Number(cur.winnings)) / 1000)
           }
         }
       })
       setDataProfit((prev: any) => {
         return {
           ...prev,
-          data: monthData
-          // labels: getLabels()
+          data: monthData,
+          labels: getLabelsArray(currentGame)
         }
       })
       setProfitTitleData(prev => [{ ...prev[0], value: totalSum }])

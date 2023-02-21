@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import Button from '../../components/base/Button'
 import ActiveGame from '../../components/icons/ActiveGame'
 import InactiveGame from '../../components/icons/InactiveGame'
-import { getGameIcon } from '../../helpers/componentsGetters'
+import { getGameIcon } from '../../helpers/gamesGetters'
 
 const Game = () => {
   const params = useParams()

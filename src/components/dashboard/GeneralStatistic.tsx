@@ -10,7 +10,7 @@ import DiceIcon from '../icons/DiceIcon'
 import StatisticIcon from '../icons/StatisticIcon'
 import { TimeOption } from '../../types/TimeOption'
 import sortDataByDate from '../../helpers/sotingByDate'
-import { getGameIcon } from '../../helpers/componentsGetters'
+import { getGameIcon } from '../../helpers/gamesGetters'
 
 const timePeriodOptions: TimeOption[] = [
   { id: 1, name: 'Today', unavailable: false },
