@@ -1,5 +1,5 @@
 import { Listbox } from '@headlessui/react'
-import { Key, useEffect, useState } from 'react'
+import { Dispatch, Key, SetStateAction, useEffect, useState } from 'react'
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Rectangle, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { GraphData } from '../../types/GraphData'
 import ArrowIcon from '../icons/ArrowIcon'
@@ -8,7 +8,7 @@ import CoinceImage from '../../assets/coins.png'
 
 const graphVariants = ['line graph', 'bar chart']
 
-const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, names, labels }: { data: GraphData[], timePeriodOptions: any[], currentTimePeriod: any, changeTimePeriod: Function, names: Array<{ name: string, value: number | string, color: string, withIcon?: boolean }>, labels: React.ReactElement[] }) => {
+const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, names, labels, setGraphMode }: { data: GraphData[], timePeriodOptions: any[], currentTimePeriod: any, changeTimePeriod: Function, names: Array<{ name: string, value: number | string, color: string, withIcon?: boolean }>, labels: React.ReactElement[], setGraphMode?: Dispatch<SetStateAction<string>> }) => {
   const [menegedGraphData, setMenegedGraphData] = useState<object[]>()
   const [currentGraphVariant, setCurrentGraphVariant] = useState<string>(graphVariants[0])
   const [middlePercent, setMiddlePercent] = useState<string>('50%')
@@ -37,6 +37,12 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
       setIsContainsNegativeVal(() => false)
     }
   }, [data])
+
+  useEffect(() => {
+    if (setGraphMode) {
+      setGraphMode(currentGraphVariant)
+    }
+  }, [currentGraphVariant])
 
   const CustomBar = (props: any): React.ReactElement => {
     return <Rectangle {...props} fill={ props.value >= 0 ? props.colors[props.colorIndex]?.postitveColor ?? 'blue' : props.colors[props.colorIndex]?.negativeColor ?? 'red' } />
