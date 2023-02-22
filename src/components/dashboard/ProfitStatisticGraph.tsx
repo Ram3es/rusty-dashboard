@@ -4,7 +4,6 @@ import { getColorsArray, getGameIndex, getLabelsArray } from '../../helpers/game
 import sortDataByDate from '../../helpers/sotingByDate'
 import { Context } from '../../store/GlobalStatisticStore'
 import Graph from '../base/Graph'
-// import JackpotIcon from '../icons/JackpotIcon'
 
 const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: any[], currentGame: string }) => {
   /** @ts-expect-error */

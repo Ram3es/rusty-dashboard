@@ -59,15 +59,23 @@ const DepositBreakdown = () => {
 
   const data = useMemo(() => [
     {
-      col1: 'Jack Pot Deposit',
+      col1: 'Jackpot Deposit',
       col2: '33,741'
     },
     {
-      col1: 'Coin Flip Deposit',
+      col1: 'Coinflip Despoit',
       col2: '341,384'
     },
     {
-      col1: 'Shop Flip Deposit',
+      col1: 'Shop Deposit Rust Skins',
+      col2: '81,384'
+    },
+    {
+      col1: 'Shop Deposits Cryptocurrency',
+      col2: '341,384'
+    },
+    {
+      col1: 'Shop Deposits Giftcards',
       col2: '81,384'
     }
 
