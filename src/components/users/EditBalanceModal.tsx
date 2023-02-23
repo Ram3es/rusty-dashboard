@@ -29,7 +29,7 @@ const EditBalanceModal: FC<IEditCode> = ({ user }) => {
 
   const addNewBalance = () => {
     setInputValue(0)
-    setNewBalance(inputValue)
+    setNewBalance(prev => prev + Number(inputValue))
   }
 
   const onChangeStage = () => {
@@ -42,6 +42,7 @@ const EditBalanceModal: FC<IEditCode> = ({ user }) => {
 
   useEffect(() => {
     user && toggleModal()
+    setNewBalance(user?.balance ?? 0)
   }, [user])
 
   const getEditCodePopup = () => {
