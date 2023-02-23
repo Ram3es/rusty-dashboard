@@ -1,54 +1,41 @@
 import dayjs from 'dayjs'
 
 const sortDataByDate = (timePeriod: string, data: any[]): { currentPeriod: any[], previousPeriod: any[] } => {
+  let daysStartIndex: number
   switch (timePeriod) {
-    case 'Today':
-      return {
-        currentPeriod: data.filter(i => {
-          const compareDate = dayjs(i.timestamp)
-          return compareDate.isAfter(dayjs().startOf('day')) && compareDate.isBefore(dayjs().endOf('day'))
-        }),
-        previousPeriod: data.filter(i => {
-          const compareDate = dayjs(i.timestamp)
-          return compareDate.isAfter(dayjs().add(-1, 'day').startOf('day')) && compareDate.isBefore(dayjs().add(-1, 'day').endOf('day'))
-        })
-      }
-    case 'Yesterday':
-      return {
-        currentPeriod: data.filter(i => {
-          const compareDate = dayjs(i.timestamp)
-          return compareDate.isAfter(dayjs().add(-1, 'day').startOf('day')) && compareDate.isBefore(dayjs().add(-1, 'day').endOf('day'))
-        }),
-        previousPeriod: data.filter(i => {
-          const compareDate = dayjs(i.timestamp)
-          return compareDate.isAfter(dayjs().add(-2, 'day').startOf('day')) && compareDate.isBefore(dayjs().add(-2, 'day').endOf('day'))
-        })
-      }
-    case 'This week':
-      return {
-        currentPeriod: data.filter(i => {
-          const compareDate = dayjs(i.timestamp)
-          return compareDate.isAfter(dayjs().startOf('week')) && compareDate.isBefore(dayjs().endOf('week'))
-        }),
-        previousPeriod: data.filter(i => {
-          const compareDate = dayjs(i.timestamp)
-          return compareDate.isAfter(dayjs().add(-1, 'week').startOf('week')) && compareDate.isBefore(dayjs().add(-1, 'week').endOf('week'))
-        })
-      }
-    case 'This month': {
-      return {
-        currentPeriod: data.filter(i => {
-          const compareDate = dayjs(i.timestamp)
-          return compareDate.isAfter(dayjs().startOf('month')) && compareDate.isBefore(dayjs().endOf('month'))
-        }),
-        previousPeriod: data.filter(i => {
-          const compareDate = dayjs(i.timestamp)
-          return compareDate.isAfter(dayjs().add(-1, 'month').startOf('month')) && compareDate.isBefore(dayjs().add(-1, 'month').endOf('month'))
-        })
-      }
-    }
+    case 'This Month':
+      daysStartIndex = -30
+      break
+    case 'This Week':
+      daysStartIndex = -6
+      break
     default:
-      return { currentPeriod: data, previousPeriod: [] }
+      daysStartIndex = -23
+      break
+  }
+  switch (timePeriod) {
+    case 'Day':
+      return {
+        currentPeriod: data.filter(i => {
+          const compareDate = dayjs(i.timestamp)
+          return compareDate.isAfter(dayjs().add(daysStartIndex, 'hour')) && compareDate.isBefore(dayjs())
+        }),
+        previousPeriod: data.filter(i => {
+          const compareDate = dayjs(i.timestamp)
+          return compareDate.isAfter(dayjs().add(daysStartIndex * 2, 'hour')) && compareDate.isBefore(dayjs().add(daysStartIndex, 'hour'))
+        })
+      }
+    default:
+      return {
+        currentPeriod: data.filter(i => {
+          const compareDate = dayjs(i.timestamp)
+          return compareDate.isAfter(dayjs().add(daysStartIndex, 'day')) && compareDate.isBefore(dayjs())
+        }),
+        previousPeriod: data.filter(i => {
+          const compareDate = dayjs(i.timestamp)
+          return compareDate.isAfter(dayjs().add(daysStartIndex * 2, 'day')) && compareDate.isBefore(dayjs().add(daysStartIndex, 'day'))
+        })
+      }
   }
 }
 

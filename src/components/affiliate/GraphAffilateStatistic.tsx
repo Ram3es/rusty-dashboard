@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
-import React, { FC, useMemo, useState } from 'react'
-import { TimeOption } from '../../types/TimeOption'
+import { FC, useMemo, useState } from 'react'
+import { TIME_OPTIONS } from '../../constants'
 import Graph from '../base/Graph'
 
 interface IData {
@@ -14,14 +14,9 @@ interface IGraphProps {
   graphColors: string[]
 
 }
-const timePeriodOptions: TimeOption[] = [
-  { id: 1, name: 'Day', unavailable: false },
-  { id: 2, name: 'This Week', unavailable: false },
-  { id: 3, name: 'This Month', unavailable: false }
-]
 
 const GraphAffilateStatistic: FC<IGraphProps> = ({ names, graphColors }) => {
-  const [codeDepositorsStatisticPeriod, setCodeDepositorsStatisticPeriod] = useState(timePeriodOptions[0])
+  const [codeDepositorsStatisticPeriod, setCodeDepositorsStatisticPeriod] = useState(TIME_OPTIONS[0])
 
   const generateDataChart = () => {
     const monthData: IData[] = []
@@ -58,7 +53,7 @@ const GraphAffilateStatistic: FC<IGraphProps> = ({ names, graphColors }) => {
   const dataCodeDepositors = useMemo(() => generateDataChart(), [codeDepositorsStatisticPeriod])
   return (
        <Graph
-        timePeriodOptions={timePeriodOptions}
+        timePeriodOptions={TIME_OPTIONS}
         currentTimePeriod={codeDepositorsStatisticPeriod}
         changeTimePeriod={setCodeDepositorsStatisticPeriod}
         data={dataCodeDepositors}

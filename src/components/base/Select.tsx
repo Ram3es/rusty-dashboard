@@ -1,5 +1,6 @@
 import { Listbox } from '@headlessui/react'
 import { FC, useEffect, useState } from 'react'
+import { TIME_OPTIONS } from '../../constants'
 import { TimeOption } from '../../types/TimeOption'
 import ArrowIcon from '../icons/ArrowIcon'
 
@@ -8,13 +9,8 @@ interface ISelectProps {
   selectedOption?: string
   onChange: Function
 }
-const timePeriodOptions: TimeOption[] = [
-  { id: 1, name: 'Day', unavailable: false },
-  { id: 2, name: 'This Week', unavailable: false },
-  { id: 3, name: 'This Month', unavailable: false }
-]
 
-const Select: FC<ISelectProps> = ({ options = timePeriodOptions, selectedOption, onChange }) => {
+const Select: FC<ISelectProps> = ({ options = TIME_OPTIONS, selectedOption, onChange }) => {
   const [selected, setSelected] = useState<string>(selectedOption ?? options[0].name)
 
   useEffect(() => onChange(selected), [selected])

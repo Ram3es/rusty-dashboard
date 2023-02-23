@@ -44,15 +44,9 @@ const SitePermissions = ({ name }: { name: string }) => {
                     </Listbox.Option>
                     <Listbox.Option
                       className="cursor-pointer text-gray-6 hover:text-white"
-                      value="One-site Basic 2"
+                      value="On-site Advanced"
                     >
-                      One-site Basic 2
-                    </Listbox.Option>
-                    <Listbox.Option
-                      className="cursor-pointer text-gray-6 hover:text-white"
-                      value="One-site Basic 3"
-                    >
-                      One-site Basic 3
+                      On-site Advanced
                     </Listbox.Option>
                 </Listbox.Options>
               </>

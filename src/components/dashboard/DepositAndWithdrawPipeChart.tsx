@@ -4,19 +4,13 @@ import { TimeOption } from '../../types/TimeOption'
 import { Context } from '../../store/GlobalStatisticStore'
 import PipeChartWithTable from '../PipeChartWithTable'
 import sortDataByDate from '../../helpers/sotingByDate'
-
-const timePeriodOptions: TimeOption[] = [
-  { id: 1, name: 'Today', unavailable: false },
-  { id: 2, name: 'Yesterday', unavailable: false },
-  { id: 3, name: 'This week', unavailable: false },
-  { id: 4, name: 'This month', unavailable: false }
-]
+import { TIME_OPTIONS } from '../../constants'
 
 const depositOptions = ['deposit', 'withdraw']
 
 const DepositAndWithdrawPipeChart = () => {
   const [depositData, setDepositData] = useState<DepositBase[]>([])
-  const [selectedDepositPeriod, setSelectedDepositPeriod] = useState(timePeriodOptions[0])
+  const [selectedDepositPeriod, setSelectedDepositPeriod] = useState(TIME_OPTIONS[0])
   const [currentDepositSelect, setCurrentDepositSelect] = useState<string>(depositOptions[0])
   /** @ts-expect-error */
   const [state] = useContext(Context)
@@ -93,7 +87,7 @@ const DepositAndWithdrawPipeChart = () => {
     <>
       { depositData.length > 0
         ? <PipeChartWithTable
-        periodOptions={timePeriodOptions}
+        periodOptions={TIME_OPTIONS}
         depositData={depositData}
         selectedPeriod={selectedDepositPeriod}
         setSelectedDepositPeriod={(val: TimeOption) => setSelectedDepositPeriod(val)}

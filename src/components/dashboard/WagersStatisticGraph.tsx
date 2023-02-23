@@ -30,37 +30,28 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       const wagersSortedByDate = sortDataByDate(selectedWagersPeriod.name, sortedData)
       console.log('wagersSortedByDate', wagersSortedByDate.currentPeriod)
       switch (selectedWagersPeriod.name) {
-        case 'Today':
-          for (let i = 0; i < 24; i++) {
+        case 'Day':
+          for (let i = 0; i <= 24; i++) {
             monthData.push({
-              name: dayjs().startOf('day').add(i, 'hour').format('DD/MM/YYYY HH'),
-              value: currentGame !== 'all' ? [0] : [0, 0, 0, 0, 0, 0, 0],
-              colors: getColorsArray(currentGame)
-            })
-          }
-          break
-        case 'Yesterday':
-          for (let i = 0; i < 24; i++) {
-            monthData.push({
-              name: dayjs().add(-24, 'hour').startOf('day').add(i, 'hour').format('DD/MM/YYYY HH'),
+              name: dayjs().add(-24, 'hour').add(i, 'hour').format('DD/MM/YYYY HH'),
               value: currentGame !== 'all' ? [0] : [0, 0, 0, 0, 0, 0, 0],
               colors: getColorsArray(currentGame)
             })
           }
           break
         case 'This week':
-          for (let i = 0; i < 7; i++) {
+          for (let i = 0; i <= 7; i++) {
             monthData.push({
-              name: dayjs().startOf('week').add(i, 'day').format('DD/MM/YYYY'),
+              name: dayjs().add(-7, 'day').add(i, 'day').format('DD/MM/YYYY'),
               value: currentGame !== 'all' ? [0] : [0, 0, 0, 0, 0, 0, 0],
               colors: getColorsArray(currentGame)
             })
           }
           break
         default:
-          for (let i = 0; i < dayjs().daysInMonth(); i++) {
+          for (let i = 0; i <= 30; i++) {
             monthData.push({
-              name: dayjs().startOf('month').add(i, 'day').format('DD/MM/YYYY'),
+              name: dayjs().add(-30, 'day').add(i, 'day').format('DD/MM/YYYY'),
               value: currentGame !== 'all' ? [0] : [0, 0, 0, 0, 0, 0, 0],
               colors: getColorsArray(currentGame)
             })

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { TIME_OPTIONS } from '../../constants'
 import { StatisticCartItem } from '../../types/StatisticCartItem'
 import { TimeOption } from '../../types/TimeOption'
 import { User } from '../../types/User'
@@ -11,15 +12,8 @@ import SponseeIcon from '../icons/SponseeIcon'
 import WalletIcon from '../icons/WalletIcon'
 import EditAffiliateCode from '../pop-up/EditAffiliateCode'
 
-const timePeriodOptions: TimeOption[] = [
-  { id: 1, name: 'Today', unavailable: false },
-  { id: 2, name: 'Yesterday', unavailable: false },
-  { id: 3, name: 'This week', unavailable: false },
-  { id: 4, name: 'This month', unavailable: false }
-]
-
 const AffiliateMainItemStatistics = () => {
-  const [selectedGeneralStatisticPeriod, setSelectedGeneralStatisticPeriod] = useState(timePeriodOptions[0])
+  const [selectedGeneralStatisticPeriod, setSelectedGeneralStatisticPeriod] = useState(TIME_OPTIONS[0])
   const [generalStatistic, setGeneralStatistic] = useState<StatisticCartItem[]>([])
   const [editedUser, setEditedUSer] = useState<User>()
 
@@ -53,7 +47,7 @@ const AffiliateMainItemStatistics = () => {
       {
         text: '101,386,222',
         isCoinceValue: true,
-        subtext: 'Code',
+        subtext: 'Total Deposited',
         icon: <DownloadIcon iconCalsses='w-4'/>
       },
       {
@@ -74,7 +68,7 @@ const AffiliateMainItemStatistics = () => {
   return (<>
     <CardsStatistic
       title="AFFILIATE Statistics"
-      periodOptions={timePeriodOptions}
+      periodOptions={TIME_OPTIONS}
       selectedPeriod={selectedGeneralStatisticPeriod}
       changePeriod={(option: TimeOption) => setSelectedGeneralStatisticPeriod(option)}
       items={generalStatistic}

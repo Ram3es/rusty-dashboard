@@ -11,19 +11,13 @@ import StatisticIcon from '../icons/StatisticIcon'
 import { TimeOption } from '../../types/TimeOption'
 import sortDataByDate from '../../helpers/sotingByDate'
 import { getGameIcon } from '../../helpers/gamesGetters'
-
-const timePeriodOptions: TimeOption[] = [
-  { id: 1, name: 'Today', unavailable: false },
-  { id: 2, name: 'Yesterday', unavailable: false },
-  { id: 3, name: 'This week', unavailable: false },
-  { id: 4, name: 'This month', unavailable: false }
-]
+import { TIME_OPTIONS } from '../../constants'
 
 const GeneralStatistic = () => {
   /** @ts-expect-error */
   const [state] = useContext(Context)
   const [generalStatistic, setGeneralStatistic] = useState<StatisticCartItem[]>([])
-  const [selectedGeneralStatisticPeriod, setSelectedGeneralStatisticPeriod] = useState(timePeriodOptions[0])
+  const [selectedGeneralStatisticPeriod, setSelectedGeneralStatisticPeriod] = useState(TIME_OPTIONS[0])
 
   const getPercentages = (prev: number, cur: number) => {
     if (prev > 0 && cur > 0) {
@@ -139,7 +133,7 @@ const GeneralStatistic = () => {
     <>
       <CardsStatistic
         title="GENERAL STATISTICS"
-        periodOptions={timePeriodOptions}
+        periodOptions={TIME_OPTIONS}
         selectedPeriod={selectedGeneralStatisticPeriod}
         changePeriod={(option: TimeOption) => setSelectedGeneralStatisticPeriod(option)}
         items={generalStatistic}

@@ -4,19 +4,11 @@ import ExcludedAccounts from '../components/dashboard/ExcludedAccounts'
 import LivePlayers from '../components/dashboard/LivePlayers'
 import Trivia from '../components/dashboard/Trivia'
 import Trades from '../components/dashboard/Trades'
-import { TimeOption } from '../types/TimeOption'
 import DepositAndWithdrawPipeChart from '../components/dashboard/DepositAndWithdrawPipeChart'
 import GeneralStatistic from '../components/dashboard/GeneralStatistic'
 import DepositGraph from '../components/dashboard/DepositGraph'
 import WithdrawGraph from '../components/dashboard/WithdrawGraph'
-// import { GamesData } from '../types/GamesData'
-
-const timePeriodOptions: TimeOption[] = [
-  { id: 1, name: 'Today', unavailable: false },
-  { id: 2, name: 'Yesterday', unavailable: false },
-  { id: 3, name: 'This week', unavailable: false },
-  { id: 4, name: 'This month', unavailable: false }
-]
+import { TIME_OPTIONS } from '../constants'
 
 const Dashboard = ({ data }: { data: any }) => {
   return (
@@ -29,7 +21,7 @@ const Dashboard = ({ data }: { data: any }) => {
           <DepositAndWithdrawPipeChart />
         </div>
         <div className="col-span-6 2xl:col-span-3 row-span-5 2xl:row-span-2 rounded-lg bg-dark-1">
-          <GamesStatistic periodOptions={timePeriodOptions} />
+          <GamesStatistic periodOptions={TIME_OPTIONS} />
         </div>
         <div className="col-span-6 2xl:col-span-3 rounded-lg bg-dark-1">
           <DepositGraph />
