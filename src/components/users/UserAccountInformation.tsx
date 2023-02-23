@@ -103,8 +103,8 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
               <UserAccountField label="UID" value={user.uid} />
               <UserAccountField label="Discord ID" value={user.discordId} />
               <UserAccountField
-                label="Affiliate code"
-                value={user.affiliateCode}
+                label="Affiliate code Used"
+                value={user.affiliateCode !== '' ? user.affiliateCode : 'NULL'}
                 editFieldValue={setAffiliateCodePopupOpen}
               />
               <UserAccountField label="Trade URL" value={user.tradeUrl} />
