@@ -137,7 +137,7 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
               </div>
               <UserAccountField
                 label="Muted"
-                value={user.muted}
+                value={`${user.muted.toString()} (${user.mutedLength.days}D:${user.mutedLength.hours}H:${user.mutedLength.minutes}M)`}
                 editFieldValue={setMutedEditPopupOpen}
                 setFieldValue={setMutedPopupOpen}
                 icon='MuteIcon'
@@ -151,7 +151,7 @@ const UserAccountInformation = ({ timePeriodOptions }: { timePeriodOptions: any[
             <div className='w-full flex flex-col'>
               <UserAccountField
                 label="Banned"
-                value={user.banned}
+                value={`${user.banned.toString()} (${user.bannedLength.days}D:${user.bannedLength.hours}H:${user.bannedLength.minutes}M)`}
                 editFieldValue={setBannedEditPopupOpen}
                 setFieldValue={setBannedPopupOpen}
                 icon='BannedIcon'
