@@ -1,36 +1,29 @@
 import { useState } from 'react'
 
 export default function Login ({ setToken }: { setToken: (userToken: { token: string }) => void }) {
-  const [username, setUserName] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setUserName] = useState('')
+  const [pass, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState<{ error: boolean, status: string }>()
 
-  async function loginUser (credentials: { username: string, password: string }) {
-    // return await fetch('', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(credentials)
-    // })
-    //   .then(async data => await data.json())
-
-    return await new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (credentials.username === 'test@test.test') {
-          resolve({ token: 'test' })
-        } else {
-          resolve({ error: true, status: 'wrong mail' })
-        }
-      }, 300)
+  async function loginUser (credentials: { email: string, pass: string }) {
+    return await fetch('', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(credentials)
     })
+      .then(async data => await data.json())
+      .then((data) => {
+        console.log('Data', data)
+      })
   }
 
   const handleSubmit = async (e: any): Promise<void> => {
     e.preventDefault()
     const res: any = await loginUser({
-      username,
-      password
+      email,
+      pass
     })
     if (res.token) {
       setToken(res)
@@ -73,7 +66,7 @@ export default function Login ({ setToken }: { setToken: (userToken: { token: st
                 required
                 className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-yellow-500 focus:outline-none focus:ring-yellow-500 sm:text-sm"
                 placeholder="Email address"
-                value={username}
+                value={email}
                 onChange={e => setUserName(e.target.value)}
               />
             </div>
@@ -89,7 +82,7 @@ export default function Login ({ setToken }: { setToken: (userToken: { token: st
                 required
                 className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-yellow-500 focus:outline-none focus:ring-yellow-500 sm:text-sm"
                 placeholder="Password"
-                value={password}
+                value={pass}
                 onChange={e => setPassword(e.target.value)}
               />
             </div>
