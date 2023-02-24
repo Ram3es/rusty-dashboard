@@ -1,16 +1,29 @@
-import { ReactElement, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { NavItem } from '../../types/Nav'
 import RustylootLogo from '../../assets/RustylootLogo.png'
 import { User } from '../../types/User'
 import LogoutIcon from '../icons/LogoutIcon'
 import ArrowIcon from '../icons/ArrowIcon'
+import PopupWrapper from '../base/PopupWrapper'
+import Button from '../base/Button'
+import InputWithLabel from '../base/InputWithLabel'
 
 const MenuDesktop = ({ navigation, user }: { navigation: NavItem[], user: User }): ReactElement => {
   const [isSubmenuOpen, setIsSubmenuOpen] = useState<boolean>(false)
+  const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false)
+  const [userDetails, setUserDetails] = useState<User>()
+
+  useEffect(() => {
+    setUserDetails(user)
+  }, [user])
+
+  const uploadFile = (file: File) => {
+    console.log(file)
+  }
 
   return (
-    <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64r md:flex-col w-64">
+    <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64r md:flex-col w-64 relative z-50">
       <div className="flex min-h-0 flex-1 flex-col bg-dark-1">
         <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
           <div className="flex flex-shrink-0 items-center px-6">
@@ -68,7 +81,10 @@ const MenuDesktop = ({ navigation, user }: { navigation: NavItem[], user: User }
           <div className="group block w-full flex-shrink-0 bg-dark-1f p-3 rounded-lg">
             <div className="flex flex-col items-center">
               <div className='flex justify-between items-center w-full mb-2'>
-                <div className='p-0.5 rounded-full border-2 border-gray-3b'>
+                <div
+                  className='p-0.5 rounded-full border-2 border-gray-3b'
+                  onClick={() => setIsOpenPopup(true)}
+                >
                   <img
                     className="inline-block h-9 w-9 rounded-full"
                     src={user.avatar}
@@ -86,6 +102,74 @@ const MenuDesktop = ({ navigation, user }: { navigation: NavItem[], user: User }
             </div>
           </div>
         </div>
+        {isOpenPopup
+          ? <PopupWrapper closePopup={() => setIsOpenPopup(false)}>
+              <div className='flex flex-col gap-5 items-center w-[400px] text-dark-1'>
+                <h4 className='text-white uppercase text-3xl font-medium'>EDIT ACCOUNT DETAILS</h4>
+                <div className='flex gap-2 items-start'>
+                  <div className='p-0.5 rounded-full border-2 border-gray-3b'>
+                    <img className='w-20 rounded-full' src={userDetails?.avatar ? userDetails?.avatar : '/src/assets/avatarIncognito.png'} alt={userDetails?.name} />
+                  </div>
+                  <div className='w-36'>
+                    <div className='text-white'>Profile Picture</div>
+                    <InputWithLabel
+                      type='file'
+                      changeFunction={uploadFile}
+                      value={undefined}
+                      name={''} />
+                  </div>
+                </div>
+
+                <div className='flex flex-col items-end gap-2 w-56'>
+                  <InputWithLabel
+                    type='text'
+                    label='Email'
+                    value={userDetails?.email}
+                    name={''}
+                    placeholder=''
+                    labelClasses="flex flex-col w-full text-gray-6 text-x"
+                    inputClasses='px-3 py-2 bg-dark-17 rounded text-white h-11'
+                    changeFunction={(name: string, value: string) => setUserDetails(prev => {
+                      if (prev) {
+                        return { ...prev, email: value }
+                      }
+                    })} />
+                  <InputWithLabel
+                    type='text'
+                    label='Username'
+                    value={userDetails?.name}
+                    name={''}
+                    placeholder=''
+                    labelClasses="flex flex-col w-full text-gray-6 text-x"
+                    inputClasses='px-3 py-2 bg-dark-17 rounded text-white h-11'
+                    changeFunction={(name: string, value: string) => setUserDetails(prev => {
+                      if (prev) {
+                        return { ...prev, name: value }
+                      }
+                    })} />
+                  <InputWithLabel
+                    type='text'
+                    label='Password'
+                    value={userDetails?.password}
+                    name={''}
+                    placeholder=''
+                    labelClasses="flex flex-col w-full text-gray-6 text-x"
+                    inputClasses='px-3 py-2 bg-dark-17 rounded text-white h-11'
+                    changeFunction={(name: string, value: string) => setUserDetails(prev => {
+                      if (prev) {
+                        return { ...prev, password: value }
+                      }
+                    })} />
+                </div>
+                <div className='flex justify-center gap-5 w-full [&>button]:max-w-[140px] mt-12' >
+                  <Button text='SAVE SETTINGS' submitFunction={() => {
+                    console.log('updated')
+                    setIsOpenPopup(false)
+                  }} />
+                </div>
+              </div>
+            </PopupWrapper>
+          : null}
       </div>
     </div>
   )

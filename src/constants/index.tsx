@@ -6,6 +6,6 @@ export const API_URLS = {
 
 export const TIME_OPTIONS: TimeOption[] = [
   { id: 1, name: 'Day', unavailable: false },
-  { id: 2, name: 'This Week', unavailable: false },
-  { id: 3, name: 'This Month', unavailable: false }
+  { id: 2, name: 'Week', unavailable: false },
+  { id: 3, name: 'Month', unavailable: false }
 ]

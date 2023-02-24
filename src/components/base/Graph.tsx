@@ -51,11 +51,12 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
   const renderTooltip = (props: any): React.ReactElement => {
     // eslint-disable-next-line no-return-assign
     const sumOfPosition = props.payload?.reduce((prev: number, cur: { value: number }) => prev += cur.value, 0) || 0
-
+    console.log(props)
     return <div className='px-4 py-5 bg-dark-22 text-gray-6 text-base flex flex-col gap-2' style={{
       border: '1.5px solid rgba(140, 152, 169, 0.2)',
       boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.4)'
     }}>
+      <div className='text-white mb-2'>{props.label}</div>
       {props.payload?.map((item: { dataKey: Key | null | undefined, color: any, value: number }, index: number) => (
         <div key={item.dataKey} className='flex items-center'>
           <span className='w-2 h-2 rounded-full mr-2' style={{

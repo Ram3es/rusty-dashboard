@@ -51,6 +51,7 @@ const AddBotsForm = () => {
          ) }
           <div className='col-span-1 flex flex-col'>
             <InputWithLabel
+              label='.Ma File'
               type='file'
               changeFunction={uploadFile}
               value={undefined}
