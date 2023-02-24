@@ -3,10 +3,10 @@ import dayjs from 'dayjs'
 const sortDataByDate = (timePeriod: string, data: any[]): { currentPeriod: any[], previousPeriod: any[] } => {
   let daysStartIndex: number
   switch (timePeriod) {
-    case 'This Month':
+    case 'Month':
       daysStartIndex = -30
       break
-    case 'This Week':
+    case 'Week':
       daysStartIndex = -6
       break
     default:

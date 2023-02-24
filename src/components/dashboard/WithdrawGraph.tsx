@@ -54,10 +54,10 @@ const WithdrawGraph = () => {
       const monthData: any[] = []
       let daysStartIndex
       switch (depositDataStatisticPeriod.name) {
-        case 'This Month':
+        case 'Month':
           daysStartIndex = -30
           break
-        case 'This Week':
+        case 'Week':
           daysStartIndex = -6
           break
         default:

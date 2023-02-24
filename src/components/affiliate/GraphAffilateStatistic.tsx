@@ -22,10 +22,10 @@ const GraphAffilateStatistic: FC<IGraphProps> = ({ names, graphColors }) => {
     const monthData: IData[] = []
     let daysStartIndex
     switch (codeDepositorsStatisticPeriod.name) {
-      case 'This Month':
+      case 'Month':
         daysStartIndex = -30
         break
-      case 'This Week':
+      case 'Week':
         daysStartIndex = -6
         break
       default:

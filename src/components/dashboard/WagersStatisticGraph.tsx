@@ -39,7 +39,7 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
             })
           }
           break
-        case 'This week':
+        case 'Week':
           for (let i = 0; i <= 7; i++) {
             monthData.push({
               name: dayjs().add(-7, 'day').add(i, 'day').format('DD/MM/YYYY'),
