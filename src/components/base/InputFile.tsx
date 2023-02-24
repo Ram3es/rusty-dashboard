@@ -12,17 +12,16 @@ const InputFile: FC<InpputFileProps> = ({ onChange }) => {
     inputRef?.current?.click()
   }
   return (
-    <>
-      <span className=' text-gray-6 text-xs mb-2'>.Ma File</span>
+    <span className='py-2'>
       <Button text='Select' color='default' submitFunction={uploadFile} />
-        <input
-          id='upload-file'
-          type='file'
-          ref={inputRef}
-          onChange={onChange}
-          style={{ display: 'none' }}
-        />
-    </>
+      <input
+        id='upload-file'
+        type='file'
+        ref={inputRef}
+        onChange={onChange}
+        style={{ display: 'none' }}
+      />
+    </span>
   )
 }
 
