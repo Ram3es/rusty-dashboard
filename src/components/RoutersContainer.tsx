@@ -1,5 +1,6 @@
-import { useContext, useEffect } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { useContext, useEffect, useState } from 'react'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { API_URLS } from '../constants'
 import Affiliateitem from '../routes/Affiliate/Affiliateitem'
 import Affiliates from '../routes/Affiliate/Affiliates'
 import Bots from '../routes/Bots'
@@ -9,10 +10,13 @@ import Sponsee from '../routes/Sponsee'
 import Staff from '../routes/Staff'
 import Users from '../routes/Users'
 import { Context } from '../store/GlobalStatisticStore'
+import Login from './login/Login'
 
 const RoutersContainer = ({ socket }: { socket: any }) => {
   /** @ts-expect-error */
   const [state, dispatch] = useContext(Context)
+  const [isAuth, setIsAuth] = useState<boolean>(false)
+  const location = useLocation()
 
   useEffect(() => {
     console.log('socket', socket)
@@ -24,17 +28,50 @@ const RoutersContainer = ({ socket }: { socket: any }) => {
     console.log(state)
   }, [])
 
+  const verifyUser = async () => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      return await fetch(`${API_URLS.API_URL}/admin/verify`, {
+        method: 'GET'
+      })
+        .then(async data => await data.json())
+        .then((data) => {
+          console.log(data)
+          setIsAuth(true)
+        })
+    } catch (e) {
+      setIsAuth(false)
+      console.error(e)
+    }
+  }
+
+  useEffect(() => {
+    const verify = async () => {
+      const res = await verifyUser()
+      console.log('verify', res)
+    }
+    void verify()
+  }, [location])
+
+  const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+    if (!isAuth) {
+      return <Navigate to="/admin/login" replace />
+    }
+    return children
+  }
+
   return (
     <>
       <Routes>
-        <Route path="/admin/" element={<Dashboard data={state} />} />
-        <Route path="/admin/users" element={<Users />} />
-        <Route path="/admin/staff" element={<Staff />} />
-        <Route path="/admin/affiliates" element={<Affiliates />} />
-        <Route path="/admin/affiliates/:name" element={<Affiliateitem />} />
-        <Route path="/admin/bots" element={<Bots />} />
-        <Route path="/admin/sponsee" element={<Sponsee />} />
-        <Route path="/admin/game/:game" element={<Game />} />
+        <Route path="/admin/" element={<ProtectedRoute><Dashboard data={state} /></ProtectedRoute>} />
+        <Route path="/admin/login" element={<Login setIsAuth={setIsAuth} />} />
+        <Route path="/admin/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
+        <Route path="/admin/staff" element={<ProtectedRoute><Staff /></ProtectedRoute>} />
+        <Route path="/admin/affiliates" element={<ProtectedRoute><Affiliates /></ProtectedRoute>} />
+        <Route path="/admin/affiliates/:name" element={<ProtectedRoute><Affiliateitem /></ProtectedRoute>} />
+        <Route path="/admin/bots" element={<ProtectedRoute><Bots /></ProtectedRoute>} />
+        <Route path="/admin/sponsee" element={<ProtectedRoute><Sponsee /></ProtectedRoute>} />
+        <Route path="/admin/game/:game" element={<ProtectedRoute><Game /></ProtectedRoute>} />
       </Routes>
     </>
   )

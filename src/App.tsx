@@ -19,8 +19,6 @@ import PvpMinesIcon from './components/icons/PvpMinesIcon'
 import PlinkoIcon from './components/icons/PlinkoIcon'
 import WheelIcon from './components/icons/WheelIcon'
 import UpgraderIcon from './components/icons/UpgraderIcon'
-import Login from './components/login/Login'
-import useToken from './Middleware/useToken'
 
 const navigation = [
   { name: 'Home', href: '/admin/', icon: <DashboardIcon iconCalsses='w-4 h-4' /> },
@@ -45,7 +43,6 @@ const navigation = [
 ]
 
 function App (): JSX.Element {
-  const { token, setToken } = useToken()
   const [user, setUser] = useState<User>({
     name: 'Some user',
     email: 'test@test.test',
@@ -66,9 +63,7 @@ function App (): JSX.Element {
 
   return (
     <BrowserRouter>
-      { !token
-        ? <Login setToken={setToken} />
-        : <><MenuDesktop navigation={navigation} user={user} />
+      <MenuDesktop navigation={navigation} user={user} />
       <div className="flex flex-1 flex-col md:pl-270px">
         <main className="flex-1 min-h-screen">
           <Store>
@@ -76,7 +71,6 @@ function App (): JSX.Element {
           </Store>
         </main>
       </div>
-      </> }
     </BrowserRouter>
   )
 }

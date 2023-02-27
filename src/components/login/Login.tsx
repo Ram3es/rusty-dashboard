@@ -1,29 +1,29 @@
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { API_URLS } from '../../constants'
 
-export default function Login ({ setToken }: { setToken: (userToken: { token: string }) => void }) {
+export default function Login ({ setIsAuth }: { setIsAuth: Dispatch<SetStateAction<boolean>> }) {
   const [username, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState<{ error: boolean, status: string }>()
+  const navigate = useNavigate()
 
   async function loginUser (credentials: { username: string, password: string }) {
-    // return await fetch('', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(credentials)
-    // })
-    //   .then(async data => await data.json())
-
-    return await new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (credentials.username === 'test@test.test') {
-          resolve({ token: 'test' })
-        } else {
-          resolve({ error: true, status: 'wrong mail' })
-        }
-      }, 300)
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await fetch(`${API_URLS.API_URL}/admin/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: credentials.username,
+        password: credentials.password
+      })
     })
+      .then(async data => await data.json())
+      .catch(e => {
+        console.error(e)
+      })
   }
 
   const handleSubmit = async (e: any): Promise<void> => {
@@ -32,11 +32,10 @@ export default function Login ({ setToken }: { setToken: (userToken: { token: st
       username,
       password
     })
-    if (res.token) {
-      setToken(res)
+    if (res) {
+      setIsAuth(true)
       setErrorMessage(undefined)
-    } else {
-      setErrorMessage(res)
+      navigate('/admin/')
     }
   }
 
