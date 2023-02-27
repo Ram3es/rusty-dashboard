@@ -1,9 +1,10 @@
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { io } from 'socket.io-client'
 import { API_URLS } from '../../constants'
 import { useUserContext } from '../../store/UserStore'
 
-export default function Login ({ setIsAuth }: { setIsAuth: Dispatch<SetStateAction<boolean>> }) {
+export default function Login () {
   const [username, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState<{ error: boolean, status: string }>()
@@ -36,10 +37,22 @@ export default function Login ({ setIsAuth }: { setIsAuth: Dispatch<SetStateActi
       password
     })
     if (res) {
-      setIsAuth(true)
-      setUser({ email: res.user.email })
-      setErrorMessage(undefined)
-      navigate('/admin/')
+      if (res.userPayload) {
+        const socket = io(API_URLS.API_URL, {
+          transports: ['websocket', 'polling'],
+          upgrade: true,
+          extraHeaders: {
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+            Authorization: `bearer ${res.token}`
+          }
+        })
+        setUser({ email: res.userPayload.email, tocken: res.token, socket })
+        setErrorMessage(undefined)
+        navigate('/admin/')
+      } else {
+        setUser({})
+        setErrorMessage({ error: true, status: res.message })
+      }
     }
   }
 

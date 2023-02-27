@@ -1,4 +1,3 @@
-import socket from './Middleware/socket'
 import { BrowserRouter } from 'react-router-dom'
 import MenuDesktop from './components/nav/MenuDesktop'
 import DashboardIcon from './components/icons/DashboardIcon'
@@ -48,7 +47,7 @@ function App (): JSX.Element {
         <>
           <MenuDesktop navigation={navigation} />
           <Store>
-            <RoutersContainer socket={socket} />
+            <RoutersContainer />
           </Store>
         </>
       </UserStore>

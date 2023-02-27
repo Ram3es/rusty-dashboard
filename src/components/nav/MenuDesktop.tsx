@@ -9,30 +9,23 @@ import PopupWrapper from '../base/PopupWrapper'
 import Button from '../base/Button'
 import InputWithLabel from '../base/InputWithLabel'
 import { useUserContext } from '../../store/UserStore'
-import socket from '../../Middleware/socket'
 
 const MenuDesktop = ({ navigation }: { navigation: NavItem[] }): ReactElement => {
   const [isSubmenuOpen, setIsSubmenuOpen] = useState<boolean>(false)
   const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false)
   const [userDetails, setUserDetails] = useState<User>()
-  const [user, setUser] = useUserContext()
+  const [user] = useUserContext()
 
   useEffect(() => {
-    socket.on('system:connect', (data: { error: boolean
+    user.socket?.on('system:connect', (data: { error: boolean
       user: {
         authenticated: boolean
         data: any
       }
     }) => {
       console.log(data, 'system CONNEC ')
-      if (!data.error && data.user.authenticated) {
-        setUser({
-          name: data.user.data.username,
-          avatar: data.user.data.avatar
-        })
-      }
     })
-  }, [])
+  }, [user.socket])
 
   useEffect(() => {
     setUserDetails(user)

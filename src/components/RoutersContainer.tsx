@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { API_URLS } from '../constants'
 import Affiliateitem from '../routes/Affiliate/Affiliateitem'
@@ -13,36 +13,36 @@ import { Context } from '../store/GlobalStatisticStore'
 import { useUserContext } from '../store/UserStore'
 import Login from './login/Login'
 
-const RoutersContainer = ({ socket }: { socket: any }) => {
+const RoutersContainer = () => {
   /** @ts-expect-error */
   const [state, dispatch] = useContext(Context)
-  const [isAuth, setIsAuth] = useState<boolean>(false)
   const location = useLocation()
   const [user, setUser] = useUserContext()
 
   useEffect(() => {
-    console.log('socket', socket)
-    socket.emit('admin:connect', {}, (data: any) => {
+    user.socket?.emit('admin:connect', {}, (data: any) => {
       console.log(data, 'ADMIN CONNEC ')
       dispatch({ type: 'UPDATE', payload: data })
     })
-
-    console.log(state)
-  }, [])
+  }, [user.socket])
 
   const verifyUser = async () => {
     try {
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       return await fetch(`${API_URLS.API_URL}/admin/verify`, {
-        method: 'GET'
+        method: 'GET',
+        headers: {
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          Authorization: `bearer ${user.tocken}`
+        }
       })
         .then(async data => await data.json())
         .then((data) => {
-          setUser({ email: data.user.email })
-          setIsAuth(true)
+          setUser((prev: any) => {
+            return { ...prev, email: data.email }
+          })
         })
     } catch (e) {
-      setIsAuth(false)
       setUser({})
       console.error(e)
     }
@@ -53,11 +53,13 @@ const RoutersContainer = ({ socket }: { socket: any }) => {
       const res = await verifyUser()
       console.log('verify', res)
     }
-    void verify()
+    if (user.tocken) {
+      void verify()
+    }
   }, [location])
 
   const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-    if (!isAuth) {
+    if (!user.tocken) {
       return <Navigate to="/admin/login" replace />
     }
     return children
@@ -68,7 +70,7 @@ const RoutersContainer = ({ socket }: { socket: any }) => {
       <main className="flex-1 min-h-screen">
         <Routes>
           <Route path="/admin/" element={<ProtectedRoute><Dashboard data={state} /></ProtectedRoute>} />
-          <Route path="/admin/login" element={<Login setIsAuth={setIsAuth} />} />
+          <Route path="/admin/login" element={<Login />} />
           <Route path="/admin/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
           <Route path="/admin/staff" element={<ProtectedRoute><Staff /></ProtectedRoute>} />
           <Route path="/admin/affiliates" element={<ProtectedRoute><Affiliates /></ProtectedRoute>} />

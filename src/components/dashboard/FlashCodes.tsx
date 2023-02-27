@@ -3,8 +3,8 @@ import Button from '../base/Button'
 import InputWithLabel from '../base/InputWithLabel'
 import Table from '../base/Table'
 import Image from '../../assets/RustylootLogo.png'
-import socket from '../../Middleware/socket'
 import dayjs from 'dayjs'
+import { useUserContext } from '../../store/UserStore'
 
 const FlashCodes = () => {
   const [state, setState] = useState({
@@ -12,17 +12,18 @@ const FlashCodes = () => {
     amount: 0,
     users: 0
   })
+  const [user] = useUserContext()
 
   const [codes, setCodes] = useState<any[]>([])
 
   useEffect(() => {
-    socket.emit('admin:flash:all', {}, (data: { error: boolean, data: any[] }) => {
-      if (!data.error) {
-        console.log(data, 'admin:flash:all')
-        setCodes(data.data)
-      }
-    })
-  }, [])
+    // user.socket?.emit('admin:flash:all', {}, (data: { error: boolean, data: any[] }) => {
+    //   if (!data.error) {
+    //     console.log(data, 'admin:flash:all')
+    //     setCodes(data.data)
+    //   }
+    // })
+  }, [user.socket])
 
   const updateCode = (name: string, value: string | number) => {
     const newValue: Record<string, string | number> = {}
@@ -34,7 +35,7 @@ const FlashCodes = () => {
 
   const codeSubmit = () => {
     console.log(state)
-    socket.emit('admin:flash:create', {
+    user.socket?.emit('admin:flash:create', {
       code: state.code,
       value: state.amount,
       max_claims: state.users
