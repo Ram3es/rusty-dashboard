@@ -10,6 +10,7 @@ import Sponsee from '../routes/Sponsee'
 import Staff from '../routes/Staff'
 import Users from '../routes/Users'
 import { Context } from '../store/GlobalStatisticStore'
+import { useUserContext } from '../store/UserStore'
 import Login from './login/Login'
 
 const RoutersContainer = ({ socket }: { socket: any }) => {
@@ -17,6 +18,7 @@ const RoutersContainer = ({ socket }: { socket: any }) => {
   const [state, dispatch] = useContext(Context)
   const [isAuth, setIsAuth] = useState<boolean>(false)
   const location = useLocation()
+  const [user, setUser] = useUserContext()
 
   useEffect(() => {
     console.log('socket', socket)
@@ -36,11 +38,12 @@ const RoutersContainer = ({ socket }: { socket: any }) => {
       })
         .then(async data => await data.json())
         .then((data) => {
-          console.log(data)
+          setUser({ email: data.user.email })
           setIsAuth(true)
         })
     } catch (e) {
       setIsAuth(false)
+      setUser({})
       console.error(e)
     }
   }
@@ -61,19 +64,21 @@ const RoutersContainer = ({ socket }: { socket: any }) => {
   }
 
   return (
-    <>
-      <Routes>
-        <Route path="/admin/" element={<ProtectedRoute><Dashboard data={state} /></ProtectedRoute>} />
-        <Route path="/admin/login" element={<Login setIsAuth={setIsAuth} />} />
-        <Route path="/admin/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
-        <Route path="/admin/staff" element={<ProtectedRoute><Staff /></ProtectedRoute>} />
-        <Route path="/admin/affiliates" element={<ProtectedRoute><Affiliates /></ProtectedRoute>} />
-        <Route path="/admin/affiliates/:name" element={<ProtectedRoute><Affiliateitem /></ProtectedRoute>} />
-        <Route path="/admin/bots" element={<ProtectedRoute><Bots /></ProtectedRoute>} />
-        <Route path="/admin/sponsee" element={<ProtectedRoute><Sponsee /></ProtectedRoute>} />
-        <Route path="/admin/game/:game" element={<ProtectedRoute><Game /></ProtectedRoute>} />
-      </Routes>
-    </>
+    <div className={`flex flex-1 flex-col ${Object.keys(user).length > 0 ? 'pl-270px' : ''}`}>
+      <main className="flex-1 min-h-screen">
+        <Routes>
+          <Route path="/admin/" element={<ProtectedRoute><Dashboard data={state} /></ProtectedRoute>} />
+          <Route path="/admin/login" element={<Login setIsAuth={setIsAuth} />} />
+          <Route path="/admin/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
+          <Route path="/admin/staff" element={<ProtectedRoute><Staff /></ProtectedRoute>} />
+          <Route path="/admin/affiliates" element={<ProtectedRoute><Affiliates /></ProtectedRoute>} />
+          <Route path="/admin/affiliates/:name" element={<ProtectedRoute><Affiliateitem /></ProtectedRoute>} />
+          <Route path="/admin/bots" element={<ProtectedRoute><Bots /></ProtectedRoute>} />
+          <Route path="/admin/sponsee" element={<ProtectedRoute><Sponsee /></ProtectedRoute>} />
+          <Route path="/admin/game/:game" element={<ProtectedRoute><Game /></ProtectedRoute>} />
+        </Routes>
+      </main>
+    </div>
   )
 }
 

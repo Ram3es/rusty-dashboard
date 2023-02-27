@@ -1,12 +1,14 @@
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { API_URLS } from '../../constants'
+import { useUserContext } from '../../store/UserStore'
 
 export default function Login ({ setIsAuth }: { setIsAuth: Dispatch<SetStateAction<boolean>> }) {
   const [username, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState<{ error: boolean, status: string }>()
   const navigate = useNavigate()
+  const [, setUser] = useUserContext()
 
   async function loginUser (credentials: { username: string, password: string }) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
@@ -23,6 +25,7 @@ export default function Login ({ setIsAuth }: { setIsAuth: Dispatch<SetStateActi
       .then(async data => await data.json())
       .catch(e => {
         console.error(e)
+        setUser({})
       })
   }
 
@@ -34,6 +37,7 @@ export default function Login ({ setIsAuth }: { setIsAuth: Dispatch<SetStateActi
     })
     if (res) {
       setIsAuth(true)
+      setUser({ email: res.user.email })
       setErrorMessage(undefined)
       navigate('/admin/')
     }

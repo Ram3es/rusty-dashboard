@@ -8,11 +8,31 @@ import ArrowIcon from '../icons/ArrowIcon'
 import PopupWrapper from '../base/PopupWrapper'
 import Button from '../base/Button'
 import InputWithLabel from '../base/InputWithLabel'
+import { useUserContext } from '../../store/UserStore'
+import socket from '../../Middleware/socket'
 
-const MenuDesktop = ({ navigation, user }: { navigation: NavItem[], user: User }): ReactElement => {
+const MenuDesktop = ({ navigation }: { navigation: NavItem[] }): ReactElement => {
   const [isSubmenuOpen, setIsSubmenuOpen] = useState<boolean>(false)
   const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false)
   const [userDetails, setUserDetails] = useState<User>()
+  const [user, setUser] = useUserContext()
+
+  useEffect(() => {
+    socket.on('system:connect', (data: { error: boolean
+      user: {
+        authenticated: boolean
+        data: any
+      }
+    }) => {
+      console.log(data, 'system CONNEC ')
+      if (!data.error && data.user.authenticated) {
+        setUser({
+          name: data.user.data.username,
+          avatar: data.user.data.avatar
+        })
+      }
+    })
+  }, [])
 
   useEffect(() => {
     setUserDetails(user)
@@ -23,7 +43,9 @@ const MenuDesktop = ({ navigation, user }: { navigation: NavItem[], user: User }
   }
 
   return (
-    <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64r md:flex-col w-64 relative z-50">
+    <>
+    { Object.keys(user).length > 0
+      ? <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64r md:flex-col w-64 relative z-50">
       <div className="flex min-h-0 flex-1 flex-col bg-dark-1">
         <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
           <div className="flex flex-shrink-0 items-center px-6">
@@ -89,7 +111,7 @@ const MenuDesktop = ({ navigation, user }: { navigation: NavItem[], user: User }
                     className="inline-block h-9 w-9 rounded-full"
                     src={user.avatar}
                     alt={user.name}
-                  />
+                    />
                 </div>
                 <div className='w-10 h-10 rounded-full bg-dark-1 text-gray-3b flex items-center justify-center cursor-pointer'>
                   <LogoutIcon iconCalsses='w-3 h-3' />
@@ -172,6 +194,8 @@ const MenuDesktop = ({ navigation, user }: { navigation: NavItem[], user: User }
           : null}
       </div>
     </div>
+      : ''}
+    </>
   )
 }
 

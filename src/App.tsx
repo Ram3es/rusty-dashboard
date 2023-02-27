@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react'
 import socket from './Middleware/socket'
 import { BrowserRouter } from 'react-router-dom'
 import MenuDesktop from './components/nav/MenuDesktop'
 import DashboardIcon from './components/icons/DashboardIcon'
 import UsersIcon from './components/icons/UsersIcon'
-import { User } from './types/User'
 import RoutersContainer from './components/RoutersContainer'
 import Store from './store/GlobalStatisticStore'
 import StaffIcon from './components/icons/StaffIcon'
@@ -19,6 +17,7 @@ import PvpMinesIcon from './components/icons/PvpMinesIcon'
 import PlinkoIcon from './components/icons/PlinkoIcon'
 import WheelIcon from './components/icons/WheelIcon'
 import UpgraderIcon from './components/icons/UpgraderIcon'
+import UserStore from './store/UserStore'
 
 const navigation = [
   { name: 'Home', href: '/admin/', icon: <DashboardIcon iconCalsses='w-4 h-4' /> },
@@ -43,34 +42,16 @@ const navigation = [
 ]
 
 function App (): JSX.Element {
-  const [user, setUser] = useState<User>({
-    name: 'Some user',
-    email: 'test@test.test',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-  })
-
-  useEffect(() => {
-    socket.on('system:connect', (data: { error: boolean, user: { data: any } }) => {
-      console.log(data, 'system CONNEC ')
-      if (!data.error) {
-        setUser({
-          name: data.user.data.username,
-          avatar: data.user.data.avatar
-        })
-      }
-    })
-  }, [])
-
   return (
     <BrowserRouter>
-      <MenuDesktop navigation={navigation} user={user} />
-      <div className="flex flex-1 flex-col md:pl-270px">
-        <main className="flex-1 min-h-screen">
+      <UserStore>
+        <>
+          <MenuDesktop navigation={navigation} />
           <Store>
             <RoutersContainer socket={socket} />
           </Store>
-        </main>
-      </div>
+        </>
+      </UserStore>
     </BrowserRouter>
   )
 }
