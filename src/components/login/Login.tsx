@@ -39,13 +39,14 @@ export default function Login () {
     if (res) {
       if (res.userPayload) {
         const socket = io(API_URLS.API_URL, {
+          path: '/dashboard',
           transports: ['websocket', 'polling'],
           upgrade: true,
-          extraHeaders: {
-            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-            Authorization: `bearer ${res.token}`
+          auth: {
+            token: res.token
           }
         })
+
         setUser({ email: res.userPayload.email, tocken: res.token, socket })
         setErrorMessage(undefined)
         navigate('/admin/')
