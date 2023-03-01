@@ -50,7 +50,7 @@ export default function Login () {
         sessionStorage.setItem('token', res.token)
         setUser({ email: res.userPayload.email, token: res.token, socket })
         setErrorMessage(undefined)
-        navigate('/admin/')
+        navigate('/')
       } else {
         setUser({})
         setErrorMessage({ error: true, status: res.message })
