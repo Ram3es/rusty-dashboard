@@ -50,7 +50,6 @@ const DepositGraph = () => {
     if (state?.data?.data) {
       const { depositsItems, crypto, giftcards } = state.data.data
       let totalSum = 0
-      console.log('depositsItems', depositsItems)
       const monthData: any[] = []
       let daysStartIndex
       switch (depositDataStatisticPeriod.name) {

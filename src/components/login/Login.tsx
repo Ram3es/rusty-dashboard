@@ -47,7 +47,8 @@ export default function Login () {
           }
         })
 
-        setUser({ email: res.userPayload.email, tocken: res.token, socket })
+        sessionStorage.setItem('token', res.token)
+        setUser({ email: res.userPayload.email, token: res.token, socket })
         setErrorMessage(undefined)
         navigate('/admin/')
       } else {

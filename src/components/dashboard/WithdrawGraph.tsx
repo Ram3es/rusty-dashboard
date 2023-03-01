@@ -50,7 +50,6 @@ const WithdrawGraph = () => {
     if (state?.data?.data) {
       const { trades } = state.data.data
       let totalSum = 0
-      console.log('trades', trades)
       const monthData: any[] = []
       let daysStartIndex
       switch (depositDataStatisticPeriod.name) {

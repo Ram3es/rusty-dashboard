@@ -14,7 +14,7 @@ const MenuDesktop = ({ navigation }: { navigation: NavItem[] }): ReactElement =>
   const [isSubmenuOpen, setIsSubmenuOpen] = useState<boolean>(false)
   const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false)
   const [userDetails, setUserDetails] = useState<User>()
-  const [user] = useUserContext()
+  const [user, setUser] = useUserContext()
 
   useEffect(() => {
     user.socket?.on('system:connect', (data: { error: boolean
@@ -24,6 +24,11 @@ const MenuDesktop = ({ navigation }: { navigation: NavItem[] }): ReactElement =>
       }
     }) => {
       console.log(data, 'system CONNEC ')
+      if (!data.error) {
+        setUser((prev: any) => {
+          return { ...prev, isSystemConnect: true }
+        })
+      }
     })
   }, [user.socket])
 
@@ -37,7 +42,7 @@ const MenuDesktop = ({ navigation }: { navigation: NavItem[] }): ReactElement =>
 
   return (
     <>
-    { Object.keys(user).length > 0
+    { user.token
       ? <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64r md:flex-col w-64 relative z-50">
       <div className="flex min-h-0 flex-1 flex-col bg-dark-1">
         <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">

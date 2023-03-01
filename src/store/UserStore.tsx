@@ -1,6 +1,7 @@
 import { createContext, ReactElement, useContext, useState } from 'react'
 
-const initialState: any = {}
+const token = sessionStorage.getItem('token')
+const initialState: any = { token }
 
 const UserContext = createContext(initialState)
 

@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react'
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import { io } from 'socket.io-client'
 import { API_URLS } from '../constants'
 import Affiliateitem from '../routes/Affiliate/Affiliateitem'
 import Affiliates from '../routes/Affiliate/Affiliates'
@@ -13,18 +14,21 @@ import { Context } from '../store/GlobalStatisticStore'
 import { useUserContext } from '../store/UserStore'
 import Login from './login/Login'
 
+let wasSocketCreated = false
+
 const RoutersContainer = () => {
   /** @ts-expect-error */
   const [state, dispatch] = useContext(Context)
-  const location = useLocation()
   const [user, setUser] = useUserContext()
 
   useEffect(() => {
-    user.socket?.emit('admin:connect', {}, (data: any) => {
-      console.log(data, 'ADMIN CONNEC ')
-      dispatch({ type: 'UPDATE', payload: data })
-    })
-  }, [user.socket])
+    if (user.isSystemConnect && Object.keys(state).length === 0) {
+      user.socket?.emit('admin:connect', {}, (data: any) => {
+        console.log(data, 'ADMIN CONNEC ')
+        dispatch({ type: 'UPDATE', payload: data })
+      })
+    }
+  }, [user.isSystemConnect])
 
   const verifyUser = async () => {
     try {
@@ -33,14 +37,29 @@ const RoutersContainer = () => {
         method: 'GET',
         headers: {
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          Authorization: `bearer ${user.tocken}`
+          Authorization: `bearer ${user.token}`
         }
       })
         .then(async data => await data.json())
         .then((data) => {
-          setUser((prev: any) => {
-            return { ...prev, email: data.email }
-          })
+          console.log('user', user)
+          if (!user.email && !wasSocketCreated && user.token) {
+            wasSocketCreated = true
+            setUser((prev: any) => {
+              return {
+                ...prev,
+                email: data.email,
+                socket: io(API_URLS.API_URL, {
+                  path: '/dashboard',
+                  transports: ['websocket', 'polling'],
+                  upgrade: true,
+                  auth: {
+                    token: user.token
+                  }
+                })
+              }
+            })
+          }
         })
     } catch (e) {
       setUser({})
@@ -48,36 +67,34 @@ const RoutersContainer = () => {
     }
   }
 
-  useEffect(() => {
+  const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
     const verify = async () => {
-      const res = await verifyUser()
-      console.log('verify', res)
+      await verifyUser()
+      console.log('verify')
     }
-    if (user.tocken) {
+    if (user.token) {
       void verify()
     }
-  }, [location])
 
-  const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-    if (!user.tocken) {
-      return <Navigate to="/admin/login" replace />
+    if (!user.token) {
+      return <Navigate to="/login" replace />
     }
     return children
   }
 
   return (
-    <div className={`flex flex-1 flex-col ${Object.keys(user).length > 0 ? 'pl-270px' : ''}`}>
+    <div className={`flex flex-1 flex-col ${user.token ? 'pl-270px' : ''}`}>
       <main className="flex-1 min-h-screen">
         <Routes>
-          <Route path="/admin/" element={<ProtectedRoute><Dashboard data={state} /></ProtectedRoute>} />
-          <Route path="/admin/login" element={<Login />} />
-          <Route path="/admin/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
-          <Route path="/admin/staff" element={<ProtectedRoute><Staff /></ProtectedRoute>} />
-          <Route path="/admin/affiliates" element={<ProtectedRoute><Affiliates /></ProtectedRoute>} />
-          <Route path="/admin/affiliates/:name" element={<ProtectedRoute><Affiliateitem /></ProtectedRoute>} />
-          <Route path="/admin/bots" element={<ProtectedRoute><Bots /></ProtectedRoute>} />
-          <Route path="/admin/sponsee" element={<ProtectedRoute><Sponsee /></ProtectedRoute>} />
-          <Route path="/admin/game/:game" element={<ProtectedRoute><Game /></ProtectedRoute>} />
+          <Route path="/" element={<ProtectedRoute><Dashboard data={state} /></ProtectedRoute>} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
+          <Route path="/staff" element={<ProtectedRoute><Staff /></ProtectedRoute>} />
+          <Route path="/affiliates" element={<ProtectedRoute><Affiliates /></ProtectedRoute>} />
+          <Route path="/affiliates/:name" element={<ProtectedRoute><Affiliateitem /></ProtectedRoute>} />
+          <Route path="/bots" element={<ProtectedRoute><Bots /></ProtectedRoute>} />
+          <Route path="/sponsee" element={<ProtectedRoute><Sponsee /></ProtectedRoute>} />
+          <Route path="/game/:game" element={<ProtectedRoute><Game /></ProtectedRoute>} />
         </Routes>
       </main>
     </div>

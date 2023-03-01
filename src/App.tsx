@@ -1,4 +1,4 @@
-import { BrowserRouter } from 'react-router-dom'
+import { HashRouter } from 'react-router-dom'
 import MenuDesktop from './components/nav/MenuDesktop'
 import DashboardIcon from './components/icons/DashboardIcon'
 import UsersIcon from './components/icons/UsersIcon'
@@ -19,30 +19,30 @@ import UpgraderIcon from './components/icons/UpgraderIcon'
 import UserStore from './store/UserStore'
 
 const navigation = [
-  { name: 'Home', href: '/admin/', icon: <DashboardIcon iconCalsses='w-4 h-4' /> },
-  { name: 'Users', href: '/admin/users', icon: <UsersIcon iconCalsses='h-4' /> },
-  { name: 'Staff', href: '/admin/staff', icon: <StaffIcon iconCalsses='w-4' /> },
-  { name: 'Affiliates', href: '/admin/affiliates', icon: <AffiliatesIcon iconCalsses='w-4' /> },
-  { name: 'Bots', href: '/admin/bots', icon: <BotsIcon iconCalsses='w-4' /> },
-  { name: 'Sponsee', href: '/admin/sponsee', icon: <SponseeIcon iconCalsses='w-4' /> },
+  { name: 'Home', href: '/', icon: <DashboardIcon iconCalsses='w-4 h-4' /> },
+  { name: 'Users', href: '/users', icon: <UsersIcon iconCalsses='h-4' /> },
+  { name: 'Staff', href: '/staff', icon: <StaffIcon iconCalsses='w-4' /> },
+  { name: 'Affiliates', href: '/affiliates', icon: <AffiliatesIcon iconCalsses='w-4' /> },
+  { name: 'Bots', href: '/bots', icon: <BotsIcon iconCalsses='w-4' /> },
+  { name: 'Sponsee', href: '/sponsee', icon: <SponseeIcon iconCalsses='w-4' /> },
   {
     name: 'Games',
     icon: <GamesIcon iconCalsses='w-4' />,
     subNavigation: [
-      { name: 'Jackpot', href: '/admin/game/jackpot', icon: <JackpotIcon iconCalsses='w-4' /> },
-      { name: 'Coinflip', href: '/admin/game/coinflip', icon: <CoinFlipIcon iconCalsses='w-4' /> },
-      { name: 'Mines', href: '/admin/game/mines', icon: <MinesIcon iconCalsses='w-4' /> },
-      { name: 'PVP Mines', href: '/admin/game/pvp-mines', icon: <PvpMinesIcon iconCalsses='w-4' /> },
-      { name: 'Plinko', href: '/admin/game/plinko', icon: <PlinkoIcon iconCalsses='w-4' /> },
-      { name: 'Wheel', href: '/admin/game/wheel', icon: <WheelIcon iconCalsses='w-4' /> },
-      { name: 'Upgrader', href: '/admin/game/upgrader', icon: <UpgraderIcon iconCalsses='w-4' /> }
+      { name: 'Jackpot', href: '/game/jackpot', icon: <JackpotIcon iconCalsses='w-4' /> },
+      { name: 'Coinflip', href: '/game/coinflip', icon: <CoinFlipIcon iconCalsses='w-4' /> },
+      { name: 'Mines', href: '/game/mines', icon: <MinesIcon iconCalsses='w-4' /> },
+      { name: 'PVP Mines', href: '/game/pvp-mines', icon: <PvpMinesIcon iconCalsses='w-4' /> },
+      { name: 'Plinko', href: '/game/plinko', icon: <PlinkoIcon iconCalsses='w-4' /> },
+      { name: 'Wheel', href: '/game/wheel', icon: <WheelIcon iconCalsses='w-4' /> },
+      { name: 'Upgrader', href: '/game/upgrader', icon: <UpgraderIcon iconCalsses='w-4' /> }
     ]
   }
 ]
 
 function App (): JSX.Element {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <UserStore>
         <>
           <MenuDesktop navigation={navigation} />
@@ -51,7 +51,7 @@ function App (): JSX.Element {
           </Store>
         </>
       </UserStore>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
 

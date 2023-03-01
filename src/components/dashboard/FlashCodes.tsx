@@ -17,13 +17,15 @@ const FlashCodes = () => {
   const [codes, setCodes] = useState<any[]>([])
 
   useEffect(() => {
-    // user.socket?.emit('admin:flash:all', {}, (data: { error: boolean, data: any[] }) => {
-    //   if (!data.error) {
-    //     console.log(data, 'admin:flash:all')
-    //     setCodes(data.data)
-    //   }
-    // })
-  }, [user.socket])
+    if (user.isSystemConnect && codes.length === 0) {
+      user.socket?.emit('admin:flash:all', {}, (data: { error: boolean, data: any[] }) => {
+        if (!data.error && data.data.length > 0) {
+          console.log(data, 'admin:flash:all')
+          setCodes(data.data)
+        }
+      })
+    }
+  }, [user])
 
   const updateCode = (name: string, value: string | number) => {
     const newValue: Record<string, string | number> = {}
