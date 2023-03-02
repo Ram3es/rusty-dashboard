@@ -22,7 +22,7 @@ const DepositAndWithdrawPipeChart = () => {
         const cryptoSortedByDate = sortDataByDate(selectedDepositPeriod.name, crypto)
         const depositsSortedByDate = sortDataByDate(selectedDepositPeriod.name, depositsItems)
         const giftcardsSortedByDate = sortDataByDate(selectedDepositPeriod.name, giftcards)
-        console.log('cryptoSortedByDate', cryptoSortedByDate, depositsSortedByDate, giftcardsSortedByDate)
+        console.log('deposits in pie chart', depositsSortedByDate.currentPeriod)
         setDepositData([
           {
             name: 'skins',
