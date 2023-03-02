@@ -101,7 +101,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
           break
       }
       [...wagersSortedByDate.currentPeriod].forEach((cur: any) => {
-        const dateVal = selectedProfitPeriod.name !== 'Today' && selectedProfitPeriod.name !== 'Yesterday' ? dayjs(cur.timestamp).format('DD/MM/YYYY') : dayjs(cur.timestamp).format('DD/MM/YYYY HH')
+        const dateVal = selectedProfitPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('DD/MM/YYYY') : dayjs(cur.timestamp).format('DD/MM/YYYY HH')
         const foundIndex = monthData?.findIndex((item: any) => item.name === dateVal)
 
         if (cur.mode === 'jackpot') {
