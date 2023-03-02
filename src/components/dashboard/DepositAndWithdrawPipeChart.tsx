@@ -58,28 +58,6 @@ const DepositAndWithdrawPipeChart = () => {
           }
         ])
       }
-    } else {
-      if (currentDepositSelect === 'deposit') {
-        setDepositData([
-          {
-            name: 'skins',
-            value: 20
-          },
-          {
-            name: 'crypto',
-            value: 40
-          },
-          {
-            name: 'gift cards',
-            value: 55.8
-          }
-        ])
-      } else {
-        setDepositData([{
-          name: 'skins',
-          value: 20
-        }])
-      }
     }
   }, [state, selectedDepositPeriod, currentDepositSelect])
 

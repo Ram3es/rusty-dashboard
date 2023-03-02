@@ -82,6 +82,7 @@ const DepositGraph = () => {
         })
       }
       const sortedData = sortDataByDate(depositDataStatisticPeriod.name, [...depositsItems, ...crypto, ...giftcards])
+      console.log('CHECK!!!!', sortedData.currentPeriod.filter((cur: any) => cur.type === 'steam-deposit'))
       sortedData.currentPeriod.forEach((cur: any) => {
         const dateVal = depositDataStatisticPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('DD/MM/YYYY') : dayjs(cur.timestamp).format('DD/MM/YYYY HH')
         const foundIndex = monthData?.findIndex((item: any) => item.name === dateVal)
