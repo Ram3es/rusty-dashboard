@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { io } from 'socket.io-client'
 import { API_URLS } from '../constants'
 import Affiliateitem from '../routes/Affiliate/Affiliateitem'
@@ -20,6 +20,7 @@ const RoutersContainer = () => {
   /** @ts-expect-error */
   const [state, dispatch] = useContext(Context)
   const [user, setUser] = useUserContext()
+  const location = useLocation()
 
   useEffect(() => {
     if (user.isSystemConnect && Object.keys(state).length === 0) {
@@ -67,13 +68,17 @@ const RoutersContainer = () => {
     }
   }
 
+  const verify = async () => {
+    await verifyUser()
+    console.log('verify')
+  }
+
+  useEffect(() => {
+    void verify()
+  }, [location])
+
   const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-    const verify = async () => {
-      await verifyUser()
-      console.log('verify')
-    }
     if (user.token) {
-      void verify()
       return children
     } else {
       return <Navigate to="/login" replace />
