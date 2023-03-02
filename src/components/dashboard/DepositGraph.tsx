@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { useContext, useEffect, useState } from 'react'
 import { TIME_OPTIONS } from '../../constants'
+import sortDataByDate from '../../helpers/sotingByDate'
 import { Context } from '../../store/GlobalStatisticStore'
 import Graph from '../base/Graph'
 import CryptoIcon from '../icons/CryptoIcon'
