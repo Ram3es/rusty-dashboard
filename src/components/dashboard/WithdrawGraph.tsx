@@ -81,7 +81,7 @@ const WithdrawGraph = () => {
           ]
         })
       }
-      const sortedData = sortDataByDate(depositDataStatisticPeriod.name, [[...trades]])
+      const sortedData = sortDataByDate(depositDataStatisticPeriod.name, [...trades])
       sortedData.currentPeriod.forEach((cur: any) => {
         const dateVal = depositDataStatisticPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('DD/MM/YYYY') : dayjs(cur.timestamp).format('DD/MM/YYYY HH')
         const foundIndex = monthData?.findIndex((item: any) => item.name === dateVal)
