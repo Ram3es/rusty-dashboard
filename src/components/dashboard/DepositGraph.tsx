@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { useContext, useEffect, useState } from 'react'
 import { TIME_OPTIONS } from '../../constants'
+import sortDataByDate from '../../helpers/sotingByDate'
 import { Context } from '../../store/GlobalStatisticStore'
 import Graph from '../base/Graph'
 import CryptoIcon from '../icons/CryptoIcon'
@@ -80,7 +81,8 @@ const DepositGraph = () => {
           ]
         })
       }
-      [...depositsItems, ...crypto, ...giftcards].forEach((cur: any) => {
+      const sortedData = sortDataByDate(depositDataStatisticPeriod.name, [...depositsItems, ...crypto, ...giftcards])
+      sortedData.currentPeriod.forEach((cur: any) => {
         const dateVal = depositDataStatisticPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('DD/MM/YYYY') : dayjs(cur.timestamp).format('DD/MM/YYYY HH')
         const foundIndex = monthData?.findIndex((item: any) => item.name === dateVal)
         if (foundIndex >= 0) {
