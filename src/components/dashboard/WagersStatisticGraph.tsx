@@ -22,10 +22,14 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       const monthData: any[] = []
       let totalSum = 0
       let sortedData = []
-      if (currentGame !== 'all') {
-        sortedData = gameHistory.filter((game: any) => game.mode === currentGame && userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)
+      if (Array.isArray(userBots)) {
+        if (currentGame !== 'all') {
+          sortedData = gameHistory.filter((game: any) => game.mode === currentGame && userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)
+        } else {
+          sortedData = [...gameHistory].filter((game: any) => userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)
+        }
       } else {
-        sortedData = [...gameHistory].filter((game: any) => userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)
+        console.log('STATISTIC GRAPH userBots!!!!!!', userBots)
       }
       const wagersSortedByDate = sortDataByDate(selectedWagersPeriod.name, sortedData)
       console.log('wagersSortedByDate', wagersSortedByDate.currentPeriod)

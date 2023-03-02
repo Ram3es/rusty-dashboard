@@ -74,12 +74,10 @@ const RoutersContainer = () => {
     }
     if (user.token) {
       void verify()
-    }
-
-    if (!user.token) {
+      return children
+    } else {
       return <Navigate to="/login" replace />
     }
-    return children
   }
 
   return (

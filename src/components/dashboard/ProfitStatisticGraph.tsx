@@ -60,10 +60,14 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       historyData = [...historyData, ...jackpotData, ...coinflipData, ...pvpMinesData]
       let totalSum = 0
       let sortedData = []
-      if (currentGame !== 'all') {
-        sortedData = historyData.filter((game: any) => game.mode === currentGame && userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)
+      if (Array.isArray(userBots)) {
+        if (currentGame !== 'all') {
+          sortedData = historyData.filter((game: any) => game.mode === currentGame && userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)
+        } else {
+          sortedData = [...historyData].filter((game: any) => userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)
+        }
       } else {
-        sortedData = [...historyData].filter((game: any) => userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)
+        console.log('PROFIT GRAPH userBots!!!!!!', userBots)
       }
       const wagersSortedByDate = sortDataByDate(selectedProfitPeriod.name, sortedData)
       switch (selectedProfitPeriod.name) {
