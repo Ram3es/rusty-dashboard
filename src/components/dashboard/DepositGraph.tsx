@@ -84,8 +84,7 @@ const DepositGraph = () => {
       const sortedData = sortDataByDate(depositDataStatisticPeriod.name, [...depositsItems, ...crypto, ...giftcards])
       const test = sortedData.currentPeriod.filter((cur: any) => cur.type === 'steam-deposit')
       console.log('CHECK!!!!', test, test.reduce((prev, cur) => {
-        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-        return cur / 1000 + prev
+        return parseInt(cur.value) / 1000 + parseInt(prev)
       }))
       sortedData.currentPeriod.forEach((cur: any) => {
         const dateVal = depositDataStatisticPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('DD/MM/YYYY') : dayjs(cur.timestamp).format('DD/MM/YYYY HH')
