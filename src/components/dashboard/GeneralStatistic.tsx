@@ -56,11 +56,11 @@ const GeneralStatistic = () => {
 
       if (sortedHistoryByDate.currentPeriod.length > 0) {
         avarage = sortedHistoryByDate.currentPeriod.reduce((prev, cur) => {
-          const total = parseInt(cur.bet_value) + parseInt(prev)
+          const total = Number(cur.bet_value) + Number(prev)
           return total
         }, 0) / sortedHistoryByDate.currentPeriod.length
         gamesCount = sortedHistoryByDate.currentPeriod.reduce((prev, cur) => {
-          const count = prev[cur.mode] !== undefined ? parseInt(prev[cur.mode]) + 1 : 1
+          const count = prev[cur.mode] !== undefined ? Number(prev[cur.mode]) + 1 : 1
           prev[cur.mode] = count
           return prev
         }, {})
@@ -68,19 +68,19 @@ const GeneralStatistic = () => {
       }
       if (sortedHistoryByDate.previousPeriod.length > 0) {
         averagePrev = sortedHistoryByDate.previousPeriod.reduce((prev, cur) => {
-          const total = parseInt(cur.bet_value) + parseInt(prev)
+          const total = Number(cur.bet_value) + Number(prev)
           return total
         }, 0) / sortedHistoryByDate.previousPeriod.length
       }
       if (depositSortedByDate.currentPeriod.length > 0) {
         depositCurrentPeriod = depositSortedByDate.currentPeriod.reduce((prev, cur) => {
-          const total = parseInt(cur.value) + parseInt(prev)
+          const total = Number(cur.value) + Number(prev)
           return total
         }, 0)
       }
       if (depositSortedByDate.previousPeriod.length > 0) {
         depositPrevPeriod = depositSortedByDate.previousPeriod.reduce((prev, cur) => {
-          const total = parseInt(cur.value) + parseInt(prev)
+          const total = Number(cur.value) + Number(prev)
           return total
         }, 0)
       }

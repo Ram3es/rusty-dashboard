@@ -27,21 +27,21 @@ const DepositAndWithdrawPipeChart = () => {
           {
             name: 'skins',
             value: depositsSortedByDate.currentPeriod.reduce((prev, cur) => {
-              const total = parseInt(cur.value) / 1000 + parseInt(prev)
+              const total = Number(cur.value) / 1000 + Number(prev)
               return total
             }, 0)
           },
           {
             name: 'gift cards',
             value: giftcardsSortedByDate.currentPeriod.reduce((prev, cur) => {
-              const total = parseInt(cur.value) / 1000 + parseInt(prev)
+              const total = Number(cur.value) / 1000 + Number(prev)
               return total
             }, 0)
           },
           {
             name: 'crypto',
             value: cryptoSortedByDate.currentPeriod.reduce((prev, cur) => {
-              const total = parseInt(cur.value) / 1000 + parseInt(prev)
+              const total = Number(cur.value) / 1000 + Number(prev)
               return total
             }, 0)
           }
@@ -52,7 +52,7 @@ const DepositAndWithdrawPipeChart = () => {
           {
             name: 'skins',
             value: tragesSortedByDate.currentPeriod.reduce((prev, cur) => {
-              const total = cur.type === 'withdraw' ? parseInt(cur.value) / 1000 + parseInt(prev) : parseInt(prev)
+              const total = cur.type === 'withdraw' ? Number(cur.value) / 1000 + Number(prev) : Number(prev)
               return total
             }, 0)
           }
