@@ -24,6 +24,8 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       let sortedData = []
       if (currentGame !== 'all') {
         sortedData = gameHistory.filter((game: any) => game.mode === currentGame)
+      } else {
+        sortedData = [...gameHistory]
       }
       if (Array.isArray(userBots)) {
         sortedData = [...sortedData].filter((game: any) => userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)

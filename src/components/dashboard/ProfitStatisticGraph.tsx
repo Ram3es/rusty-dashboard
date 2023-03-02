@@ -62,6 +62,8 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       let sortedData = []
       if (currentGame !== 'all') {
         sortedData = historyData.filter((game: any) => game.mode === currentGame)
+      } else {
+        sortedData = [...historyData]
       }
       if (Array.isArray(userBots)) {
         sortedData = [...sortedData].filter((game: any) => userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)
