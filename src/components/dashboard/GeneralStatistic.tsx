@@ -47,15 +47,15 @@ const GeneralStatistic = () => {
       const sortedUsersByDate = sortDataByDate(selectedGeneralStatisticPeriod.name, user)
       const conversionedUsersCurrentPeriod = getConversionedUsers(sortedUsersByDate.currentPeriod, depositSortedByDate.currentPeriod)
       const conversionedUsersPrevPeriod = getConversionedUsers(sortedUsersByDate.previousPeriod, depositSortedByDate.previousPeriod)
-      let avarage = 0
-      let averagePrev = 0
+      let avarageBet = 0
+      let avarageBetPrev = 0
       let gamesCount: Record<string, number>
       let topGame
-      let depositCurrentPeriod = 0
-      let depositPrevPeriod = 0
+      let avarageDepositCurrentPeriod = 0
+      let avarageDepositPrevPeriod = 0
 
       if (sortedHistoryByDate.currentPeriod.length > 0) {
-        avarage = sortedHistoryByDate.currentPeriod.reduce((prev, cur) => {
+        avarageBet = sortedHistoryByDate.currentPeriod.reduce((prev, cur) => {
           const total = Number(cur.bet_value) + Number(prev)
           return total
         }, 0) / sortedHistoryByDate.currentPeriod.length
@@ -67,22 +67,22 @@ const GeneralStatistic = () => {
         topGame = Object.keys(gamesCount).reduce((a, b) => gamesCount[a] > gamesCount[b] ? a : b)
       }
       if (sortedHistoryByDate.previousPeriod.length > 0) {
-        averagePrev = sortedHistoryByDate.previousPeriod.reduce((prev, cur) => {
+        avarageBetPrev = sortedHistoryByDate.previousPeriod.reduce((prev, cur) => {
           const total = Number(cur.bet_value) + Number(prev)
           return total
         }, 0) / sortedHistoryByDate.previousPeriod.length
       }
       if (depositSortedByDate.currentPeriod.length > 0) {
-        depositCurrentPeriod = depositSortedByDate.currentPeriod.reduce((prev, cur) => {
+        avarageDepositCurrentPeriod = depositSortedByDate.currentPeriod.reduce((prev, cur) => {
           const total = Number(cur.value) + Number(prev)
           return total
-        }, 0)
+        }, 0) / depositSortedByDate.currentPeriod.length
       }
       if (depositSortedByDate.previousPeriod.length > 0) {
-        depositPrevPeriod = depositSortedByDate.previousPeriod.reduce((prev, cur) => {
+        avarageDepositPrevPeriod = depositSortedByDate.previousPeriod.reduce((prev, cur) => {
           const total = Number(cur.value) + Number(prev)
           return total
-        }, 0)
+        }, 0) / depositSortedByDate.previousPeriod.length
       }
 
       const currentSessions = sortedHistoryByDate.currentPeriod.length
@@ -103,15 +103,15 @@ const GeneralStatistic = () => {
         },
         {
           icon: <DepositIcon iconCalsses='w-5' />,
-          text: `$${(depositCurrentPeriod / 1000).toFixed(2)}`,
+          text: `$${(avarageDepositCurrentPeriod / 1000).toFixed(2)}`,
           subtext: 'Avg. Deposit',
-          percent: getPercentages(depositPrevPeriod, depositCurrentPeriod)
+          percent: getPercentages(avarageDepositCurrentPeriod, avarageDepositPrevPeriod)
         },
         {
           icon: <DiceIcon iconCalsses='w-4' />,
-          text: avarage.toFixed(0).toString(),
+          text: avarageBet.toFixed(0).toString(),
           subtext: 'Avg. Bet Amount',
-          percent: getPercentages(averagePrev, avarage),
+          percent: getPercentages(avarageBetPrev, avarageBet),
           isCoinceValue: true
         },
         {
