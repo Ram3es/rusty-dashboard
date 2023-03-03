@@ -104,13 +104,11 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
         const dateVal = selectedProfitPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('DD/MM/YYYY') : dayjs(cur.timestamp).format('DD/MM/YYYY HH')
         const foundIndex = monthData?.findIndex((item: any) => item.name === dateVal)
 
-        if (cur.mode === 'jackpot') {
-          if (foundIndex >= 0) {
+        if (foundIndex >= 0) {
+          if (cur.mode === 'jackpot') {
             totalSum += Number(cur.house_edge) / 1000
             monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)]) + (Number(cur.house_edge) / 1000)
-          }
-        } else if (cur.mode === 'pvp-mines') {
-          if (foundIndex >= 0) {
+          } else if (cur.mode === 'pvp-mines') {
             let profit = 0
             if (cur.isBotWon) {
               profit = cur.bet_value
@@ -119,12 +117,10 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
             }
             totalSum += profit / 1000
             monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)]) + (profit / 1000)
-          }
-        } else if (cur.mode === 'coinflip') {
-          if (foundIndex >= 0) {
+          } else if (cur.mode === 'coinflip') {
             let profit = 0
             if (cur.isBotWon) {
-              profit = cur.oponent_bet
+              profit = cur.bet_value
             } else if (!cur.isOponentBot) {
               profit = cur.house_edge
             } else {
@@ -132,9 +128,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
             }
             totalSum += profit / 1000
             monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)]) + (profit / 1000)
-          }
-        } else {
-          if (foundIndex >= 0) {
+          } else {
             totalSum += (Number(cur.bet_value) - Number(cur.winnings)) / 1000
             monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)]) + ((Number(cur.bet_value) - Number(cur.winnings)) / 1000)
           }
