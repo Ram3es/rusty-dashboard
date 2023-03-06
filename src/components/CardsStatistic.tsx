@@ -44,7 +44,7 @@ const CardsStatistic = ({ title, periodOptions, selectedPeriod, changePeriod, it
           </Listbox>
         </div>
       </div>
-      <div className='flex gap-10 flex-wrap justify-between'>
+      <div className='flex gap-10 flex-wrap justify-start'>
           {items.map((item, index) => <StatisticCart key={index} item={item} />)}
       </div>
     </>
