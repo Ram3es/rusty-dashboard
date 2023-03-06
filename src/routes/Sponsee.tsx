@@ -5,6 +5,7 @@ import AddUserInGroup from '../components/Sponsee/pop-up/AddUserInGroup'
 import CreateGroupPopup from '../components/Sponsee/pop-up/CreateGroupPopup'
 import RemovePopup from '../components/Sponsee/pop-up/RemovePopup'
 import SponseeTableItem from '../components/Sponsee/SponseeTableItem'
+import { useUserContext } from '../store/UserStore'
 import { User } from '../types/User'
 
 export interface SponseeUser {
@@ -33,6 +34,7 @@ const Sponsee = () => {
   const [isOpenCreateGroup, setOpenCreateGroup] = useState<boolean>(false)
   const [groupToEdit, setGroupToEdit] = useState<{ name: string, id: string }>()
   const [removeItem, setRemoveItem] = useState<{ user?: User, groupName: string, groupId: string }>()
+  const [user] = useUserContext()
 
   const togglePopup = () => {
     setOpenPopupAddUser(prev => !prev)
@@ -76,7 +78,10 @@ const Sponsee = () => {
   }
 
   const submitRemove = () => {
-    console.log(removeItem)
+    user.socket?.emit('admin:group:delete', { group_id: removeItem?.groupId }, (data: any) => {
+      console.log(data, 'admin:group:delete')
+      setRemoveItem(undefined)
+    })
   }
 
   const updateUserInGroup = (id: string, updateOption: Record<string, string | number | boolean>) => {
@@ -84,71 +89,80 @@ const Sponsee = () => {
   }
 
   useEffect(() => {
-    setData([{
-      name: 'YOUTUBERS',
-      id: '1',
-      users: [
-        {
-          user: { name: 'DerWeißWizard1', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
-          steamId: '1',
-          code: 'test',
-          codeUses: 12,
-          deposits: 1000,
-          balance: 2000,
-          status: {
-            id: '1',
-            isStatisticIncluded: true
+    user.socket?.emit('admin:groups', {}, (data: any) => {
+      console.log(data, 'admin:groups')
+      setData([{
+        name: 'YOUTUBERS',
+        id: '1',
+        users: [
+          {
+            user: { name: 'DerWeißWizard1', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
+            steamId: '1',
+            code: 'test',
+            codeUses: 12,
+            deposits: 1000,
+            balance: 2000,
+            status: {
+              id: '1',
+              isStatisticIncluded: true
+            },
+            id: '1'
           },
-          id: '1'
-        },
-        {
-          user: { name: 'DerWeißWizard2', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
-          steamId: '2',
-          code: 'test',
-          codeUses: 12,
-          deposits: 1000,
-          balance: 2000,
-          status: {
-            id: '2',
-            isStatisticIncluded: false
+          {
+            user: { name: 'DerWeißWizard2', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
+            steamId: '2',
+            code: 'test',
+            codeUses: 12,
+            deposits: 1000,
+            balance: 2000,
+            status: {
+              id: '2',
+              isStatisticIncluded: false
+            },
+            id: '2'
+          }
+        ]
+      },
+      {
+        name: 'TWITCH STREAMERS',
+        id: '2',
+        users: [
+          {
+            user: { name: 'DerWeißWizard3', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
+            steamId: '3',
+            code: 'test',
+            codeUses: 12,
+            deposits: 1000,
+            balance: 2000,
+            status: {
+              id: '3',
+              isStatisticIncluded: true
+            },
+            id: '3'
           },
-          id: '2'
-        }
-      ]
-    },
-    {
-      name: 'TWITCH STREAMERS',
-      id: '2',
-      users: [
-        {
-          user: { name: 'DerWeißWizard3', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
-          steamId: '3',
-          code: 'test',
-          codeUses: 12,
-          deposits: 1000,
-          balance: 2000,
-          status: {
-            id: '3',
-            isStatisticIncluded: true
-          },
-          id: '3'
-        },
-        {
-          user: { name: 'DerWeißWizard3', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
-          steamId: '3',
-          code: 'test',
-          codeUses: 12,
-          deposits: 1000,
-          balance: 2000,
-          status: {
-            id: '3',
-            isStatisticIncluded: false
-          },
-          id: '4'
-        }
-      ]
-    }])
+          {
+            user: { name: 'DerWeißWizard3', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
+            steamId: '3',
+            code: 'test',
+            codeUses: 12,
+            deposits: 1000,
+            balance: 2000,
+            status: {
+              id: '3',
+              isStatisticIncluded: false
+            },
+            id: '4'
+          }
+        ]
+      }])
+    })
   }, [])
+
+  const createGroupFn = (name: string) => {
+    user.socket?.emit('admin:group:create', { name }, (data: any) => {
+      console.log(data, 'admin:group:create')
+    })
+  }
 
   return (
     <>
@@ -175,7 +189,7 @@ const Sponsee = () => {
           {data ? data.filter(group => group.name?.includes(groupSearchName)).map(item => <SponseeTableItem key={item.id} groupId={item.id} name={item.name} users={item.users} onAddUser={addUserToGroup} onRemoveUser={removeUserGromGroup} onGroupRemove={removeGroup} userUpdate={updateUserInGroup} />) : null}
       </div>
       <AddUserInGroup isOpenPopup={isOpenPopupAddUser} closePopup={togglePopup} groupToEdit={groupToEdit} />
-      <CreateGroupPopup onGroupCreate={(name: string) => console.log('create group ', name)} isPopupOpen={isOpenCreateGroup} onClose={onCloseCeateGroupPopup} />
+      <CreateGroupPopup onGroupCreate={(name: string) => createGroupFn(name)} isPopupOpen={isOpenCreateGroup} onClose={onCloseCeateGroupPopup} />
       <RemovePopup removeItem={removeItem} submitFunction={submitRemove} />
     </>
   )
