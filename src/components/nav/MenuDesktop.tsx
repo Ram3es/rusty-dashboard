@@ -111,7 +111,13 @@ const MenuDesktop = ({ navigation }: { navigation: NavItem[] }): ReactElement =>
                     alt={user.name}
                     />
                 </div>
-                <div className='w-10 h-10 rounded-full bg-dark-1 text-gray-3b flex items-center justify-center cursor-pointer'>
+                <div
+                  className='w-10 h-10 rounded-full bg-dark-1 text-gray-3b flex items-center justify-center cursor-pointer'
+                  onClick={() => {
+                    setUser((prev: any) => ({ ...prev, token: undefined }))
+                    sessionStorage.removeItem('token')
+                  }}
+                >
                   <LogoutIcon iconCalsses='w-3 h-3' />
                 </div>
               </div>
