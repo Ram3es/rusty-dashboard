@@ -37,7 +37,7 @@ const GraphAffilateStatistic: FC<IGraphProps> = ({ names, graphColors }) => {
       const mockValue = Math.floor(Math.random() * 10)
       monthData.push(
         {
-          name: codeDepositorsStatisticPeriod.name !== 'Day' ? dayjs().add(i, 'day').format('DD/MM/YYYY') : dayjs().add(i, 'hour').format('DD/MM/YYYY HH'),
+          name: codeDepositorsStatisticPeriod.name !== 'Day' ? dayjs().add(i, 'day').format('MM/DD/YYYY') : dayjs().add(i, 'hour').format('MM/DD/YYYY HH'),
           value: [mockValue + 1, mockValue + 7],
           colors: [{
             postitveColor: graphColors[0]

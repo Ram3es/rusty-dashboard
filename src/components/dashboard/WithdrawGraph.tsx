@@ -66,7 +66,7 @@ const WithdrawGraph = () => {
       }
       for (let i = daysStartIndex; i <= 0; i++) {
         monthData.push({
-          name: depositDataStatisticPeriod.name !== 'Day' ? dayjs().add(i, 'day').format('DD/MM/YYYY') : dayjs().add(i, 'hour').format('DD/MM/YYYY HH'),
+          name: depositDataStatisticPeriod.name !== 'Day' ? dayjs().add(i, 'day').format('MM/DD/YYYY') : dayjs().add(i, 'hour').format('MM/DD/YYYY HH'),
           value: [0],
           colors: [
             {
@@ -83,7 +83,7 @@ const WithdrawGraph = () => {
       }
       const sortedData = sortDataByDate(depositDataStatisticPeriod.name, [...trades])
       sortedData.currentPeriod.forEach((cur: any) => {
-        const dateVal = depositDataStatisticPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('DD/MM/YYYY') : dayjs(cur.timestamp).format('DD/MM/YYYY HH')
+        const dateVal = depositDataStatisticPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('MM/DD/YYYY') : dayjs(cur.timestamp).format('MM/DD/YYYY HH')
         const foundIndex = monthData?.findIndex((item: any) => item.name === dateVal)
         if (foundIndex >= 0 && cur.type === 'withdraw') {
           totalSum += Number(cur.value) / 1000

@@ -38,7 +38,7 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
         case 'Day':
           for (let i = 0; i <= 24; i++) {
             monthData.push({
-              name: dayjs().add(-24, 'hour').add(i, 'hour').format('DD/MM/YYYY HH'),
+              name: dayjs().add(-24, 'hour').add(i, 'hour').format('MM/DD/YYYY HH'),
               value: currentGame !== 'all' ? [0] : [0, 0, 0, 0, 0, 0, 0],
               colors: getColorsArray(currentGame)
             })
@@ -47,7 +47,7 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
         case 'Week':
           for (let i = 0; i <= 7; i++) {
             monthData.push({
-              name: dayjs().add(-7, 'day').add(i, 'day').format('DD/MM/YYYY'),
+              name: dayjs().add(-7, 'day').add(i, 'day').format('MM/DD/YYYY'),
               value: currentGame !== 'all' ? [0] : [0, 0, 0, 0, 0, 0, 0],
               colors: getColorsArray(currentGame)
             })
@@ -56,7 +56,7 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
         default:
           for (let i = 0; i <= 30; i++) {
             monthData.push({
-              name: dayjs().add(-30, 'day').add(i, 'day').format('DD/MM/YYYY'),
+              name: dayjs().add(-30, 'day').add(i, 'day').format('MM/DD/YYYY'),
               value: currentGame !== 'all' ? [0] : [0, 0, 0, 0, 0, 0, 0],
               colors: getColorsArray(currentGame)
             })
@@ -64,7 +64,7 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
           break
       }
       [...wagersSortedByDate.currentPeriod].forEach((cur: any) => {
-        const dateVal = selectedWagersPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('DD/MM/YYYY') : dayjs(cur.timestamp).format('DD/MM/YYYY HH')
+        const dateVal = selectedWagersPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('MM/DD/YYYY') : dayjs(cur.timestamp).format('MM/DD/YYYY HH')
         const foundIndex = monthData?.findIndex((item: any) => item.name === dateVal)
         if (foundIndex >= 0) {
           totalSum += Number(cur.bet_value) / 1000
