@@ -31,7 +31,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
           timestamp: game.timestamp,
           userid: game.winner,
           winnings: game.pot_value,
-          house_edge: game.house_edge
+          fee_items_value: game.fee_items_value
         }
       })
       const coinflipData = coinflips.map((game: any) => {
@@ -41,7 +41,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
           id: game.id,
           mode: 'coinflip',
           timestamp: game.timestamp,
-          house_edge: game.house_edge ?? 0,
+          fee_items_value: game.fee_items_value ?? 0,
           isOponentBot: game.opponent_steamid === 'bot',
           isBotWon: game.opponent_steamid === 'bot' && game.creator_side !== Number(game.winner_side)
         }
@@ -53,7 +53,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
           id: game.id,
           mode: 'pvp-mines',
           timestamp: game.timestamp,
-          house_edge: 0.1 * game.value * (game.players - game.botqty),
+          fee_items_value: 0.1 * game.value * (game.players - game.botqty),
           isBotWon: game.winner === 0
         }
       })
@@ -100,20 +100,22 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
           }
           break
       }
+      console.log('wagersSortedByDate.currentPeriod!!!!', wagersSortedByDate.currentPeriod);
+
       [...wagersSortedByDate.currentPeriod].forEach((cur: any) => {
         const dateVal = selectedProfitPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('MM/DD/YYYY') : dayjs(cur.timestamp).format('MM/DD/YYYY HH')
         const foundIndex = monthData?.findIndex((item: any) => item.name === dateVal)
 
         if (foundIndex >= 0) {
           if (cur.mode === 'jackpot') {
-            totalSum += Number(cur.house_edge) / 1000
-            monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)]) + (Number(cur.house_edge) / 1000)
+            totalSum += Number(cur.fee_items_value) / 1000
+            monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)]) + (Number(cur.fee_items_value) / 1000)
           } else if (cur.mode === 'pvp-mines') {
             let profit = 0
             if (cur.isBotWon) {
               profit = cur.bet_value
             } else {
-              profit = cur.house_edge - cur.oponent_bet
+              profit = cur.fee_items_value - cur.oponent_bet
             }
             totalSum += profit / 1000
             monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)]) + (profit / 1000)
@@ -122,9 +124,9 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
             if (cur.isBotWon) {
               profit = cur.bet_value
             } else if (!cur.isOponentBot) {
-              profit = cur.house_edge
+              profit = cur.fee_items_value
             } else {
-              profit = cur.house_edge - cur.oponent_bet
+              profit = cur.fee_items_value - cur.oponent_bet
             }
             totalSum += profit / 1000
             monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)]) + (profit / 1000)
