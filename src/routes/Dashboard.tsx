@@ -1,7 +1,6 @@
 import GamesStatistic from '../components/dashboard/GamesStatistic'
 import FlashCodes from '../components/dashboard/FlashCodes'
 import ExcludedAccounts from '../components/dashboard/ExcludedAccounts'
-import LivePlayers from '../components/dashboard/LivePlayers'
 import Trivia from '../components/dashboard/Trivia'
 import Trades from '../components/dashboard/Trades'
 import DepositAndWithdrawPipeChart from '../components/dashboard/DepositAndWithdrawPipeChart'
@@ -29,17 +28,15 @@ const Dashboard = ({ data }: { data: any }) => {
         <div className="col-span-6 2xl:col-span-3 rounded-lg bg-dark-1">
           <WithdrawGraph />
         </div>
-        <div className="col-span-6 2xl:col-span-3 grid grid-cols-3 gap-6">
-          <div className='col-span-2 rounded-lg bg-dark-1 px-8 py-10'>
+          <div className='col-span-6 2xl:col-span-3 rounded-lg bg-dark-1 px-8 py-10'>
             <FlashCodes />
           </div>
-          <div className='col-span-1 rounded-lg bg-dark-1 px-8 py-10'>
+          <div className='col-span-6 2xl:col-span-3 rounded-lg bg-dark-1 px-8 py-10'>
             <ExcludedAccounts name="EXCLUDED ACCOUNTS" />
           </div>
-        </div>
-        <div className="col-span-6 2xl:col-span-3">
+        {/* <div className="col-span-6 2xl:col-span-3">
           <LivePlayers />
-        </div>
+        </div> */}
         <div className="col-span-6 2xl:col-span-3">
           <Trivia name='Trivia GAMES' />
         </div>
