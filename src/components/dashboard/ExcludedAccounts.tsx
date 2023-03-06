@@ -8,7 +8,7 @@ import CloseIcon from '../icons/CloseIcon'
 
 const ExcludedAccounts = ({ name }: { name: string }) => {
   const [state, setState] = useState({
-    account: ''
+    group: ''
   })
 
   const updateCode = (name: string, value: string | number) => {
@@ -77,12 +77,12 @@ const ExcludedAccounts = ({ name }: { name: string }) => {
         <div className="flex w-full justify-between items-end gap-4" style={{ width: 'calc(100% - 60px)' }}>
           <div className='w-full'>
             <InputWithLabel
-              label="Acount"
+              label="Group name"
               type="text"
-              value={state.account}
-              name="account"
+              value={state.group}
+              name="group"
               changeFunction={updateCode}
-              placeholder="Steam 64 / Name"
+              placeholder="Name"
             />
           </div>
           <div className='w-10'>
