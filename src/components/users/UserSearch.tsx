@@ -9,10 +9,23 @@ const UserSearch = ({ submitFn }: { submitFn: Function }) => {
   const [userSearchParametr, setUserSearchParametr] = useState<Record<string, string>>({})
   const [currentSearchSelect, setCurrentSearchSelect] = useState<string>(searchOptions[0])
 
+  const getParametrName = (name: string) => {
+    switch (name) {
+      case ('Discord'):
+        return 'discordId'
+      case ('Username'):
+        return 'username'
+      case ('UID'):
+        return 'id'
+      default:
+        return 'steamid'
+    }
+  }
+
   const searchParametrsUpdate = (name: string, value: string) => {
     setUserSearchParametr(() => {
       const parametr: Record<string, any> = {}
-      parametr[name.toLocaleLowerCase()] = value
+      parametr[getParametrName(name)] = value
       return parametr
     })
   }
@@ -28,9 +41,9 @@ const UserSearch = ({ submitFn }: { submitFn: Function }) => {
         <div className='grow relative'>
           <InputWithLabel
             type="text"
-            name={currentSearchSelect.toLowerCase()}
+            name={currentSearchSelect}
             placeholder={currentSearchSelect}
-            value={userSearchParametr[currentSearchSelect.toLocaleLowerCase()] ?? ''}
+            value={userSearchParametr[getParametrName(currentSearchSelect)] ?? ''}
             changeFunction={searchParametrsUpdate}
           />
           <svg className='absolute right-2 top-1/2 transform -translate-y-2/3 z-20' width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -25,7 +25,7 @@ const FlashCodes = () => {
         }
       })
     }
-  }, [user])
+  }, [codes, user])
 
   const updateCode = (name: string, value: string | number) => {
     const newValue: Record<string, string | number> = {}

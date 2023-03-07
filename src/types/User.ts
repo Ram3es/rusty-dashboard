@@ -5,6 +5,8 @@ export interface User {
   email?: string
   password?: string
   avatar: string
+  id?: string
+  steamid?: string
 }
 
 export interface UserWithBalance extends User {
@@ -29,4 +31,7 @@ export interface UserWithFields extends User {
   registerIp: string
   lattestIp: string
   lattestLogin: Date
+}
+
+export interface UserFoeExcluded extends User {
 }

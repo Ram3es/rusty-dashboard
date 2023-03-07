@@ -55,7 +55,6 @@ const Sponsee = () => {
   }
 
   const addUserToGroup = (groupId: string) => {
-    console.log('add user to', groupId)
     const group = data?.find(group => group.id === groupId)
     setGroupToEdit(() => {
       if (group) {
@@ -65,11 +64,50 @@ const Sponsee = () => {
     setOpenPopupAddUser(true)
   }
 
+  const submitUserToGroup = (userObj: { user_id: string, group_id: string }) => {
+    user.socket?.emit('admin:group:user:add', userObj, (res: any) => {
+      console.log(data)
+      if (!res.error) {
+        setData(prev => {
+          if (prev) {
+            return [...prev].map(group => {
+              if (group.id !== userObj.group_id) {
+                return group
+              } else {
+                return {
+                  ...group,
+                  users: [
+                    ...group.users,
+                    {
+                      user: {
+                        name: res.user[0].username,
+                        avatar: res.user[0].avatar ?? ''
+                      },
+                      steamId: res.user[0].steamid ?? '',
+                      code: res.user[0].code ?? '',
+                      codeUses: res.user[0].earnings ?? 0,
+                      deposits: res.user[0].wager ?? 0,
+                      balance: res.user[0].balance ?? 0,
+                      status: {
+                        id: res.user[0].id,
+                        isStatisticIncluded: !res.user[0].excluded
+                      },
+                      id: res.user[0].id
+                    }
+                  ]
+                }
+              }
+            })
+          }
+        })
+      }
+    })
+  }
+
   const removeUserGromGroup = (userId: string, groupId: string) => {
     const group = data?.find(group => group.id === groupId) as IGroup
-    const user = group?.users.find(user => user.id === userId)?.user as User
-
-    setRemoveItem({ user, groupName: group.name, groupId: group.id })
+    const user = group?.users.find(user => user.id === userId)
+    setRemoveItem({ user: { ...user?.user, name: user?.user.name ?? '', avatar: user?.user.avatar ?? '', id: user?.id }, groupName: group.name, groupId: group.id })
   }
 
   const removeGroup = (groupId: string) => {
@@ -78,10 +116,39 @@ const Sponsee = () => {
   }
 
   const submitRemove = () => {
-    user.socket?.emit('admin:group:delete', { group_id: removeItem?.groupId }, (data: any) => {
-      console.log(data, 'admin:group:delete')
-      setRemoveItem(undefined)
-    })
+    if (removeItem?.user) {
+      console.log(removeItem)
+      user.socket?.emit('admin:group:user:delete', { group_id: removeItem?.groupId, user_id: removeItem?.user?.id }, (res: any) => {
+        console.log(data)
+        if (!res.error) {
+          setData(prev => {
+            if (prev) {
+              return [...prev].map(group => {
+                if (group.id !== removeItem?.groupId) {
+                  return group
+                } else {
+                  return {
+                    ...group,
+                    users: [...group.users].filter(user => user.id !== removeItem?.user?.id)
+                  }
+                }
+              })
+            }
+          })
+          setRemoveItem(undefined)
+        }
+      })
+    } else {
+      user.socket?.emit('admin:group:delete', { group_id: removeItem?.groupId }, (data: any) => {
+        if (!data.error) {
+          setData((prev: IGroup[] | undefined) => {
+            if (prev) return [...prev].filter((group: IGroup) => removeItem?.groupId !== group.id)
+            return []
+          })
+          setRemoveItem(undefined)
+        }
+      })
+    }
   }
 
   const updateUserInGroup = (id: string, updateOption: Record<string, string | number | boolean>) => {
@@ -92,70 +159,29 @@ const Sponsee = () => {
     if (!data) {
       user.socket?.emit('admin:groups', {}, (data: any) => {
         console.log(data, 'admin:groups')
-        setData([{
-          name: 'YOUTUBERS',
-          id: '1',
-          users: [
-            {
-              user: { name: 'DerWeißWizard1', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
-              steamId: '1',
-              code: 'test',
-              codeUses: 12,
-              deposits: 1000,
-              balance: 2000,
-              status: {
-                id: '1',
-                isStatisticIncluded: true
+        if (data?.data) {
+          const groups = data?.data?.map((group: any) => ({
+            name: group.name,
+            id: group.id,
+            users: group.users.map((user: any) => ({
+              user: {
+                name: user.username,
+                avatar: user.avatar ?? ''
               },
-              id: '1'
-            },
-            {
-              user: { name: 'DerWeißWizard2', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
-              steamId: '2',
-              code: 'test',
-              codeUses: 12,
-              deposits: 1000,
-              balance: 2000,
+              steamId: user.steamid ?? '',
+              code: user.code ?? '',
+              codeUses: user.earnings ?? 0,
+              deposits: user.wager ?? 0,
+              balance: user.balance ?? 0,
               status: {
-                id: '2',
-                isStatisticIncluded: false
+                id: user.id,
+                isStatisticIncluded: !user.excluded
               },
-              id: '2'
-            }
-          ]
-        },
-        {
-          name: 'TWITCH STREAMERS',
-          id: '2',
-          users: [
-            {
-              user: { name: 'DerWeißWizard3', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
-              steamId: '3',
-              code: 'test',
-              codeUses: 12,
-              deposits: 1000,
-              balance: 2000,
-              status: {
-                id: '3',
-                isStatisticIncluded: true
-              },
-              id: '3'
-            },
-            {
-              user: { name: 'DerWeißWizard3', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
-              steamId: '3',
-              code: 'test',
-              codeUses: 12,
-              deposits: 1000,
-              balance: 2000,
-              status: {
-                id: '3',
-                isStatisticIncluded: false
-              },
-              id: '4'
-            }
-          ]
-        }])
+              id: user.id
+            }))
+          }))
+          setData(groups)
+        }
       })
     }
   }, [data])
@@ -163,6 +189,13 @@ const Sponsee = () => {
   const createGroupFn = (name: string) => {
     user.socket?.emit('admin:group:create', { name }, (data: any) => {
       console.log(data, 'admin:group:create')
+      if (!data.error && data?.created?.length > 0) {
+        setData(prev => prev && [...prev, {
+          name: data.created[0].name,
+          id: data.created[0].id,
+          users: []
+        }])
+      }
     })
   }
 
@@ -190,7 +223,7 @@ const Sponsee = () => {
         </div>
           {data ? data.filter(group => group.name?.includes(groupSearchName)).map(item => <SponseeTableItem key={item.id} groupId={item.id} name={item.name} users={item.users} onAddUser={addUserToGroup} onRemoveUser={removeUserGromGroup} onGroupRemove={removeGroup} userUpdate={updateUserInGroup} />) : null}
       </div>
-      <AddUserInGroup isOpenPopup={isOpenPopupAddUser} closePopup={togglePopup} groupToEdit={groupToEdit} />
+      <AddUserInGroup isOpenPopup={isOpenPopupAddUser} closePopup={togglePopup} groupToEdit={groupToEdit} onSubmit={submitUserToGroup} />
       <CreateGroupPopup onGroupCreate={(name: string) => createGroupFn(name)} isPopupOpen={isOpenCreateGroup} onClose={onCloseCeateGroupPopup} />
       <RemovePopup removeItem={removeItem} submitFunction={submitRemove} />
     </>

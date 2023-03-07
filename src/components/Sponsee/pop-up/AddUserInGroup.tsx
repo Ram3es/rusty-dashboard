@@ -1,4 +1,5 @@
 import React, { FC, useMemo, useState } from 'react'
+import { useUserContext } from '../../../store/UserStore'
 import Button from '../../base/Button'
 import InputWithLabel from '../../base/InputWithLabel'
 import PopupWrapper from '../../base/PopupWrapper'
@@ -10,22 +11,35 @@ interface ISearchUsersProps {
   isOpenPopup: boolean
   closePopup: Function
   groupToEdit?: { name: string, id: string }
+  onSubmit: ({ user_id, group_id }: { user_id: string, group_id: string }) => void
 }
 
-const AddUserInGroup: FC<ISearchUsersProps> = ({ isOpenPopup, closePopup, groupToEdit }) => {
-  const [popupPermissinStage, setpopupPermissionStage] = useState<number>(1)
-  const [isChecked, setChecked] = useState({ user: false })
-  const [user, setUser] = useState<{ name: string, avatar: string }>()
+interface DataToAdd { user_id: string, group_id: string }
 
-  const handleCheckBox = (name: string, isChecked: boolean) => {
-    setChecked(prev => ({ ...prev, [name]: isChecked }))
+const AddUserInGroup: FC<ISearchUsersProps> = ({ isOpenPopup, closePopup, groupToEdit, onSubmit }) => {
+  const [popupPermissinStage, setpopupPermissionStage] = useState<number>(1)
+  const [selectedUser, setSelectedUser] = useState<DataToAdd>()
+  const [user, setUser] = useState<{ name: string, avatar: string, id: string }>()
+  const [searchUser, setSearchUser] = useState<Array<{ name: string, avatar: string, id: string, steamid: string }>>([])
+  const [globulUser] = useUserContext()
+
+  const handleCheckBox = (item: { user_id: string, group_id: string }) => {
+    if (selectedUser?.user_id === item.user_id) {
+      setSelectedUser(undefined)
+    } else {
+      setSelectedUser(item)
+    }
   }
 
   const submitFunction = () => {
-    const selected = { name: 'DerWeißWizard', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' }
-    console.log('submited', groupToEdit)
-    setpopupPermissionStage(2)
-    setUser(selected)
+    if (selectedUser) {
+      setpopupPermissionStage(2)
+      const userToAdd = searchUser.find(user => user.id === selectedUser.user_id)
+      if (userToAdd) {
+        setUser({ ...userToAdd, name: userToAdd.name })
+      }
+      console.log(user)
+    }
   }
 
   const cancelConfimation = () => {
@@ -33,19 +47,34 @@ const AddUserInGroup: FC<ISearchUsersProps> = ({ isOpenPopup, closePopup, groupT
   }
 
   const submitConfirmation = () => {
-    setpopupPermissionStage(1)
-    closePopup()
+    if (selectedUser) {
+      onSubmit(selectedUser)
+      setSelectedUser(undefined)
+      setSearchUser([])
+      setpopupPermissionStage(1)
+      closePopup()
+    }
   }
 
-  const getCheckBoxComponent = () => (
-    <InputWithLabel
+  const userSearch = (data: Record<string, string>) => {
+    const keys = Object.keys(data)
+    globulUser.socket?.emit('admin:groups:users', { type: keys[0], search: data[keys[0]] }, (data: any) => {
+      console.log(data)
+      if (!data.error) {
+        setSearchUser(data.data)
+      }
+    })
+  }
+
+  const getCheckBoxComponent = (props: { group_id: string, user_id: string }) => {
+    return (<InputWithLabel
       type='checkbox'
       name='user'
-      value={isChecked.user}
+      value={selectedUser?.user_id === props.user_id}
       labelClasses='flex items-center justify-center'
       inputClasses='px-3 py-2  accent-yellow-f rounded text-white w-5 h-5 '
-      changeFunction={handleCheckBox} />
-  )
+      changeFunction={() => handleCheckBox(props)} />)
+  }
 
   const getGivenPermissionPopup = () => {
     switch (popupPermissinStage) {
@@ -54,7 +83,7 @@ const AddUserInGroup: FC<ISearchUsersProps> = ({ isOpenPopup, closePopup, groupT
         <>
           <div className=' flex flex-col '>
           <h4 className='text-white uppercase  text-3xl font-medium mb-8'>Add users to “{groupToEdit?.name}” Grouping</h4>
-            <UserSearch submitFn={() => { '' }} />
+            <UserSearch submitFn={userSearch} />
             <Table columns={columns} data={data} />
             <div className='flex justify-center gap-5 w-full [&>button]:max-w-[140px] mt-12' >
               <Button text='Cancel' color='default' submitFunction={closePopup} />
@@ -70,8 +99,8 @@ const AddUserInGroup: FC<ISearchUsersProps> = ({ isOpenPopup, closePopup, groupT
             <div className='flex'>
               <p className='text-center text-gray-6 font-normal text-sm leading-5 p-2'>Are you sure you want to add the user</p>
                 <UserAvatarWithName
-                user={user}
-                avatarClasses='flex gap-2 items-center text-base font-semibold text-gray-6 '/>
+                  user={user}
+                  avatarClasses='flex gap-2 items-center text-base font-semibold text-gray-6 '/>
             </div>
             <p className='text-center text-gray-6 font-normal text-sm leading-5 '>to the group “{groupToEdit?.name}”</p>
             <div className='flex justify-center gap-5 w-full [&>button]:max-w-[140px] mt-12' >
@@ -88,7 +117,7 @@ const AddUserInGroup: FC<ISearchUsersProps> = ({ isOpenPopup, closePopup, groupT
       {
         header: '',
         accessor: 'col1',
-        Cell: (props: any) => getCheckBoxComponent()
+        Cell: (props: any) => getCheckBoxComponent(props.value)
       },
       {
         header: 'User',
@@ -106,29 +135,23 @@ const AddUserInGroup: FC<ISearchUsersProps> = ({ isOpenPopup, closePopup, groupT
         accessor: 'col4'
       }
     ],
-    [isChecked]
+    [selectedUser]
   )
 
   const data = useMemo(
-    () => [
-      {
-        col2: { name: 'DerWeißWizard', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
-        col3: '7182317182913',
-        col4: '9821'
-
+    () => searchUser.map(user => ({
+      col1: {
+        group_id: groupToEdit?.id,
+        user_id: user.id
       },
-      {
-        col2: { name: 'DerWeißWizard', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
-        col3: '7182317182913',
-        col4: '9821'
+      col2: {
+        name: user.name,
+        avatar: user.avatar
       },
-      {
-        col2: { name: 'DerWeißWizard', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
-        col3: '7182317182913',
-        col4: '9821'
-      }
-    ],
-    []
+      col3: user.steamid,
+      col4: user.id
+    })),
+    [searchUser]
   )
 
   return (isOpenPopup

@@ -113,7 +113,7 @@ const SponseeTableItem: FC<SponseeTableItemProps> = ({ name, users, userUpdate, 
   )
 
   const data = useMemo(
-    () => [...users].filter((i) => i.user.name.includes(searchNames.userName.toString())),
+    () => [...users].filter((i) => i.user?.name?.includes(searchNames.userName.toString())),
     [searchNames.userName, users]
   )
 

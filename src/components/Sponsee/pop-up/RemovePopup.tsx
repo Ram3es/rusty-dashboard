@@ -14,7 +14,7 @@ const RemovePopup: FC<IRemovePopupProps> = ({ removeItem, submitFunction }) => {
   const [isOpenPopup, setOpenPopup] = useState(false)
 
   useEffect(() => {
-    removeItem && setOpenPopup(true)
+    setOpenPopup(!!removeItem)
   }, [removeItem])
 
   return (isOpenPopup
