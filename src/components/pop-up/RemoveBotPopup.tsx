@@ -16,7 +16,6 @@ const RemoveBotPopup: FC<IRemoveBotPrpops> = ({ bot, onClose }) => {
   }
 
   useEffect(() => {
-    console.log('here')
     bot && setOpenPopup(true)
   }, [bot])
 

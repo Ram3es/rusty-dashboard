@@ -28,13 +28,10 @@ const MenuDesktop = ({ navigation }: { navigation: NavItem[] }): ReactElement =>
         setUser((prev: any) => {
           return { ...prev, isSystemConnect: true }
         })
+        setUserDetails(user)
       }
     })
   }, [user.socket])
-
-  useEffect(() => {
-    setUserDetails(user)
-  }, [user])
 
   const uploadFile = (file: File) => {
     console.log(file)

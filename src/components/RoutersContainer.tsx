@@ -43,8 +43,8 @@ const RoutersContainer = () => {
       })
         .then(async data => await data.json())
         .then((data) => {
-          console.log('user', user)
           if (!user.email && !wasSocketCreated && user.token) {
+            console.log('user', user)
             wasSocketCreated = true
             setUser((prev: any) => {
               return {

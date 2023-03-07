@@ -156,7 +156,7 @@ const Sponsee = () => {
         ]
       }])
     })
-  }, [])
+  })
 
   const createGroupFn = (name: string) => {
     user.socket?.emit('admin:group:create', { name }, (data: any) => {
