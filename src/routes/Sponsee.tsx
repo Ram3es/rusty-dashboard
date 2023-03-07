@@ -89,74 +89,76 @@ const Sponsee = () => {
   }
 
   useEffect(() => {
-    user.socket?.emit('admin:groups', {}, (data: any) => {
-      console.log(data, 'admin:groups')
-      setData([{
-        name: 'YOUTUBERS',
-        id: '1',
-        users: [
-          {
-            user: { name: 'DerWeißWizard1', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
-            steamId: '1',
-            code: 'test',
-            codeUses: 12,
-            deposits: 1000,
-            balance: 2000,
-            status: {
-              id: '1',
-              isStatisticIncluded: true
+    if (!data) {
+      user.socket?.emit('admin:groups', {}, (data: any) => {
+        console.log(data, 'admin:groups')
+        setData([{
+          name: 'YOUTUBERS',
+          id: '1',
+          users: [
+            {
+              user: { name: 'DerWeißWizard1', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
+              steamId: '1',
+              code: 'test',
+              codeUses: 12,
+              deposits: 1000,
+              balance: 2000,
+              status: {
+                id: '1',
+                isStatisticIncluded: true
+              },
+              id: '1'
             },
-            id: '1'
-          },
-          {
-            user: { name: 'DerWeißWizard2', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
-            steamId: '2',
-            code: 'test',
-            codeUses: 12,
-            deposits: 1000,
-            balance: 2000,
-            status: {
-              id: '2',
-              isStatisticIncluded: false
+            {
+              user: { name: 'DerWeißWizard2', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
+              steamId: '2',
+              code: 'test',
+              codeUses: 12,
+              deposits: 1000,
+              balance: 2000,
+              status: {
+                id: '2',
+                isStatisticIncluded: false
+              },
+              id: '2'
+            }
+          ]
+        },
+        {
+          name: 'TWITCH STREAMERS',
+          id: '2',
+          users: [
+            {
+              user: { name: 'DerWeißWizard3', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
+              steamId: '3',
+              code: 'test',
+              codeUses: 12,
+              deposits: 1000,
+              balance: 2000,
+              status: {
+                id: '3',
+                isStatisticIncluded: true
+              },
+              id: '3'
             },
-            id: '2'
-          }
-        ]
-      },
-      {
-        name: 'TWITCH STREAMERS',
-        id: '2',
-        users: [
-          {
-            user: { name: 'DerWeißWizard3', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
-            steamId: '3',
-            code: 'test',
-            codeUses: 12,
-            deposits: 1000,
-            balance: 2000,
-            status: {
-              id: '3',
-              isStatisticIncluded: true
-            },
-            id: '3'
-          },
-          {
-            user: { name: 'DerWeißWizard3', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
-            steamId: '3',
-            code: 'test',
-            codeUses: 12,
-            deposits: 1000,
-            balance: 2000,
-            status: {
-              id: '3',
-              isStatisticIncluded: false
-            },
-            id: '4'
-          }
-        ]
-      }])
-    })
-  })
+            {
+              user: { name: 'DerWeißWizard3', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
+              steamId: '3',
+              code: 'test',
+              codeUses: 12,
+              deposits: 1000,
+              balance: 2000,
+              status: {
+                id: '3',
+                isStatisticIncluded: false
+              },
+              id: '4'
+            }
+          ]
+        }])
+      })
+    }
+  }, [data])
 
   const createGroupFn = (name: string) => {
     user.socket?.emit('admin:group:create', { name }, (data: any) => {
