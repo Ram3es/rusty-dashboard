@@ -107,8 +107,8 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
         const dateVal = selectedWagersPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('MM/DD/YYYY') : dayjs(cur.timestamp).format('MM/DD/YYYY HH')
         const foundIndex = monthData?.findIndex((item: any) => item.name === dateVal)
         if (foundIndex >= 0) {
-          totalSum += Number(cur.bet_value) / 1000
-          monthData[foundIndex].value[getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[getGameIndex(currentGame, cur.mode)]) + (Number(cur.bet_value) / 1000)
+          totalSum += (Number(cur.bet_value) + Number(!cur.isOponentBot && (cur.oponent_bet ?? 0))) / 1000
+          monthData[foundIndex].value[getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[getGameIndex(currentGame, cur.mode)]) + ((Number(cur.bet_value) + Number(!cur.isOponentBot && (cur.oponent_bet ?? 0))) / 1000)
         }
       })
       setDataWagers((prev: any) => {
