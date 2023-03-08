@@ -18,14 +18,54 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
 
   useEffect(() => {
     if (state?.data?.data) {
-      const { gameHistory, userBots } = state.data.data
+      const { gameHistory, jackpots, coinflips, pvpMines, userBots } = state.data.data
       const monthData: any[] = []
       let totalSum = 0
       let sortedData = []
+      let historyData = [...gameHistory]
+      const jackpotData = jackpots
+        ? jackpots?.map((game: any) => {
+          return {
+            bet_value: game.pot_value,
+            id: game.id,
+            mode: 'jackpot',
+            timestamp: game.timestamp,
+            userid: game.winner,
+            winnings: game.pot_value,
+            fee_items_value: game.fee_items_value
+          }
+        })
+        : []
+      const coinflipData = coinflips
+        ? coinflips.map((game: any) => {
+          return {
+            bet_value: Number(game.creator_value),
+            oponent_bet: Number(game.opponent_value),
+            id: game.id,
+            mode: 'coinflip',
+            timestamp: game.timestamp,
+            fee_items_value: game.fee_items_value ?? 0,
+            isOponentBot: game.opponent_steamid === 'bot',
+            isBotWon: game.opponent_steamid === 'bot' && game.creator_side !== Number(game.winner_side)
+          }
+        })
+        : []
+      const pvpMinesData = pvpMines.map((game: any) => {
+        return {
+          bet_value: game.value * (game.players - game.botqty),
+          oponent_bet: game.value * game.botqty,
+          id: game.id,
+          mode: 'pvp-mines',
+          timestamp: game.timestamp,
+          fee_items_value: 0.1 * game.value * (game.players - game.botqty),
+          isBotWon: game.winner === 0
+        }
+      })
+      historyData = [...historyData, ...jackpotData, ...coinflipData, ...pvpMinesData]
       if (currentGame !== 'all') {
-        sortedData = gameHistory.filter((game: any) => game.mode === currentGame)
+        sortedData = historyData.filter((game: any) => game.mode === currentGame)
       } else {
-        sortedData = [...gameHistory]
+        sortedData = [...historyData]
       }
       if (Array.isArray(userBots)) {
         sortedData = [...sortedData].filter((game: any) => userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)

@@ -22,7 +22,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       console.log('state?.data?.data', state?.data?.data)
       const { gameHistory, userBots, jackpots, coinflips, pvpMines } = state.data.data
       const monthData: any[] = []
-      let historyData = gameHistory.filter((game: any) => game.mode !== 'jackpot' && game.mode !== 'coinflip' && game.mode !== 'pvp-mines')
+      let historyData = [...gameHistory]
       const jackpotData = jackpots
         ? jackpots?.map((game: any) => {
           return {

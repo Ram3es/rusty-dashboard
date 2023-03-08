@@ -38,10 +38,50 @@ const GeneralStatistic = () => {
   useEffect(() => {
     if (state?.data?.data) {
       console.log('dashboard data', state.data.data)
-      const { user, gameHistory, trades } = state.data.data
+      const { user, gameHistory, trades, jackpots, coinflips, pvpMines } = state.data.data
       const deposit = trades.filter((t: any) => t.type === 'deposit')
+      let historyData = [...gameHistory]
+      const jackpotData = jackpots
+        ? jackpots?.map((game: any) => {
+          return {
+            bet_value: game.pot_value,
+            id: game.id,
+            mode: 'jackpot',
+            timestamp: game.timestamp,
+            userid: game.winner,
+            winnings: game.pot_value,
+            fee_items_value: game.fee_items_value
+          }
+        })
+        : []
+      const coinflipData = coinflips
+        ? coinflips.map((game: any) => {
+          return {
+            bet_value: Number(game.creator_value),
+            oponent_bet: Number(game.opponent_value),
+            id: game.id,
+            mode: 'coinflip',
+            timestamp: game.timestamp,
+            fee_items_value: game.fee_items_value ?? 0,
+            isOponentBot: game.opponent_steamid === 'bot',
+            isBotWon: game.opponent_steamid === 'bot' && game.creator_side !== Number(game.winner_side)
+          }
+        })
+        : []
+      const pvpMinesData = pvpMines.map((game: any) => {
+        return {
+          bet_value: game.value * (game.players - game.botqty),
+          oponent_bet: game.value * game.botqty,
+          id: game.id,
+          mode: 'pvp-mines',
+          timestamp: game.timestamp,
+          fee_items_value: 0.1 * game.value * (game.players - game.botqty),
+          isBotWon: game.winner === 0
+        }
+      })
+      historyData = [...historyData, ...jackpotData, ...coinflipData, ...pvpMinesData]
       const depositSortedByDate = sortDataByDate(selectedGeneralStatisticPeriod.name, deposit ?? [])
-      const sortedHistoryByDate = sortDataByDate(selectedGeneralStatisticPeriod.name, gameHistory ?? [])
+      const sortedHistoryByDate = sortDataByDate(selectedGeneralStatisticPeriod.name, historyData ?? [])
       const sortedUsersByDate = sortDataByDate(selectedGeneralStatisticPeriod.name, user ?? [])
       const conversionedUsersCurrentPeriod = getConversionedUsers(sortedUsersByDate.currentPeriod, depositSortedByDate.currentPeriod)
       const conversionedUsersPrevPeriod = getConversionedUsers(sortedUsersByDate.previousPeriod, depositSortedByDate.previousPeriod)
