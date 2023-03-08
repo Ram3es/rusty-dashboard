@@ -81,8 +81,8 @@ const DepositGraph = () => {
           ]
         })
       }
-      const sortedData = sortDataByDate(depositDataStatisticPeriod.name, [...depositsItems, ...crypto, ...giftcards])
-      sortedData.currentPeriod.forEach((cur: any) => {
+      const sortedData = depositsItems && sortDataByDate(depositDataStatisticPeriod.name, [...depositsItems, ...crypto, ...giftcards])
+      sortedData?.currentPeriod.forEach((cur: any) => {
         const dateVal = depositDataStatisticPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('MM/DD/YYYY') : dayjs(cur.timestamp).format('MM/DD/YYYY HH')
         const foundIndex = monthData?.findIndex((item: any) => item.name === dateVal)
         if (foundIndex >= 0) {

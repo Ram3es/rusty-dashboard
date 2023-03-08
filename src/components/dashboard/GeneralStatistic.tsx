@@ -40,9 +40,9 @@ const GeneralStatistic = () => {
       console.log('dashboard data', state.data.data)
       const { user, gameHistory, trades } = state.data.data
       const deposit = trades.filter((t: any) => t.type === 'deposit')
-      const depositSortedByDate = sortDataByDate(selectedGeneralStatisticPeriod.name, deposit)
-      const sortedHistoryByDate = sortDataByDate(selectedGeneralStatisticPeriod.name, gameHistory)
-      const sortedUsersByDate = sortDataByDate(selectedGeneralStatisticPeriod.name, user)
+      const depositSortedByDate = sortDataByDate(selectedGeneralStatisticPeriod.name, deposit ?? [])
+      const sortedHistoryByDate = sortDataByDate(selectedGeneralStatisticPeriod.name, gameHistory ?? [])
+      const sortedUsersByDate = sortDataByDate(selectedGeneralStatisticPeriod.name, user ?? [])
       const conversionedUsersCurrentPeriod = getConversionedUsers(sortedUsersByDate.currentPeriod, depositSortedByDate.currentPeriod)
       const conversionedUsersPrevPeriod = getConversionedUsers(sortedUsersByDate.previousPeriod, depositSortedByDate.previousPeriod)
       let avarageBet = 0

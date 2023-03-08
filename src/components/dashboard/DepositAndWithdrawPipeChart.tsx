@@ -19,9 +19,9 @@ const DepositAndWithdrawPipeChart = () => {
     if (state?.data?.data) {
       const { crypto, depositsItems, giftcards, trades } = state.data.data
       if (currentDepositSelect === 'deposit') {
-        const cryptoSortedByDate = sortDataByDate(selectedDepositPeriod.name, crypto)
-        const depositsSortedByDate = sortDataByDate(selectedDepositPeriod.name, depositsItems)
-        const giftcardsSortedByDate = sortDataByDate(selectedDepositPeriod.name, giftcards)
+        const cryptoSortedByDate = sortDataByDate(selectedDepositPeriod.name, crypto ?? [])
+        const depositsSortedByDate = sortDataByDate(selectedDepositPeriod.name, depositsItems ?? [])
+        const giftcardsSortedByDate = sortDataByDate(selectedDepositPeriod.name, giftcards ?? [])
         console.log('deposits in pie chart', depositsSortedByDate.currentPeriod)
         setDepositData([
           {
@@ -47,7 +47,7 @@ const DepositAndWithdrawPipeChart = () => {
           }
         ])
       } else {
-        const tragesSortedByDate = sortDataByDate(selectedDepositPeriod.name, trades)
+        const tragesSortedByDate = sortDataByDate(selectedDepositPeriod.name, trades ?? [])
         setDepositData([
           {
             name: 'skins',

@@ -32,7 +32,9 @@ const ExcludedAccounts = ({ name }: { name: string }) => {
     const findGroup = groups?.find((item) => item.name.toLowerCase() === state.group)
     if (findGroup) {
       user.socket?.emit('admin:group:exclude', { group_id: findGroup.id, excluded: 1 }, (data: any) => {
-        setGroups(prev => prev?.map(prevGroup => findGroup.id === prevGroup.id ? ({ ...prevGroup, excluded: 1 }) : ({ ...prevGroup })))
+        if (!data.error) {
+          setGroups(prev => prev?.map(prevGroup => findGroup.id === prevGroup.id ? ({ ...prevGroup, excluded: 1 }) : ({ ...prevGroup })))
+        }
       })
     }
   }
@@ -53,7 +55,7 @@ const ExcludedAccounts = ({ name }: { name: string }) => {
 
   useEffect(() => {
     console.log('groups effect', !groups)
-    if (!groups) {
+    if (user.isSystemConnect && (!groups || groups.length === 0)) {
       user.socket?.emit('admin:groups', {}, (data: any) => {
         console.log(data, 'admin:groups')
         if (data?.data) {
@@ -76,7 +78,9 @@ const ExcludedAccounts = ({ name }: { name: string }) => {
               onClick={() => {
                 user.socket?.emit('admin:group:exclude', { group_id: group.id, excluded: 0 }, (data: any) => {
                   console.log('admin:groups', data)
-                  setGroups(prev => prev?.map(prevGroup => group.id === prevGroup.id ? ({ ...prevGroup, excluded: 0 }) : ({ ...prevGroup })))
+                  if (!data.error) {
+                    setGroups(prev => prev?.map(prevGroup => group.id === prevGroup.id ? ({ ...prevGroup, excluded: 0 }) : ({ ...prevGroup })))
+                  }
                 })
               }}
             >

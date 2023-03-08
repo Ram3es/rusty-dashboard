@@ -32,7 +32,7 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       } else {
         console.log('STATISTIC GRAPH userBots!!!!!!', userBots)
       }
-      const wagersSortedByDate = sortDataByDate(selectedWagersPeriod.name, sortedData)
+      const wagersSortedByDate = sortDataByDate(selectedWagersPeriod.name, sortedData ?? [])
       console.log('wagersSortedByDate', wagersSortedByDate.currentPeriod)
       switch (selectedWagersPeriod.name) {
         case 'Day':

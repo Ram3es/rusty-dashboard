@@ -23,29 +23,33 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       const { gameHistory, userBots, jackpots, coinflips, pvpMines } = state.data.data
       const monthData: any[] = []
       let historyData = gameHistory.filter((game: any) => game.mode !== 'jackpot' && game.mode !== 'coinflip' && game.mode !== 'pvp-mines')
-      const jackpotData = jackpots.map((game: any) => {
-        return {
-          bet_value: game.pot_value,
-          id: game.id,
-          mode: 'jackpot',
-          timestamp: game.timestamp,
-          userid: game.winner,
-          winnings: game.pot_value,
-          fee_items_value: game.fee_items_value
-        }
-      })
-      const coinflipData = coinflips.map((game: any) => {
-        return {
-          bet_value: Number(game.creator_value),
-          oponent_bet: Number(game.opponent_value),
-          id: game.id,
-          mode: 'coinflip',
-          timestamp: game.timestamp,
-          fee_items_value: game.fee_items_value ?? 0,
-          isOponentBot: game.opponent_steamid === 'bot',
-          isBotWon: game.opponent_steamid === 'bot' && game.creator_side !== Number(game.winner_side)
-        }
-      })
+      const jackpotData = jackpots
+        ? jackpots?.map((game: any) => {
+          return {
+            bet_value: game.pot_value,
+            id: game.id,
+            mode: 'jackpot',
+            timestamp: game.timestamp,
+            userid: game.winner,
+            winnings: game.pot_value,
+            fee_items_value: game.fee_items_value
+          }
+        })
+        : []
+      const coinflipData = coinflips
+        ? coinflips.map((game: any) => {
+          return {
+            bet_value: Number(game.creator_value),
+            oponent_bet: Number(game.opponent_value),
+            id: game.id,
+            mode: 'coinflip',
+            timestamp: game.timestamp,
+            fee_items_value: game.fee_items_value ?? 0,
+            isOponentBot: game.opponent_steamid === 'bot',
+            isBotWon: game.opponent_steamid === 'bot' && game.creator_side !== Number(game.winner_side)
+          }
+        })
+        : []
       const pvpMinesData = pvpMines.map((game: any) => {
         return {
           bet_value: game.value * (game.players - game.botqty),
@@ -70,7 +74,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       } else {
         console.log('PROFIT GRAPH userBots!!!!!!', userBots)
       }
-      const wagersSortedByDate = sortDataByDate(selectedProfitPeriod.name, sortedData)
+      const wagersSortedByDate = sortDataByDate(selectedProfitPeriod.name, sortedData ?? [])
       switch (selectedProfitPeriod.name) {
         case 'Day':
           for (let i = 0; i <= 24; i++) {
