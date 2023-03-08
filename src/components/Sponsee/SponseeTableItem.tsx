@@ -2,11 +2,9 @@ import { FC, useMemo, useState } from 'react'
 import InputWithLabel from '../base/InputWithLabel'
 import Table from '../base/Table'
 import CoinceImage from '../../assets/coins.png'
-import UserAvatarWithName from '../base/UserAvatarWithName'
-import { Listbox } from '@headlessui/react'
-import ArrowIcon from '../icons/ArrowIcon'
 import { SponseeUser } from '../../routes/Sponsee'
 import Button from '../base/Button'
+import UserAvatarWithName from '../base/UserAvatarWithName'
 
 interface SponseeTableItemProps {
   name: string
@@ -15,10 +13,9 @@ interface SponseeTableItemProps {
   onAddUser: (groupId: string) => void
   onRemoveUser: (userId: string, groupId: string) => void
   onGroupRemove: (groupId: string) => void
-  userUpdate: (id: string, updateOption: Record<string, string | number | boolean>) => void
 }
 
-const SponseeTableItem: FC<SponseeTableItemProps> = ({ name, users, userUpdate, onAddUser, onRemoveUser, groupId, onGroupRemove }) => {
+const SponseeTableItem: FC<SponseeTableItemProps> = ({ name, users, onAddUser, onRemoveUser, groupId, onGroupRemove }) => {
   const [searchNames, setSearchNames] = useState<{ userName: string }>({
     userName: ''
   })
@@ -31,10 +28,6 @@ const SponseeTableItem: FC<SponseeTableItemProps> = ({ name, users, userUpdate, 
     setSearchNames(() => {
       return { userName: value }
     })
-  }
-
-  const setIsUserStatisticIncluded = (id: string, isIncluded: boolean) => {
-    userUpdate(id, { isStatisticIncluded: isIncluded })
   }
 
   const columns = useMemo(
@@ -65,34 +58,6 @@ const SponseeTableItem: FC<SponseeTableItemProps> = ({ name, users, userUpdate, 
         header: 'Balance',
         accessor: 'balance',
         Cell: (props: any) => <div className='flex items-center flex-2 gap-2'><img className='w-7 h-3' src={CoinceImage} alt="CoinceImage" /><span className='text-white text-lg'>{props.value}</span></div>
-      },
-      {
-        header: 'Status',
-        accessor: 'status',
-        Cell: (props: any) => <Listbox value={props.value.isStatisticIncluded ? 'Statistics included' : 'Statistics not included'} onChange={(option: string) => setIsUserStatisticIncluded(props.value.id, !!option)}>
-          {({ open }) => (
-            <div className='relative'>
-              <Listbox.Button className='w-full h-10 flex items-center justify-between px-4 py-2 rounded bg-dark-17 text-gray-6'>
-                <span>{props.value.isStatisticIncluded ? 'Statistics included' : 'Statistics not included'}</span>
-                <ArrowIcon iconCalsses={`w-4 transform ${open ? 'rotate-90' : ''}`} />
-              </Listbox.Button>
-              <Listbox.Options className="absolute left-0 top-full bg-dark-17 mt-1 w-full px-4 py-2 rounded z-20">
-                <Listbox.Option
-                  className="cursor-pointer text-gray-6 hover:text-white"
-                  value={true}
-                >
-                  Statistics included
-                </Listbox.Option>
-                <Listbox.Option
-                  className="cursor-pointer text-gray-6 hover:text-white"
-                  value={false}
-                >
-                  Statistics not included
-                </Listbox.Option>
-              </Listbox.Options>
-            </div>
-          )}
-        </Listbox>
       },
       {
         header: 'Action',

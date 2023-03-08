@@ -29,7 +29,7 @@ interface IGroup {
 
 const Sponsee = () => {
   const [groupSearchName, setGroupSearchName] = useState<string>('')
-  const [data, setData] = useState<IGroup[]>()
+  const [tableData, setTableData] = useState<IGroup[]>()
   const [isOpenPopupAddUser, setOpenPopupAddUser] = useState<boolean>(false)
   const [isOpenCreateGroup, setOpenCreateGroup] = useState<boolean>(false)
   const [groupToEdit, setGroupToEdit] = useState<{ name: string, id: string }>()
@@ -47,7 +47,6 @@ const Sponsee = () => {
 
   const addGroup = () => {
     setOpenCreateGroup(true)
-    console.log('add group')
   }
 
   const setCearchName = (name: string, value: string) => {
@@ -55,7 +54,7 @@ const Sponsee = () => {
   }
 
   const addUserToGroup = (groupId: string) => {
-    const group = data?.find(group => group.id === groupId)
+    const group = tableData?.find(group => group.id === groupId)
     setGroupToEdit(() => {
       if (group) {
         return { name: group.name, id: group.id }
@@ -66,9 +65,8 @@ const Sponsee = () => {
 
   const submitUserToGroup = (userObj: { user_id: string, group_id: string }) => {
     user.socket?.emit('admin:group:user:add', userObj, (res: any) => {
-      console.log(data)
       if (!res.error) {
-        setData(prev => {
+        setTableData(prev => {
           if (prev) {
             return [...prev].map(group => {
               if (group.id !== userObj.group_id) {
@@ -105,23 +103,21 @@ const Sponsee = () => {
   }
 
   const removeUserGromGroup = (userId: string, groupId: string) => {
-    const group = data?.find(group => group.id === groupId) as IGroup
+    const group = tableData?.find(group => group.id === groupId) as IGroup
     const user = group?.users.find(user => user.id === userId)
     setRemoveItem({ user: { ...user?.user, name: user?.user.name ?? '', avatar: user?.user.avatar ?? '', id: user?.id }, groupName: group.name, groupId: group.id })
   }
 
   const removeGroup = (groupId: string) => {
-    const { id, name } = data?.find(group => group.id === groupId) as IGroup
+    const { id, name } = tableData?.find(group => group.id === groupId) as IGroup
     setRemoveItem({ groupId: id, groupName: name })
   }
 
   const submitRemove = () => {
     if (removeItem?.user) {
-      console.log(removeItem)
       user.socket?.emit('admin:group:user:delete', { group_id: removeItem?.groupId, user_id: removeItem?.user?.id }, (res: any) => {
-        console.log(data)
         if (!res.error) {
-          setData(prev => {
+          setTableData(prev => {
             if (prev) {
               return [...prev].map(group => {
                 if (group.id !== removeItem?.groupId) {
@@ -141,7 +137,7 @@ const Sponsee = () => {
     } else {
       user.socket?.emit('admin:group:delete', { group_id: removeItem?.groupId }, (data: any) => {
         if (!data.error) {
-          setData((prev: IGroup[] | undefined) => {
+          setTableData((prev: IGroup[] | undefined) => {
             if (prev) return [...prev].filter((group: IGroup) => removeItem?.groupId !== group.id)
             return []
           })
@@ -151,14 +147,9 @@ const Sponsee = () => {
     }
   }
 
-  const updateUserInGroup = (id: string, updateOption: Record<string, string | number | boolean>) => {
-    console.log('update user ', id, 'with options', updateOption)
-  }
-
   useEffect(() => {
-    if (!data) {
+    if (!tableData) {
       user.socket?.emit('admin:groups', {}, (data: any) => {
-        console.log(data, 'admin:groups')
         if (data?.data) {
           const groups = data?.data?.map((group: any) => ({
             name: group.name,
@@ -180,17 +171,17 @@ const Sponsee = () => {
               id: user.id
             }))
           }))
-          setData(groups)
+          setTableData(groups)
         }
       })
     }
-  }, [data])
+  }, [tableData])
 
   const createGroupFn = (name: string) => {
     user.socket?.emit('admin:group:create', { name }, (data: any) => {
       console.log(data, 'admin:group:create')
       if (!data.error && data?.created?.length > 0) {
-        setData(prev => prev && [...prev, {
+        setTableData(prev => prev && [...prev, {
           name: data.created[0].name,
           id: data.created[0].id,
           users: []
@@ -221,7 +212,7 @@ const Sponsee = () => {
             </div>
           </div>
         </div>
-          {data ? data.filter(group => group.name?.includes(groupSearchName)).map(item => <SponseeTableItem key={item.id} groupId={item.id} name={item.name} users={item.users} onAddUser={addUserToGroup} onRemoveUser={removeUserGromGroup} onGroupRemove={removeGroup} userUpdate={updateUserInGroup} />) : null}
+          {tableData ? tableData.filter(group => group.name?.includes(groupSearchName)).map(item => <SponseeTableItem key={item.id} groupId={item.id} name={item.name} users={item.users} onAddUser={addUserToGroup} onRemoveUser={(userId, groupId) => removeUserGromGroup(userId, groupId)} onGroupRemove={removeGroup} />) : null}
       </div>
       <AddUserInGroup isOpenPopup={isOpenPopupAddUser} closePopup={togglePopup} groupToEdit={groupToEdit} onSubmit={submitUserToGroup} />
       <CreateGroupPopup onGroupCreate={(name: string) => createGroupFn(name)} isPopupOpen={isOpenCreateGroup} onClose={onCloseCeateGroupPopup} />

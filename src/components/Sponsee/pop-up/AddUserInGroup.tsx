@@ -20,7 +20,7 @@ const AddUserInGroup: FC<ISearchUsersProps> = ({ isOpenPopup, closePopup, groupT
   const [popupPermissinStage, setpopupPermissionStage] = useState<number>(1)
   const [selectedUser, setSelectedUser] = useState<DataToAdd>()
   const [user, setUser] = useState<{ name: string, avatar: string, id: string }>()
-  const [searchUser, setSearchUser] = useState<Array<{ name: string, avatar: string, id: string, steamid: string }>>([])
+  const [searchUser, setSearchUser] = useState<Array<{ name: string, avatar: string, id: string, steamid: string, username: string }>>([])
   const [globulUser] = useUserContext()
 
   const handleCheckBox = (item: { user_id: string, group_id: string }) => {
@@ -36,9 +36,8 @@ const AddUserInGroup: FC<ISearchUsersProps> = ({ isOpenPopup, closePopup, groupT
       setpopupPermissionStage(2)
       const userToAdd = searchUser.find(user => user.id === selectedUser.user_id)
       if (userToAdd) {
-        setUser({ ...userToAdd, name: userToAdd.name })
+        setUser({ ...userToAdd, name: userToAdd.username })
       }
-      console.log(user)
     }
   }
 
@@ -59,7 +58,6 @@ const AddUserInGroup: FC<ISearchUsersProps> = ({ isOpenPopup, closePopup, groupT
   const userSearch = (data: Record<string, string>) => {
     const keys = Object.keys(data)
     globulUser.socket?.emit('admin:groups:users', { type: keys[0], search: data[keys[0]] }, (data: any) => {
-      console.log(data)
       if (!data.error) {
         setSearchUser(data.data)
       }
