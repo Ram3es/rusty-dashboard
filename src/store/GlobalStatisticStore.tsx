@@ -1,4 +1,4 @@
-import { createContext, ReactElement, useEffect, useReducer } from 'react'
+import { createContext, ReactElement, useEffect, useMemo, useReducer } from 'react'
 import Reducer from './GlobalStatisticReducer'
 import { useUserContext } from './UserStore'
 
@@ -19,9 +19,11 @@ const Store = ({ children }: { children: ReactElement }) => {
     }
   }, [user.isSystemConnect])
 
+  const value = useMemo(() => state, [state])
+
   return (
     // eslint-disable-next-line react/jsx-filename-extension
-    <Context.Provider value={[state, dispatch]}>
+    <Context.Provider value={[value]}>
         {children}
     </Context.Provider>
   )
