@@ -6,7 +6,7 @@ import Graph from '../base/Graph'
 
 const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: any[], currentGame: string }) => {
   /** @ts-expect-error */
-  const [state] = useContext(Context)
+  const [state, period] = useContext(Context)
   const [selectedProfitPeriod, setSelectedProfitPeriod] = useState(periodOptions[0])
   const [profitTitleData, setProfitTitleData] = useState([{ name: 'PROFIT', value: 0, color: '#39C89D' }])
   const [dataProfit, setDataProfit] = useState({
@@ -17,7 +17,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
   const [graphMode, setGraphMode] = useState<string>('line graph')
 
   useEffect(() => {
-    console.log(state?.dataCurrentPeriod, '!!!!!!!!!!!')
+    console.log(state?.dataCurrentPeriod, period, '!!!!!!!!!!!')
     if (state?.dataCurrentPeriod) {
       const { gameHistory, userBots, jackpots, coinflips, pvpMines } = state.dataCurrentPeriod
       const monthData: any[] = []
@@ -71,7 +71,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       if (Array.isArray(userBots)) {
         sortedData = [...sortedData].filter((game: any) => userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)
       }
-      switch (selectedProfitPeriod.name) {
+      switch (period) {
         case 'Day':
           for (let i = 0; i <= 24; i++) {
             monthData.push({
@@ -102,7 +102,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       }
 
       [...sortedData].forEach((cur: any) => {
-        const dateVal = selectedProfitPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('MM/DD/YYYY') : dayjs(cur.timestamp).format('MM/DD/YYYY HH')
+        const dateVal = period !== 'Day' ? dayjs(cur.timestamp).format('MM/DD/YYYY') : dayjs(cur.timestamp).format('MM/DD/YYYY HH')
         const foundIndex = monthData?.findIndex((item: any) => item.name === dateVal)
 
         if (foundIndex >= 0) {

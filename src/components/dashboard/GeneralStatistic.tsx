@@ -12,7 +12,7 @@ import { TIME_OPTIONS } from '../../constants'
 
 const GeneralStatistic = () => {
   /** @ts-expect-error */
-  const [state, setPeriod] = useContext(Context)
+  const [state, , setPeriod] = useContext(Context)
   const [generalStatistic, setGeneralStatistic] = useState<StatisticCartItem[]>([])
   const [selectedGeneralStatisticPeriod, setSelectedGeneralStatisticPeriod] = useState(TIME_OPTIONS[0])
 

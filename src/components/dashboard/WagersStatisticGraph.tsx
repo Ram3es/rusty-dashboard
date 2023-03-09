@@ -6,7 +6,7 @@ import Graph from '../base/Graph'
 
 const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: any[], currentGame: string }) => {
   /** @ts-expect-error */
-  const [state] = useContext(Context)
+  const [state, period] = useContext(Context)
   const [selectedWagersPeriod, setSelectedWagersPeriod] = useState(periodOptions[0])
   const [wagersTitleData, setWagersTitleData] = useState([{ name: 'Wagers', value: 0, color: '#39C89D' }])
   const [dataWagers, setDataWagers] = useState({
@@ -69,7 +69,7 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       if (Array.isArray(userBots)) {
         sortedData = [...sortedData].filter((game: any) => userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)
       }
-      switch (selectedWagersPeriod.name) {
+      switch (period) {
         case 'Day':
           for (let i = 0; i <= 24; i++) {
             monthData.push({
@@ -99,7 +99,7 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
           break
       }
       [...sortedData].forEach((cur: any) => {
-        const dateVal = selectedWagersPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('MM/DD/YYYY') : dayjs(cur.timestamp).format('MM/DD/YYYY HH')
+        const dateVal = period !== 'Day' ? dayjs(cur.timestamp).format('MM/DD/YYYY') : dayjs(cur.timestamp).format('MM/DD/YYYY HH')
         const foundIndex = monthData?.findIndex((item: any) => item.name === dateVal)
         if (foundIndex >= 0) {
           totalSum += (Number(cur.bet_value) + Number(!cur.isOponentBot && (cur.oponent_bet ?? 0))) / 1000

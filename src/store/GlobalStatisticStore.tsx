@@ -68,7 +68,7 @@ const Store = ({ children }: { children: ReactElement }) => {
 
   return (
     // eslint-disable-next-line react/jsx-filename-extension
-    <Context.Provider value={[value, setPeriod]}>
+    <Context.Provider value={[value, period, setPeriod]}>
         {children}
     </Context.Provider>
   )
