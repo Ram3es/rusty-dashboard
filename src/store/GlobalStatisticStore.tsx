@@ -12,14 +12,18 @@ const Store = ({ children }: { children: ReactElement }) => {
   const [period, setPeriod] = useState('Day')
   const [user] = useUserContext()
 
-  useEffect(() => {
-    if (user.isSystemConnect && Object.keys(state).length === 0) {
-      user.socket?.emit('admin:connect', {}, (data: any) => {
+  const getNewData = () => {
+    if (user.isSystemConnect) {
+      user.socket?.emit('admin:connect', { interval: period.toUpperCase(), qty: 1 }, (data: any) => {
         console.log(data, 'ADMIN CONNEC ')
         dispatch({ type: 'UPDATE', payload: data })
       })
     }
-  }, [user.isSystemConnect])
+  }
+
+  useEffect(() => {
+    getNewData()
+  }, [user.isSystemConnect, period])
 
   const value = useMemo(() => {
     if (state.data?.data) {
@@ -64,7 +68,7 @@ const Store = ({ children }: { children: ReactElement }) => {
     } else {
       return {}
     }
-  }, [state, period])
+  }, [state])
 
   return (
     // eslint-disable-next-line react/jsx-filename-extension
