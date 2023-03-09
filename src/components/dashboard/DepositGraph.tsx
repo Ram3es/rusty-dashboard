@@ -1,7 +1,6 @@
 import dayjs from 'dayjs'
 import { useContext, useEffect, useState } from 'react'
 import { TIME_OPTIONS } from '../../constants'
-import sortDataByDate from '../../helpers/sotingByDate'
 import { Context } from '../../store/GlobalStatisticStore'
 import Graph from '../base/Graph'
 import CryptoIcon from '../icons/CryptoIcon'
@@ -10,7 +9,7 @@ import SkinsIcon from '../icons/SkinsIcon'
 
 const DepositGraph = () => {
   /** @ts-expect-error */
-  const [state] = useContext(Context)
+  const [state, period] = useContext(Context)
   const [depositDataStatisticPeriod, setDepositDataStatisticPeriod] = useState(TIME_OPTIONS[0])
   const [titleData, setTitleData] = useState([{ name: 'deposit', value: 0, color: '#39C89D' }])
   const [dataDeposit, setDataDeposit] = useState<{ name: string, labels: any[], data: Array<{ name: string, value: number[], colors: Array<{ postitveColor: string }> }> }>({
@@ -48,12 +47,12 @@ const DepositGraph = () => {
   })
 
   useEffect(() => {
-    if (state?.data?.data) {
-      const { depositsItems, crypto, giftcards } = state.data.data
+    if (state?.dataCurrentPeriod) {
+      const { depositsItems, crypto, giftcards } = state.dataCurrentPeriod
       let totalSum = 0
       const monthData: any[] = []
       let daysStartIndex
-      switch (depositDataStatisticPeriod.name) {
+      switch (period) {
         case 'Month':
           daysStartIndex = -30
           break
@@ -66,7 +65,7 @@ const DepositGraph = () => {
       }
       for (let i = daysStartIndex; i <= 0; i++) {
         monthData.push({
-          name: depositDataStatisticPeriod.name !== 'Day' ? dayjs().add(i, 'day').format('MM/DD/YYYY') : dayjs().add(i, 'hour').format('MM/DD/YYYY HH'),
+          name: period !== 'Day' ? dayjs().add(i, 'day').format('MM/DD/YYYY') : dayjs().add(i, 'hour').format('MM/DD/YYYY HH'),
           value: [0, 0, 0],
           colors: [
             {
@@ -81,9 +80,9 @@ const DepositGraph = () => {
           ]
         })
       }
-      const sortedData = depositsItems && sortDataByDate(depositDataStatisticPeriod.name, [...depositsItems, ...crypto, ...giftcards])
-      sortedData?.currentPeriod.forEach((cur: any) => {
-        const dateVal = depositDataStatisticPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('MM/DD/YYYY') : dayjs(cur.timestamp).format('MM/DD/YYYY HH')
+      const sortedData = depositsItems && [...depositsItems, ...crypto, ...giftcards]
+      sortedData?.forEach((cur: any) => {
+        const dateVal = period !== 'Day' ? dayjs(cur.timestamp).format('MM/DD/YYYY') : dayjs(cur.timestamp).format('MM/DD/YYYY HH')
         const foundIndex = monthData?.findIndex((item: any) => item.name === dateVal)
         if (foundIndex >= 0) {
           totalSum += Number(cur.value) / 1000

@@ -3,7 +3,6 @@ import { DepositBase } from '../../types/Deposit'
 import { TimeOption } from '../../types/TimeOption'
 import { Context } from '../../store/GlobalStatisticStore'
 import PipeChartWithTable from '../PipeChartWithTable'
-import sortDataByDate from '../../helpers/sotingByDate'
 import { TIME_OPTIONS } from '../../constants'
 
 const depositOptions = ['deposit', 'withdraw']
@@ -16,42 +15,38 @@ const DepositAndWithdrawPipeChart = () => {
   const [state] = useContext(Context)
 
   useEffect(() => {
-    if (state?.data?.data) {
-      const { crypto, depositsItems, giftcards, trades } = state.data.data
+    if (state?.dataCurrentPeriod) {
+      const { crypto, depositsItems, giftcards, trades } = state.dataCurrentPeriod
       if (currentDepositSelect === 'deposit') {
-        const cryptoSortedByDate = sortDataByDate(selectedDepositPeriod.name, crypto ?? [])
-        const depositsSortedByDate = sortDataByDate(selectedDepositPeriod.name, depositsItems ?? [])
-        const giftcardsSortedByDate = sortDataByDate(selectedDepositPeriod.name, giftcards ?? [])
-        console.log('deposits in pie chart', depositsSortedByDate.currentPeriod)
+        console.log('deposits in pie chart', depositsItems)
         setDepositData([
           {
             name: 'skins',
-            value: depositsSortedByDate.currentPeriod.reduce((prev, cur) => {
+            value: depositsItems.reduce((prev: any, cur: { value: any }) => {
               const total = Number(cur.value) / 1000 + Number(prev)
               return total
             }, 0)
           },
           {
             name: 'gift cards',
-            value: giftcardsSortedByDate.currentPeriod.reduce((prev, cur) => {
+            value: giftcards.reduce((prev: any, cur: { value: any }) => {
               const total = Number(cur.value) / 1000 + Number(prev)
               return total
             }, 0)
           },
           {
             name: 'crypto',
-            value: cryptoSortedByDate.currentPeriod.reduce((prev, cur) => {
+            value: crypto.reduce((prev: any, cur: { value: any }) => {
               const total = Number(cur.value) / 1000 + Number(prev)
               return total
             }, 0)
           }
         ])
       } else {
-        const tragesSortedByDate = sortDataByDate(selectedDepositPeriod.name, trades ?? [])
         setDepositData([
           {
             name: 'skins',
-            value: tragesSortedByDate.currentPeriod.reduce((prev, cur) => {
+            value: trades.reduce((prev: any, cur: { type: string, value: any }) => {
               const total = cur.type === 'withdraw' ? Number(cur.value) / 1000 + Number(prev) : Number(prev)
               return total
             }, 0)

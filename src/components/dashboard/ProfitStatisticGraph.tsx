@@ -1,7 +1,6 @@
 import dayjs from 'dayjs'
 import { useState, useContext, useEffect } from 'react'
 import { getColorsArray, getGameIndex, getLabelsArray } from '../../helpers/gamesGetters'
-import sortDataByDate from '../../helpers/sotingByDate'
 import { Context } from '../../store/GlobalStatisticStore'
 import Graph from '../base/Graph'
 
@@ -18,9 +17,9 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
   const [graphMode, setGraphMode] = useState<string>('line graph')
 
   useEffect(() => {
-    if (state?.data?.data) {
-      console.log('state?.data?.data', state?.data?.data)
-      const { gameHistory, userBots, jackpots, coinflips, pvpMines } = state.data.data
+    console.log(state?.dataCurrentPeriod, '!!!!!!!!!!!')
+    if (state?.dataCurrentPeriod) {
+      const { gameHistory, userBots, jackpots, coinflips, pvpMines } = state.dataCurrentPeriod
       const monthData: any[] = []
       let historyData = [...gameHistory]
       const jackpotData = jackpots
@@ -72,7 +71,6 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       if (Array.isArray(userBots)) {
         sortedData = [...sortedData].filter((game: any) => userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)
       }
-      const wagersSortedByDate = sortDataByDate(selectedProfitPeriod.name, sortedData ?? [])
       switch (selectedProfitPeriod.name) {
         case 'Day':
           for (let i = 0; i <= 24; i++) {
@@ -102,9 +100,8 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
           }
           break
       }
-      console.log('wagersSortedByDate.currentPeriod!!!!', wagersSortedByDate.currentPeriod);
 
-      [...wagersSortedByDate.currentPeriod].forEach((cur: any) => {
+      [...sortedData].forEach((cur: any) => {
         const dateVal = selectedProfitPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('MM/DD/YYYY') : dayjs(cur.timestamp).format('MM/DD/YYYY HH')
         const foundIndex = monthData?.findIndex((item: any) => item.name === dateVal)
 
@@ -151,7 +148,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       })
       setProfitTitleData(prev => [{ ...prev[0], value: totalSum }])
     }
-  }, [state, selectedProfitPeriod, currentGame, graphMode])
+  }, [state, currentGame, graphMode])
   return (
     <>
       <Graph timePeriodOptions={periodOptions} currentTimePeriod={selectedProfitPeriod} changeTimePeriod={setSelectedProfitPeriod} data={dataProfit.data} names={profitTitleData} labels={dataProfit.labels} setGraphMode={setGraphMode} />

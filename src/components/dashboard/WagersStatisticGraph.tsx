@@ -1,7 +1,6 @@
 import dayjs from 'dayjs'
 import { useState, useContext, useEffect } from 'react'
 import { getColorsArray, getGameIndex, getLabelsArray } from '../../helpers/gamesGetters'
-import sortDataByDate from '../../helpers/sotingByDate'
 import { Context } from '../../store/GlobalStatisticStore'
 import Graph from '../base/Graph'
 
@@ -17,8 +16,8 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
   })
 
   useEffect(() => {
-    if (state?.data?.data) {
-      const { gameHistory, jackpots, coinflips, pvpMines, userBots } = state.data.data
+    if (state?.dataCurrentPeriod) {
+      const { gameHistory, jackpots, coinflips, pvpMines, userBots } = state.dataCurrentPeriod
       const monthData: any[] = []
       let totalSum = 0
       let sortedData = []
@@ -70,8 +69,6 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       if (Array.isArray(userBots)) {
         sortedData = [...sortedData].filter((game: any) => userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)
       }
-      const wagersSortedByDate = sortDataByDate(selectedWagersPeriod.name, sortedData ?? [])
-      console.log('wagersSortedByDate', wagersSortedByDate.currentPeriod)
       switch (selectedWagersPeriod.name) {
         case 'Day':
           for (let i = 0; i <= 24; i++) {
@@ -101,7 +98,7 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
           }
           break
       }
-      [...wagersSortedByDate.currentPeriod].forEach((cur: any) => {
+      [...sortedData].forEach((cur: any) => {
         const dateVal = selectedWagersPeriod.name !== 'Day' ? dayjs(cur.timestamp).format('MM/DD/YYYY') : dayjs(cur.timestamp).format('MM/DD/YYYY HH')
         const foundIndex = monthData?.findIndex((item: any) => item.name === dateVal)
         if (foundIndex >= 0) {
@@ -118,7 +115,7 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       })
       setWagersTitleData(prev => [{ ...prev[0], value: totalSum }])
     }
-  }, [state, selectedWagersPeriod, currentGame])
+  }, [state, currentGame])
   return (
     <>
       <Graph timePeriodOptions={periodOptions} currentTimePeriod={selectedWagersPeriod} changeTimePeriod={setSelectedWagersPeriod} data={dataWagers.data} names={wagersTitleData} labels={dataWagers.labels} />

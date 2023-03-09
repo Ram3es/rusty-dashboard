@@ -8,14 +8,18 @@ import DepositIcon from '../icons/DepositIcon'
 import DiceIcon from '../icons/DiceIcon'
 import StatisticIcon from '../icons/StatisticIcon'
 import { TimeOption } from '../../types/TimeOption'
-import sortDataByDate from '../../helpers/sotingByDate'
 import { TIME_OPTIONS } from '../../constants'
 
 const GeneralStatistic = () => {
   /** @ts-expect-error */
-  const [state] = useContext(Context)
+  const [state, setPeriod] = useContext(Context)
   const [generalStatistic, setGeneralStatistic] = useState<StatisticCartItem[]>([])
   const [selectedGeneralStatisticPeriod, setSelectedGeneralStatisticPeriod] = useState(TIME_OPTIONS[0])
+
+  const updateStatisticPeriod = (period: TimeOption) => {
+    setPeriod(period.name)
+    setSelectedGeneralStatisticPeriod(period)
+  }
 
   const getPercentages = (prev: number, cur: number) => {
     if (prev > 0 && cur > 0) {
@@ -35,92 +39,104 @@ const GeneralStatistic = () => {
     return [...users].filter(u => deposits?.findIndex(i => i.user_id === u.id) >= 0)
   }
 
+  const getJackpotObj = (game: any) => {
+    return {
+      bet_value: game.pot_value,
+      id: game.id,
+      mode: 'jackpot',
+      timestamp: game.timestamp,
+      userid: game.winner,
+      winnings: game.pot_value,
+      fee_items_value: game.fee_items_value
+    }
+  }
+
+  const getCoinflipObj = (game: any) => {
+    return {
+      bet_value: Number(game.creator_value),
+      oponent_bet: Number(game.opponent_value),
+      id: game.id,
+      mode: 'coinflip',
+      timestamp: game.timestamp,
+      fee_items_value: game.fee_items_value ?? 0,
+      isOponentBot: game.opponent_steamid === 'bot',
+      isBotWon: game.opponent_steamid === 'bot' && game.creator_side !== Number(game.winner_side)
+    }
+  }
+
+  const getPvpMinesOnj = (game: any) => {
+    return {
+      bet_value: game.value * (game.players - game.botqty),
+      oponent_bet: game.value * game.botqty,
+      id: game.id,
+      mode: 'pvp-mines',
+      timestamp: game.timestamp,
+      fee_items_value: 0.1 * game.value * (game.players - game.botqty),
+      isBotWon: game.winner === 0
+    }
+  }
+
   useEffect(() => {
-    if (state?.data?.data) {
-      console.log('dashboard data', state.data.data)
-      const { user, gameHistory, trades, jackpots, coinflips, pvpMines } = state.data.data
+    if (state?.dataCurrentPeriod) {
+      const { user, gameHistory, trades, jackpots, coinflips, pvpMines } = state.dataCurrentPeriod
       const deposit = trades.filter((t: any) => t.type === 'deposit')
+      const depositPrev = state.dataPrevPeriod.trades.filter((t: any) => t.type === 'deposit')
       let historyData = [...gameHistory]
       const jackpotData = jackpots
-        ? jackpots?.map((game: any) => {
-          return {
-            bet_value: game.pot_value,
-            id: game.id,
-            mode: 'jackpot',
-            timestamp: game.timestamp,
-            userid: game.winner,
-            winnings: game.pot_value,
-            fee_items_value: game.fee_items_value
-          }
-        })
+        ? jackpots?.map((game: any) => getJackpotObj(game))
         : []
       const coinflipData = coinflips
-        ? coinflips.map((game: any) => {
-          return {
-            bet_value: Number(game.creator_value),
-            oponent_bet: Number(game.opponent_value),
-            id: game.id,
-            mode: 'coinflip',
-            timestamp: game.timestamp,
-            fee_items_value: game.fee_items_value ?? 0,
-            isOponentBot: game.opponent_steamid === 'bot',
-            isBotWon: game.opponent_steamid === 'bot' && game.creator_side !== Number(game.winner_side)
-          }
-        })
+        ? coinflips.map((game: any) => getCoinflipObj(game))
         : []
-      const pvpMinesData = pvpMines.map((game: any) => {
-        return {
-          bet_value: game.value * (game.players - game.botqty),
-          oponent_bet: game.value * game.botqty,
-          id: game.id,
-          mode: 'pvp-mines',
-          timestamp: game.timestamp,
-          fee_items_value: 0.1 * game.value * (game.players - game.botqty),
-          isBotWon: game.winner === 0
-        }
-      })
+      const pvpMinesData = pvpMines.map((game: any) => getPvpMinesOnj(game))
       historyData = [...historyData, ...jackpotData, ...coinflipData, ...pvpMinesData]
-      const depositSortedByDate = sortDataByDate(selectedGeneralStatisticPeriod.name, deposit ?? [])
-      const sortedHistoryByDate = sortDataByDate(selectedGeneralStatisticPeriod.name, historyData ?? [])
-      const sortedUsersByDate = sortDataByDate(selectedGeneralStatisticPeriod.name, user ?? [])
-      const conversionedUsersCurrentPeriod = getConversionedUsers(sortedUsersByDate.currentPeriod, depositSortedByDate.currentPeriod)
-      const conversionedUsersPrevPeriod = getConversionedUsers(sortedUsersByDate.previousPeriod, depositSortedByDate.previousPeriod)
+      let historyDataPrev = [...state.dataPrevPeriod.gameHistory]
+      const jackpotDataPrev = state.dataPrevPeriod.jackpots
+        ? jackpots?.map((game: any) => getJackpotObj(game))
+        : []
+      const coinflipDataPrev = state.dataPrevPeriod.coinflips
+        ? coinflips.map((game: any) => getCoinflipObj(game))
+        : []
+      const pvpMinesDataPrev = state.dataPrevPeriod.pvpMines.map((game: any) => getPvpMinesOnj(game))
+      historyDataPrev = [...historyDataPrev, ...jackpotDataPrev, ...coinflipDataPrev, ...pvpMinesDataPrev]
+      const conversionedUsersCurrentPeriod = getConversionedUsers(user, deposit)
+      const conversionedUsersPrevPeriod = getConversionedUsers(state.dataPrevPeriod.user, state.dataPrevPeriod.deposit)
       let avarageBet = 0
       let avarageBetPrev = 0
       let avarageDepositCurrentPeriod = 0
       let avarageDepositPrevPeriod = 0
 
-      if (sortedHistoryByDate.currentPeriod.length > 0) {
-        avarageBet = sortedHistoryByDate.currentPeriod.reduce((prev, cur) => {
+      if (historyData.length > 0) {
+        avarageBet = historyData.reduce((prev, cur) => {
           const total = Number(cur.bet_value) + Number(prev)
           return total
-        }, 0) / sortedHistoryByDate.currentPeriod.length
+        }, 0) / historyData.length
       }
-      if (sortedHistoryByDate.previousPeriod.length > 0) {
-        avarageBetPrev = sortedHistoryByDate.previousPeriod.reduce((prev, cur) => {
+      if (historyDataPrev.length > 0) {
+        avarageBetPrev = historyDataPrev.reduce((prev, cur) => {
           const total = Number(cur.bet_value) + Number(prev)
           return total
-        }, 0) / sortedHistoryByDate.previousPeriod.length
+        }, 0) / historyDataPrev.length
       }
-      if (depositSortedByDate.currentPeriod.length > 0) {
-        avarageDepositCurrentPeriod = depositSortedByDate.currentPeriod.reduce((prev, cur) => {
+      if (deposit.length > 0) {
+        avarageDepositCurrentPeriod = deposit.reduce((prev: any, cur: { value: any }) => {
           const total = Number(cur.value) + Number(prev)
           return total
-        }, 0) / depositSortedByDate.currentPeriod.length
+        }, 0) / deposit.length
       }
-      if (depositSortedByDate.previousPeriod.length > 0) {
-        avarageDepositPrevPeriod = depositSortedByDate.previousPeriod.reduce((prev, cur) => {
+      if (depositPrev.length > 0) {
+        avarageDepositPrevPeriod = depositPrev.reduce((prev: any, cur: { value: any }) => {
           const total = Number(cur.value) + Number(prev)
           return total
-        }, 0) / depositSortedByDate.previousPeriod.length
+        }, 0) / depositPrev.length
       }
 
       setGeneralStatistic([
         {
           icon: <UsersIcon iconCalsses='w-4' />,
-          text: sortedUsersByDate.currentPeriod.length.toString(),
+          text: user.length.toString(),
           subtext: 'New Sign Ups',
-          percent: getPercentages(sortedUsersByDate.previousPeriod.length, sortedUsersByDate.currentPeriod.length)
+          percent: getPercentages(state.dataPrevPeriod.user.length, user.length)
         },
         {
           icon: <DepositIcon iconCalsses='w-5' />,
@@ -137,7 +153,7 @@ const GeneralStatistic = () => {
         },
         {
           icon: <StatisticIcon iconCalsses='w-4' />,
-          text: `${conversionedUsersCurrentPeriod.length !== 0 ? (conversionedUsersCurrentPeriod.length / sortedUsersByDate.currentPeriod.length * 100).toFixed(2) : 0}%`,
+          text: `${conversionedUsersCurrentPeriod.length !== 0 ? (conversionedUsersCurrentPeriod.length / user.length * 100).toFixed(2) : 0}%`,
           subtext: 'Conversion',
           percent: getPercentages(conversionedUsersPrevPeriod.length, conversionedUsersCurrentPeriod.length)
         }
@@ -151,7 +167,7 @@ const GeneralStatistic = () => {
         title="GENERAL STATISTICS"
         periodOptions={TIME_OPTIONS}
         selectedPeriod={selectedGeneralStatisticPeriod}
-        changePeriod={(option: TimeOption) => setSelectedGeneralStatisticPeriod(option)}
+        changePeriod={(option: TimeOption) => updateStatisticPeriod(option)}
         items={generalStatistic}
       />
     </>
