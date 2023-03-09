@@ -71,8 +71,6 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
       }
       if (Array.isArray(userBots)) {
         sortedData = [...sortedData].filter((game: any) => userBots?.findIndex((bot: any) => game.userid === bot.id) < 0)
-      } else {
-        console.log('PROFIT GRAPH userBots!!!!!!', userBots)
       }
       const wagersSortedByDate = sortDataByDate(selectedProfitPeriod.name, sortedData ?? [])
       switch (selectedProfitPeriod.name) {

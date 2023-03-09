@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { io } from 'socket.io-client'
 import { API_URLS } from '../constants'
@@ -10,26 +10,14 @@ import Game from '../routes/Games/Game'
 import Sponsee from '../routes/Sponsee'
 import Staff from '../routes/Staff'
 import Users from '../routes/Users'
-import { Context } from '../store/GlobalStatisticStore'
 import { useUserContext } from '../store/UserStore'
 import Login from './login/Login'
 
 let wasSocketCreated = false
 
 const RoutersContainer = () => {
-  /** @ts-expect-error */
-  const [state, dispatch] = useContext(Context)
   const [user, setUser] = useUserContext()
   const location = useLocation()
-
-  useEffect(() => {
-    if (user.isSystemConnect && Object.keys(state).length === 0) {
-      user.socket?.emit('admin:connect', {}, (data: any) => {
-        console.log(data, 'ADMIN CONNEC ')
-        dispatch({ type: 'UPDATE', payload: data })
-      })
-    }
-  }, [user.isSystemConnect])
 
   const verifyUser = async () => {
     try {
@@ -89,7 +77,7 @@ const RoutersContainer = () => {
     <div className={`flex flex-1 flex-col ${user.token ? 'pl-270px' : ''}`}>
       <main className="flex-1 min-h-screen">
         <Routes>
-          <Route path="/" element={<ProtectedRoute><Dashboard data={state} /></ProtectedRoute>} />
+          <Route path="/" element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />
           <Route path="/login" element={<Login />} />
           <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
           <Route path="/staff" element={<ProtectedRoute><Staff /></ProtectedRoute>} />

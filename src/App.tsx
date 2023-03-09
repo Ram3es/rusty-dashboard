@@ -3,7 +3,6 @@ import MenuDesktop from './components/nav/MenuDesktop'
 import DashboardIcon from './components/icons/DashboardIcon'
 import UsersIcon from './components/icons/UsersIcon'
 import RoutersContainer from './components/RoutersContainer'
-import Store from './store/GlobalStatisticStore'
 import StaffIcon from './components/icons/StaffIcon'
 import AffiliatesIcon from './components/icons/AffiliatesIcon'
 import BotsIcon from './components/icons/BotsIcon'
@@ -46,9 +45,7 @@ function App (): JSX.Element {
       <UserStore>
         <>
           <MenuDesktop navigation={navigation} />
-          <Store>
-            <RoutersContainer />
-          </Store>
+          <RoutersContainer />
         </>
       </UserStore>
     </HashRouter>
