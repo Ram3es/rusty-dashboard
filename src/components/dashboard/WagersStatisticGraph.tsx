@@ -31,7 +31,7 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
             timestamp: game.timestamp,
             userid: game.winner,
             winnings: game.pot_value,
-            fee_items_value: game.fee_items_value
+            fee_items_value: game.fee_items_value ?? 0
           }
         })
         : []

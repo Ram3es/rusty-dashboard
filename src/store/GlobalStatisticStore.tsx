@@ -14,7 +14,7 @@ const Store = ({ children }: { children: ReactElement }) => {
 
   const getNewData = () => {
     if (user.isSystemConnect) {
-      user.socket?.emit('admin:connect', { interval: period.toUpperCase(), qty: 1 }, (data: any) => {
+      user.socket?.emit('admin:connect', { qty: period === 'Day' ? 1 : period === 'Week' ? 7 : 30 }, (data: any) => {
         console.log(data, 'ADMIN CONNEC ')
         dispatch({ type: 'UPDATE', payload: data })
       })
@@ -33,7 +33,7 @@ const Store = ({ children }: { children: ReactElement }) => {
       const depositsSortedByDate = sortDataByDate(period, depositsItems ?? [])
       const giftcardsSortedByDate = sortDataByDate(period, giftcards ?? [])
       const tragesSortedByDate = sortDataByDate(period, trades ?? [])
-      const sortedHistoryByDate = sortDataByDate(period, gameHistory ?? [])
+      const sortedHistoryByDate = sortDataByDate(period, [...gameHistory].filter(game => game.mode !== 'coinflip' && game.mode !== 'jackpot' && game.mode !== 'pvp-mines') ?? [])
       const sortedUsersByDate = sortDataByDate(period, user ?? [])
       const sortedJackpotsByDate = sortDataByDate(period, jackpots ?? [])
       const sortedCoinflipsByDate = sortDataByDate(period, coinflips ?? [])

@@ -31,7 +31,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
             timestamp: game.timestamp,
             userid: game.winner,
             winnings: game.pot_value,
-            fee_items_value: game.fee_items_value
+            fee_items_value: game.fee_items_value ?? 0
           }
         })
         : []
@@ -108,13 +108,13 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
         if (foundIndex >= 0) {
           if (cur.mode === 'jackpot') {
             totalSum += Number(cur.fee_items_value ?? 0) / 1000
-            monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)]) + (Number(cur.fee_items_value) / 1000)
+            monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)]) + (Number(cur.fee_items_value ?? 0) / 1000)
           } else if (cur.mode === 'pvp-mines') {
             let profit = 0
             if (cur.isBotWon) {
               profit = cur.bet_value
             } else {
-              profit = cur.fee_items_value - cur.oponent_bet
+              profit = (cur.fee_items_value ?? 0) - cur.oponent_bet
             }
             totalSum += profit / 1000
             monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)]) + (profit / 1000)
@@ -123,14 +123,14 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
             if (cur.isBotWon) {
               profit = cur.bet_value
             } else if (!cur.isOponentBot) {
-              profit = cur.fee_items_value
+              profit = cur.fee_items_value ?? 0
             } else {
-              profit = cur.fee_items_value - cur.oponent_bet
+              profit = (cur.fee_items_value ?? 0) - cur.oponent_bet
             }
             totalSum += profit / 1000
             monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)]) + (profit / 1000)
           } else {
-            totalSum += (Number(cur.bet_value) - Number(cur.winnings)) / 1000
+            totalSum += parseFloat(((Number(cur.bet_value) - Number(cur.winnings)) / 1000).toFixed(2))
             monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)]) + ((Number(cur.bet_value) - Number(cur.winnings)) / 1000)
           }
         }
