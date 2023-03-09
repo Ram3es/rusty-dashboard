@@ -112,7 +112,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
 
         if (foundIndex >= 0) {
           if (cur.mode === 'jackpot') {
-            totalSum += Number(cur.fee_items_value) / 1000
+            totalSum += Number(cur.fee_items_value ?? 0) / 1000
             monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)] = Number(monthData[foundIndex].value[currentGame === 'all' && graphMode !== 'line graph' ? 0 : getGameIndex(currentGame, cur.mode)]) + (Number(cur.fee_items_value) / 1000)
           } else if (cur.mode === 'pvp-mines') {
             let profit = 0
