@@ -101,7 +101,7 @@ const GeneralStatistic = () => {
       const pvpMinesDataPrev = state.dataPrevPeriod.pvpMines.map((game: any) => getPvpMinesOnj(game))
       historyDataPrev = [...historyDataPrev, ...jackpotDataPrev, ...coinflipDataPrev, ...pvpMinesDataPrev]
       const conversionedUsersCurrentPeriod = getConversionedUsers(user, deposit)
-      const conversionedUsersPrevPeriod = getConversionedUsers(state.dataPrevPeriod.user, state.dataPrevPeriod.deposit)
+      const conversionedUsersPrevPeriod = getConversionedUsers(state.dataPrevPeriod.user, depositPrev)
       let avarageBet = 0
       let avarageBetPrev = 0
       let avarageDepositCurrentPeriod = 0
