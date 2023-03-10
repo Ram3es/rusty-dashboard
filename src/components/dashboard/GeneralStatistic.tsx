@@ -79,6 +79,7 @@ const GeneralStatistic = () => {
   useEffect(() => {
     if (state?.dataCurrentPeriod) {
       const { user, gameHistory, trades, jackpots, coinflips, pvpMines } = state.dataCurrentPeriod
+      console.log(state.dataCurrentPeriod, 'USER')
       const deposit = trades.filter((t: any) => t.type === 'deposit')
       const depositPrev = state.dataPrevPeriod.trades.filter((t: any) => t.type === 'deposit')
       let historyData = [...gameHistory]

@@ -4,7 +4,7 @@ import AffilateUserStatistics from '../../components/affiliate/AffiliateUserStat
 import AffiliateMainItemStatistics from '../../components/affiliate/AffiliateMainItemStatistics'
 import DepositBreakdown from '../../components/affiliate/DepositBreakdown'
 import GraphAffilateStatistic from '../../components/affiliate/GraphAffilateStatistic'
-import DepositAndWithdrawPipeChart from '../../components/dashboard/DepositAndWithdrawPipeChart'
+// import DepositAndWithdrawPipeChart from '../../components/dashboard/DepositAndWithdrawPipeChart'
 // import Graph from '../../components/base/Graph'
 import UserSearch from '../../components/users/UserSearch'
 
@@ -35,7 +35,7 @@ const Affiliateitem = () => {
           />
         </div>
         <div className='col-span-6 2xl:col-span-3 rounded-lg bg-dark-1 p-8'>
-          <DepositAndWithdrawPipeChart />
+          {/* <DepositAndWithdrawPipeChart /> */}
         </div>
         <div className="col-span-6 2xl:col-span-3 rounded-lg bg-dark-1">
           <GraphAffilateStatistic

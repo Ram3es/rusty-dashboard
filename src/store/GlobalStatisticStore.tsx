@@ -3,6 +3,21 @@ import sortDataByDate from '../helpers/sotingByDate'
 import Reducer from './GlobalStatisticReducer'
 import { useUserContext } from './UserStore'
 
+interface GlobalStatisticData {
+  excluded?: any
+  liveTrades?: any
+  online?: any
+  coinflips: any[]
+  crypto: any[]
+  depositsItems: any[]
+  gameHistory: any[]
+  giftcards: any[]
+  jackpots: any[]
+  pvpMines: any[]
+  trades: any[]
+  user: any[]
+}
+
 const initialState = {}
 
 export const Context = createContext(initialState)
@@ -23,12 +38,11 @@ const Store = ({ children }: { children: ReactElement }) => {
 
   useEffect(() => {
     getNewData()
-  }, [user.isSystemConnect, period])
+  }, [period])
 
-  const value = useMemo(() => {
+  const value: { dataCurrentPeriod: GlobalStatisticData, dataPrevPeriod: GlobalStatisticData } | undefined = useMemo(() => {
     if (state.data?.data) {
-      console.log(state, 'state!!!!!!!!!!')
-      const { crypto, depositsItems, giftcards, trades, gameHistory, jackpots, coinflips, pvpMines } = state.data.data
+      const { crypto, depositsItems, giftcards, trades, gameHistory, jackpots, coinflips, pvpMines, user }: GlobalStatisticData = state.data.data
       const cryptoSortedByDate = sortDataByDate(period, crypto ?? [])
       const depositsSortedByDate = sortDataByDate(period, depositsItems ?? [])
       const giftcardsSortedByDate = sortDataByDate(period, giftcards ?? [])
@@ -65,8 +79,6 @@ const Store = ({ children }: { children: ReactElement }) => {
           user: sortedUsersByDate.previousPeriod ?? []
         }
       }
-    } else {
-      return {}
     }
   }, [state])
 
