@@ -4,7 +4,17 @@ import CoinceImage from '../../assets/coins.png'
 import InputWithLabel from '../base/InputWithLabel'
 import { Link } from 'react-router-dom'
 
-const AffiliateStatistics = ({ name }: { name: string }) => {
+interface affiliateStatisticItem {
+  codeName: string
+  codeClaims: number
+  depositors: number
+  wagered: number
+  gameDeposits: number
+  shopDeposits: number
+  totalDeposits: number
+}
+
+const AffiliateStatistics = ({ affiliatesData }: { affiliatesData: affiliateStatisticItem[] }) => {
   const [searchObj, setSearchObj] = useState<{ col3: string | number }>({
     col3: ''
   })
@@ -20,42 +30,42 @@ const AffiliateStatistics = ({ name }: { name: string }) => {
   }
 
   const getPriceFormated = (value: number) => {
-    return (<div className='flex items-center gap-2 text-white'><img src={CoinceImage} /> <span>{value}</span></div>)
+    return (<div className='flex items-center gap-2 text-white'><img src={CoinceImage} /> <span>{value.toLocaleString('en-US')}</span></div>)
   }
 
   const columns = useMemo(
     () => [
       {
         header: 'Code name',
-        accessor: 'col1',
+        accessor: 'codeName',
         Cell: (props: any) => getCodeWithLink(props.value)
       },
       {
         header: 'Code Claims',
-        accessor: 'col2'
+        accessor: 'codeClaims'
       },
       {
         header: 'Depositors',
-        accessor: 'col3'
+        accessor: 'depositors'
       },
       {
         header: 'Wagered',
-        accessor: 'col4',
+        accessor: 'wagered',
         Cell: (props: any) => getPriceFormated(props.value)
       },
       {
         header: 'Game Deposits',
-        accessor: 'col5',
+        accessor: 'gameDeposits',
         Cell: (props: any) => getPriceFormated(props.value)
       },
       {
         header: 'Shop Deposits',
-        accessor: 'col6',
+        accessor: 'shopDeposits',
         Cell: (props: any) => getPriceFormated(props.value)
       },
       {
         header: 'Total Deposits',
-        accessor: 'col7',
+        accessor: 'totalDeposits',
         Cell: (props: any) => getPriceFormated(props.value)
       }
     ],
@@ -63,72 +73,8 @@ const AffiliateStatistics = ({ name }: { name: string }) => {
   )
 
   const data = useMemo(
-    () => [
-      {
-        col1: 'SebManChild1',
-        col2: 13430,
-        col3: 31462,
-        col4: '4,631,203,301',
-        col5: '765,837,203',
-        col6: '493,393,734',
-        col7: '1,259,230,937'
-      },
-      {
-        col1: 'SebManChild2',
-        col2: 13430,
-        col3: 31462,
-        col4: '4,631,203,301',
-        col5: '765,837,203',
-        col6: '493,393,734',
-        col7: '1,259,230,937'
-      },
-      {
-        col1: 'SebManChild',
-        col2: 13430,
-        col3: 31462,
-        col4: '4,631,203,301',
-        col5: '765,837,203',
-        col6: '493,393,734',
-        col7: '1,259,230,937'
-      },
-      {
-        col1: 'SebManChild',
-        col2: 13430,
-        col3: 31462,
-        col4: '4,631,203,301',
-        col5: '765,837,203',
-        col6: '493,393,734',
-        col7: '1,259,230,937'
-      },
-      {
-        col1: 'SebManChild',
-        col2: 13430,
-        col3: 31462,
-        col4: '4,631,203,301',
-        col5: '765,837,203',
-        col6: '493,393,734',
-        col7: '1,259,230,937'
-      },
-      {
-        col1: 'SebManChild',
-        col2: 13430,
-        col3: 31462,
-        col4: '4,631,203,301',
-        col5: '765,837,203',
-        col6: '493,393,734',
-        col7: '1,259,230,937'
-      },
-      {
-        col1: 'SebManChild',
-        col2: 13430,
-        col3: 31462,
-        col4: '4,631,203,301',
-        col5: '765,837,203',
-        col6: '493,393,734',
-        col7: '1,259,230,937'
-      }
-    ],
-    []
+    (): affiliateStatisticItem[] => affiliatesData,
+    [affiliatesData]
   )
 
   return (
@@ -136,7 +82,7 @@ const AffiliateStatistics = ({ name }: { name: string }) => {
       <div className='flex flex-col justify-between h-full rounded-lg bg-dark-1 px-8 py-10'>
         <div className='w-full'>
           <div className='flex justify-between items-center mb-6'>
-            <h4 className='text-white uppercase text-2xl'>{name}</h4>
+            <h4 className='text-white uppercase text-2xl'>AFFILIATE STATISTICS</h4>
             <div className='flex gap-6'>
               <InputWithLabel type='text' value={searchObj.col3} name="steamId" changeFunction={updateSearch} placeholder="Search By Steam ID" />
             </div>

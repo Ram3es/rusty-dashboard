@@ -148,7 +148,7 @@ const Sponsee = () => {
   }
 
   useEffect(() => {
-    if (!tableData) {
+    if (!tableData && user.isSystemConnect) {
       user.socket?.emit('admin:groups', {}, (data: any) => {
         if (data?.data) {
           const groups = data?.data?.map((group: any) => ({
@@ -175,7 +175,7 @@ const Sponsee = () => {
         }
       })
     }
-  }, [tableData])
+  }, [tableData, user])
 
   const createGroupFn = (name: string) => {
     user.socket?.emit('admin:group:create', { name }, (data: any) => {
