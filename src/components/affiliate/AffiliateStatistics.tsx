@@ -5,7 +5,10 @@ import InputWithLabel from '../base/InputWithLabel'
 import { Link } from 'react-router-dom'
 
 interface affiliateStatisticItem {
-  codeName: string
+  codeName: {
+    name: string
+    id: string
+  }
   codeClaims: number
   depositors: number
   wagered: number
@@ -25,8 +28,11 @@ const AffiliateStatistics = ({ affiliatesData }: { affiliatesData: affiliateStat
     })
   }
 
-  const getCodeWithLink = (value: string) => {
-    return <Link to={`/affiliates/${value}`}>{value}</Link>
+  const getCodeWithLink = (value: {
+    name: string
+    id: string
+  }) => {
+    return <Link to={`/affiliates/${value.id}`}>{value.name}</Link>
   }
 
   const getPriceFormated = (value: number) => {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { TIME_OPTIONS } from '../../constants'
 import { StatisticCartItem } from '../../types/StatisticCartItem'
 import { TimeOption } from '../../types/TimeOption'
@@ -11,59 +11,53 @@ import LinkIcon from '../icons/LinkIcon'
 import SponseeIcon from '../icons/SponseeIcon'
 import WalletIcon from '../icons/WalletIcon'
 import EditAffiliateCode from '../pop-up/EditAffiliateCode'
+import { generalInfoObj } from '../../types/Afiliates'
 
-const AffiliateMainItemStatistics = () => {
+const AffiliateMainItemStatistics = ({ generalInfoObj }: { generalInfoObj: generalInfoObj }): JSX.Element => {
   const [selectedGeneralStatisticPeriod, setSelectedGeneralStatisticPeriod] = useState(TIME_OPTIONS[0])
-  const [generalStatistic, setGeneralStatistic] = useState<StatisticCartItem[]>([])
   const [editedUser, setEditedUSer] = useState<User>()
 
   const editFunction = () => {
-    setEditedUSer({
-      name: 'Some user',
-      email: 'test@test.test',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-    })
+    setEditedUSer(generalInfoObj.user)
   }
 
-  useEffect(() => {
-    setGeneralStatistic([
-      {
-        text: 'Grodslaktaren',
-        subtext: 'Code',
-        icon: <LinkIcon iconCalsses='w-4'/>,
-        canEdit: true,
-        editFunction: () => editFunction()
-      },
-      {
-        text: '21 355',
-        subtext: 'Claims',
-        icon: <CheckIcon iconCalsses='w-5'/>
-      },
-      {
-        text: '14 324',
-        subtext: 'Depositors',
-        icon: <SponseeIcon iconCalsses='w-7'/>
-      },
-      {
-        text: '101,386,222',
-        isCoinceValue: true,
-        subtext: 'Total Deposited',
-        icon: <DownloadIcon iconCalsses='w-4'/>
-      },
-      {
-        text: '101,386',
-        isCoinceValue: true,
-        subtext: 'Earnings',
-        icon: <CoinceIcon iconCalsses='w-5'/>
-      },
-      {
-        text: '351,386',
-        isCoinceValue: true,
-        subtext: 'Current Balance',
-        icon: <WalletIcon iconCalsses='w-5'/>
-      }
-    ])
-  }, [])
+  const generalStatistic = useMemo((): StatisticCartItem[] => [
+    {
+      text: generalInfoObj.statistic.code,
+      subtext: 'Code',
+      icon: <LinkIcon iconCalsses='w-4'/>,
+      canEdit: true,
+      editFunction: () => editFunction()
+    },
+    {
+      text: generalInfoObj.statistic.claims,
+      subtext: 'Claims',
+      icon: <CheckIcon iconCalsses='w-5'/>
+    },
+    {
+      text: generalInfoObj.statistic.depositors,
+      subtext: 'Depositors',
+      icon: <SponseeIcon iconCalsses='w-7'/>
+    },
+    {
+      text: generalInfoObj.statistic.totalDeposited,
+      isCoinceValue: true,
+      subtext: 'Total Deposited',
+      icon: <DownloadIcon iconCalsses='w-4'/>
+    },
+    {
+      text: generalInfoObj.statistic.earnings,
+      isCoinceValue: true,
+      subtext: 'Earnings',
+      icon: <CoinceIcon iconCalsses='w-5'/>
+    },
+    {
+      text: generalInfoObj.statistic.currentBalance,
+      isCoinceValue: true,
+      subtext: 'Current Balance',
+      icon: <WalletIcon iconCalsses='w-5'/>
+    }
+  ], [generalInfoObj])
 
   return (<>
     <CardsStatistic
@@ -72,11 +66,7 @@ const AffiliateMainItemStatistics = () => {
       selectedPeriod={selectedGeneralStatisticPeriod}
       changePeriod={(option: TimeOption) => setSelectedGeneralStatisticPeriod(option)}
       items={generalStatistic}
-      user={{
-        name: 'Some user',
-        email: 'test@test.test',
-        avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-      }}
+      user={generalInfoObj.user}
     />
     <EditAffiliateCode user={editedUser} />
     </>
