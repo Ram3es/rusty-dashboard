@@ -54,7 +54,7 @@ interface IAffiliatesAllStatistic {
 
 const Affiliates = () => {
   const [user] = useUserContext()
-  const [pageSize, setPageSize] = useState<{ limit: number, offset: number }>({ limit: 10, offset: 0 })
+  const [pageSize, setPageSize] = useState<{ limit: number, page: number }>({ limit: 10, page: 0 })
   const [countOfPages, setCountOfPages] = useState<number>()
   const [data, setData] = useState<affiliateStatisticItem[]>([])
   const navigate = useNavigate()
@@ -65,7 +65,7 @@ const Affiliates = () => {
   }
 
   const updateStatisticObj = () => {
-    user.socket?.emit('admin:affiliate:all', { ...pageSize }, (data: IAffiliatesAllStatistic) => {
+    user.socket?.emit('admin:affiliate:all', { limit: pageSize.limit, offset: pageSize.limit * pageSize.page }, (data: IAffiliatesAllStatistic) => {
       if (!data?.error) {
         console.log(data?.data)
         let codes: affiliateStatisticItem[] = []
@@ -127,13 +127,13 @@ const Affiliates = () => {
                   return (
                     <button
                       className={`${
-                        pageSize.offset === value
+                        pageSize.page === value
                           ? 'bg-yellow-f text-black'
                           : 'bg-dark-1f text-gray-6'
                       } text-sm flex w-8 h-8 items-center justify-center rounded`}
                       key={i}
-                      onClick={() => setPageSize(() => ({ limit: 10, offset: value }))}
-                      disabled={pageSize.offset === value}
+                      onClick={() => setPageSize(() => ({ limit: 10, page: value }))}
+                      disabled={pageSize.page === value}
                     >
                       {value + 1}
                     </button>
