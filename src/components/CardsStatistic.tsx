@@ -6,7 +6,7 @@ import { User } from '../types/User'
 import StatisticCart from './base/StatisticCart'
 import ArrowIcon from './icons/ArrowIcon'
 
-const CardsStatistic = ({ title, periodOptions, selectedPeriod, changePeriod, items, user }: { title?: string, periodOptions: TimeOption[], selectedPeriod: TimeOption, changePeriod: any, items: StatisticCartItem[], user?: User }) => {
+const CardsStatistic = ({ title, periodOptions, selectedPeriod, changePeriod, items, user }: { title?: string, periodOptions: TimeOption[], selectedPeriod: TimeOption, changePeriod: any, items?: StatisticCartItem[], user?: User }) => {
   return (
     <>
       <div className="flex justify-between w-full mb-6">
@@ -44,9 +44,11 @@ const CardsStatistic = ({ title, periodOptions, selectedPeriod, changePeriod, it
           </Listbox>
         </div>
       </div>
-      <div className='flex gap-10 flex-wrap justify-start'>
+      {items
+        ? <div className='flex gap-10 flex-wrap justify-start'>
           {items.map((item, index) => <StatisticCart key={index} item={item} />)}
       </div>
+        : ''}
     </>
   )
 }

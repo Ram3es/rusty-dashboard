@@ -1,10 +1,9 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import Table from '../base/Table'
 import CoinceImage from '../../assets/coins.png'
-import InputWithLabel from '../base/InputWithLabel'
 import { Link } from 'react-router-dom'
 
-interface affiliateStatisticItem {
+export interface affiliateStatisticItem {
   codeName: {
     name: string
     id: string
@@ -18,21 +17,21 @@ interface affiliateStatisticItem {
 }
 
 const AffiliateStatistics = ({ affiliatesData }: { affiliatesData: affiliateStatisticItem[] }) => {
-  const [searchObj, setSearchObj] = useState<{ col3: string | number }>({
-    col3: ''
-  })
+  // const [searchObj, setSearchObj] = useState<{ col3: string | number }>({
+  //   col3: ''
+  // })
 
-  const updateSearch = (name: string, value: string | number) => {
-    setSearchObj(() => {
-      return { col3: value }
-    })
-  }
+  // const updateSearch = (name: string, value: string | number) => {
+  //   setSearchObj(() => {
+  //     return { col3: value }
+  //   })
+  // }
 
   const getCodeWithLink = (value: {
     name: string
     id: string
   }) => {
-    return <Link to={`/affiliates/${value.id}`}>{value.name}</Link>
+    return <Link to={`/affiliates/id/${value.id}`}>{value.name}</Link>
   }
 
   const getPriceFormated = (value: number) => {
@@ -85,16 +84,16 @@ const AffiliateStatistics = ({ affiliatesData }: { affiliatesData: affiliateStat
 
   return (
     <>
-      <div className='flex flex-col justify-between h-full rounded-lg bg-dark-1 px-8 py-10'>
+      <div className='flex flex-col justify-between h-full rounded-lg bg-dark-1'>
         <div className='w-full'>
           <div className='flex justify-between items-center mb-6'>
             <h4 className='text-white uppercase text-2xl'>AFFILIATE STATISTICS</h4>
-            <div className='flex gap-6'>
+            {/* <div className='flex gap-6'>
               <InputWithLabel type='text' value={searchObj.col3} name="steamId" changeFunction={updateSearch} placeholder="Search By Steam ID" />
-            </div>
+            </div> */}
           </div>
           <div className='w-full flex flex-col mb-4'>
-            <Table columns={columns} data={data} />
+            <Table columns={columns} data={data} itemsNumberOnPage={10} />
           </div>
         </div>
       </div>

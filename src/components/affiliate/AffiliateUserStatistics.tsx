@@ -1,21 +1,23 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { User } from '../../types/User'
 import Select from '../base/Select'
 import Table from '../base/Table'
 import CoinceImage from '../../assets/coins.png'
 import UserAvatarWithName from '../base/UserAvatarWithName'
+import { affiliateDataObj, gameModes } from '../../types/Afiliates'
 
 const options = [
-  { id: 1, name: 'Show 10', unavailable: false },
-  { id: 2, name: 'Show 25', unavailable: false },
-  { id: 3, name: 'Show 50', unavailable: false },
-  { id: 4, name: 'Show 100', unavailable: false }
+  { id: 1, name: 'Show 10', unavailable: false, length: 10 },
+  { id: 2, name: 'Show 25', unavailable: false, length: 25 },
+  { id: 3, name: 'Show 50', unavailable: false, length: 50 },
+  { id: 4, name: 'Show 100', unavailable: false, length: 100 }
 ]
 
-const AffilateUserStatistics = () => {
+const AffilateUserStatistics = ({ userData }: { userData?: affiliateDataObj }) => {
+  const [tableLength, setTableLength] = useState<number>(10)
   const onSelected = (option: string) => {
+    setTableLength(options.find(item => item.name === option)?.length ?? 0)
   }
-
   const getUserComponent = (user: User) => <UserAvatarWithName user={user}/>
 
   const getPriceFormated = (value: number) => {
@@ -58,65 +60,41 @@ const AffilateUserStatistics = () => {
   ], [])
 
   const data = useMemo(
-    () => [
-      {
-        col1: { name: 'DerWeißWizard', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
-        col2: '34523423',
-        col3: '4,631,203,301',
-        col4: '765,837,203',
-        col5: '493,393,734',
-        col6: '1,259,230,937'
-      },
-      {
-        col1: { name: 'DerWeißWizard', avatar: '' },
-        col2: '34523423',
-        col3: '4,631,203,301',
-        col4: '765,837,203',
-        col5: '493,393,734',
-        col6: '1,259,230,937'
-      },
-      {
-        col1: { name: 'Iaharsonnya', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
-        col2: '34523423',
-        col3: '4,631,203,301',
-        col4: '765,837,203',
-        col5: '493,393,734',
-        col6: '1,259,230,937'
-      },
-      {
-        col1: { name: 'DerWeißWizard', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
-        col2: '34523423',
-        col3: '4,631,203,301',
-        col4: '765,837,203',
-        col5: '493,393,734',
-        col6: '1,259,230,937'
-      },
-      {
-        col1: { name: 'DerWeißWizard', avatar: 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80' },
-        col2: '34523423',
-        col3: '4,631,203,301',
-        col4: '765,837,203',
-        col5: '493,393,734',
-        col6: '1,259,230,937'
-      },
-      {
-        col1: { name: 'DerWeißWizard' },
-        col2: '34523423',
-        col3: '4,631,203,301',
-        col4: '765,837,203',
-        col5: '493,393,734',
-        col6: '1,259,230,937'
-      },
-      {
-        col1: { name: 'DerWeißWizard' },
-        col2: '34523423',
-        col3: '4,631,203,301',
-        col4: '765,837,203',
-        col5: '493,393,734',
-        col6: '1,259,230,937'
-      }
-    ],
-    []
+    () => Array.isArray(userData?.data?.claimed)
+      ? userData?.data?.claimed.map(user => {
+        const shopDeposits: number = userData?.data?.giftcardAndDeposit && Array.isArray(userData?.data?.giftcardAndDeposit)
+          ? [...userData?.data?.giftcardAndDeposit]
+              .filter(deposit => user.id === deposit.userid)
+              .reduce((prev, deposit) => (prev += deposit.value), 0)
+          : 0
+        const jackpotAndCoinflipDeposits = userData?.data?.coinflipAndJackpots && Array.isArray(userData?.data?.coinflipAndJackpots)
+          ? [...userData?.data?.coinflipAndJackpots]
+              .filter(game => (game.mode === gameModes.COINFLIP || game.mode === gameModes.JACKPOT) && game.userid === user.id)
+              .reduce((prev, game) => (prev += game.bet_value), 0)
+          : 0
+        const cryptoDeposit: number = userData?.data && Array.isArray(userData?.data?.cryptoRes)
+          ? [...userData?.data?.cryptoRes]
+              .filter(deposit => user.id === deposit.user_id)
+              .reduce((prev, deposit) => (prev += deposit.value), 0)
+          : 0
+        return {
+          col1: {
+            name: user.username,
+            avatar: user.avatar
+          },
+          col2: user.id,
+          col3: userData?.data?.coinflipAndJackpots && Array.isArray(userData?.data?.coinflipAndJackpots)
+            ? userData?.data?.coinflipAndJackpots
+              .reduce((prev, game) => game.userid === user.id ? (prev += game.bet_value) : prev, 0)
+              .toLocaleString('en-US')
+            : 0,
+          col4: jackpotAndCoinflipDeposits.toLocaleString('en-US'),
+          col5: (shopDeposits + cryptoDeposit).toLocaleString('en-US'),
+          col6: (shopDeposits + cryptoDeposit + jackpotAndCoinflipDeposits).toLocaleString('en-US')
+        }
+      }) ?? []
+      : [],
+    [userData]
   )
 
   return (
@@ -126,7 +104,7 @@ const AffilateUserStatistics = () => {
         <Select options={options} onChange={onSelected} />
       </div>
       <div className='w-full flex flex-col mb-4'>
-        <Table columns={columns} data={data} />
+        <Table columns={columns} data={data} itemsNumberOnPage={tableLength} />
       </div>
 </div>
   )

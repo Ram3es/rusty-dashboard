@@ -9,3 +9,10 @@ export const TIME_OPTIONS: TimeOption[] = [
   { id: 2, name: 'Week', unavailable: false },
   { id: 3, name: 'Month', unavailable: false }
 ]
+
+export const TIME_OPTIONS_AFFILIEATES: TimeOption[] = [
+  { id: 1, name: 'Day', unavailable: false, days: 1 },
+  { id: 2, name: 'Week', unavailable: false, days: 7 },
+  { id: 3, name: 'Month', unavailable: false, days: 30 }
+  // { id: 4, name: 'All', unavailable: false, days: 999 }
+]

@@ -82,7 +82,7 @@ const RoutersContainer = () => {
           <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
           <Route path="/staff" element={<ProtectedRoute><Staff /></ProtectedRoute>} />
           <Route path="/affiliates" element={<ProtectedRoute><Affiliates /></ProtectedRoute>} />
-          <Route path="/affiliates/:name" element={<ProtectedRoute><Affiliateitem /></ProtectedRoute>} />
+          <Route path="/affiliates/:type/:value" element={<ProtectedRoute><Affiliateitem /></ProtectedRoute>} />
           <Route path="/bots" element={<ProtectedRoute><Bots /></ProtectedRoute>} />
           <Route path="/sponsee" element={<ProtectedRoute><Sponsee /></ProtectedRoute>} />
           <Route path="/game/:game" element={<ProtectedRoute><Game /></ProtectedRoute>} />

@@ -1,1 +1,1 @@
-export interface TimeOption { name: string, id: string | number, unavailable: boolean }
+export interface TimeOption { name: string, id: string | number, unavailable: boolean, days?: number }

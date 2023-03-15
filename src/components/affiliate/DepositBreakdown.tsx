@@ -1,6 +1,5 @@
 
 import { useMemo } from 'react'
-import Select from '../base/Select'
 import Table from '../base/Table'
 import CoinceImage from '../../assets/coins.png'
 import JackpotIcon from '../icons/JackpotIcon'
@@ -21,10 +20,7 @@ const icons = [{
 }
 ]
 
-const DepositBreakdown = () => {
-  const onSelected = (option: string) => {
-  }
-
+const DepositBreakdown = ({ data }: { data: Array<{ col1: string, col2: string }> }) => {
   const getMethod = (value: string) => {
     const icon = icons.find(item => value.toLowerCase().startsWith(item.name))?.icon
     return (
@@ -57,35 +53,10 @@ const DepositBreakdown = () => {
 
   ], [])
 
-  const data = useMemo(() => [
-    {
-      col1: 'Jackpot Deposit',
-      col2: '33,741'
-    },
-    {
-      col1: 'Coinflip Despoit',
-      col2: '341,384'
-    },
-    {
-      col1: 'Shop Deposit Rust Skins',
-      col2: '81,384'
-    },
-    {
-      col1: 'Shop Deposits Cryptocurrency',
-      col2: '341,384'
-    },
-    {
-      col1: 'Shop Deposits Giftcards',
-      col2: '81,384'
-    }
-
-  ], [])
-
   return (
         <div>
             <div className='flex justify-between'>
               <h4 className='text-white uppercase text-2xl'>Deposit Breakdown</h4>
-              <Select onChange={onSelected} />
             </div>
             <div className='w-full flex flex-col mb-4'>
               <Table columns={columns} data={data} />

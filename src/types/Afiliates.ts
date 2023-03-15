@@ -1,14 +1,32 @@
 import { User } from './User'
 
-enum depositType {
+export enum depositType {
   GIFTCARD = 'deposit-giftcards',
   STEAM = 'steam-deposit'
+}
+
+export enum gameModes {
+  COINFLIP = 'coinflip',
+  JACKPOT = 'jackpot',
+  MINES = 'mines',
+  PLINKO = 'plinko',
+  PVP_MINES = 'pvp-mines',
+  UPGRADER = 'upgrader',
+  WHEEL = 'wheel',
 }
 
 export interface affiliateDataObj {
   error: boolean
   data?: {
-    codeData: {
+    claimed: Array<{
+      code: string
+      id: number
+      steamid: string
+      username: string
+      timestamp: string
+      avatar: string
+    }> | false
+    codeData: Array<{
       avatar: string
       balance: number // allow to claim
       code: string // name
@@ -18,10 +36,11 @@ export interface affiliateDataObj {
       timestamp: string
       username: string
       wager: number // total deposited
-    }
+    }>
     cryptoRes: Array<{ // shop balance updates of connected users
       timestamp: string
       value: number
+      user_id: number
     }> | false
     giftcardAndDeposit: Array<{ // shop balance updates of connected users
       id: number
@@ -38,6 +57,13 @@ export interface affiliateDataObj {
       timestamp: string
       userid: number
       wager: number
+    }> | false
+    coinflipAndJackpots: Array<{ // shop balance updates of connected users
+      id: number
+      timestamp: string
+      mode: gameModes
+      bet_value: number
+      userid: number
     }> | false
   }
   msg?: string

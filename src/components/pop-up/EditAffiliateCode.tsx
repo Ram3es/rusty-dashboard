@@ -7,14 +7,20 @@ import UserAvatarWithName from '../base/UserAvatarWithName'
 
 interface IEditCode {
   user?: User
+  onCodeChange: (userId: string, newCode: string) => void
+  onClose: () => void
+  oldCode: string
 }
 
-const EditAffiliateCode: FC<IEditCode> = ({ user }) => {
+const EditAffiliateCode: FC<IEditCode> = ({ user, onCodeChange, oldCode, onClose }) => {
   const [isOpenPopup, setOpenPopup] = useState<boolean>(false)
   const [inputValue, setInputValue] = useState('')
   const [editCodePopupStage, seteditCodeStage] = useState<number>(1)
 
   const toggleModal = () => {
+    if (isOpenPopup) {
+      onClose()
+    }
     setOpenPopup(state => !state)
     seteditCodeStage(1)
     setInputValue('')
@@ -31,10 +37,14 @@ const EditAffiliateCode: FC<IEditCode> = ({ user }) => {
   }
 
   const submitFunction = () => {
+    if (user?.id) {
+      onCodeChange(user?.id, inputValue)
+    }
     toggleModal()
   }
 
   useEffect(() => {
+    console.log(user)
     user && toggleModal()
   }, [user])
 
@@ -69,10 +79,11 @@ const EditAffiliateCode: FC<IEditCode> = ({ user }) => {
             <div className='flex'>
               <p className='text-center text-gray-6 font-normal text-sm leading-5 p-2'>Are you sure you want to push the change</p>
                 <UserAvatarWithName
-                user={user}
-                avatarClasses='flex gap-2 items-center text-base font-semibold text-gray-6 '/>
+                  user={user}
+                  avatarClasses='flex gap-2 items-center text-base font-semibold text-gray-6'
+                />
             </div>
-            <p className='text-center text-gray-6 font-normal text-sm leading-5 '>affiliate code from “Terry” to “Alex”?  </p>
+            <p className='text-center text-gray-6 font-normal text-sm leading-5 '>affiliate code from “{oldCode}” to “{inputValue}”?  </p>
             <div className='flex justify-center gap-5 w-full [&>button]:max-w-[140px] mt-12' >
               <Button text='Cancel' color='default' submitFunction={() => seteditCodeStage(1)} />
               <Button text='Change' submitFunction={submitFunction} />

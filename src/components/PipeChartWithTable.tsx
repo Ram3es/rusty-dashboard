@@ -1,5 +1,5 @@
 // import { Listbox } from '@headlessui/react'
-import { useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Deposit } from '../types/Deposit'
 // import ArrowIcon from './icons/ArrowIcon'
 import CryptoIcon from './icons/CryptoIcon'
@@ -41,7 +41,17 @@ const colorAndIconPeaker = (item: any) => {
   }
 }
 
-const PipeChartWithTable = ({ periodOptions, depositData, selectedPeriod, depositOptions, setSelectedDepositPeriod, currentDepositSelect, setCurrentDepositSelect }: { periodOptions: any[], depositData: any[], selectedPeriod: TimeOption, setSelectedDepositPeriod: (value: TimeOption) => void, depositOptions: string[], currentDepositSelect: string, setCurrentDepositSelect: (value: string) => void }) => {
+interface IPepeChart {
+  periodOptions?: any[]
+  depositData: any[]
+  selectedPeriod?: TimeOption
+  setSelectedDepositPeriod?: (value: TimeOption) => void
+  depositOptions?: string[]
+  currentDepositSelect: string
+  setCurrentDepositSelect?: (value: string) => void
+}
+
+const PipeChartWithTable: FC<IPepeChart> = ({ periodOptions, depositData, selectedPeriod, depositOptions, setSelectedDepositPeriod, currentDepositSelect, setCurrentDepositSelect }) => {
   const [statisticData, setStatisticData] = useState<Deposit[]>([])
   const [total, setTotal] = useState<number>(0)
 
@@ -80,7 +90,10 @@ const PipeChartWithTable = ({ periodOptions, depositData, selectedPeriod, deposi
         <div className='flex gap-5 justify-between items-end'>
           <div className='flex flex-col gap-5'>
             <div className="uppercase text-white text-2xl">{currentDepositSelect}</div>
-            <ButtonsToggle options={depositOptions} currentSelect={currentDepositSelect} peackFunction={setCurrentDepositSelect} />
+            {depositOptions && setCurrentDepositSelect
+              ? <ButtonsToggle options={depositOptions} currentSelect={currentDepositSelect} peackFunction={setCurrentDepositSelect} />
+              : ''
+            }
           </div>
           {/* <div className="relative">
               <Listbox value={selectedPeriod} onChange={setSelectedDepositPeriod}>

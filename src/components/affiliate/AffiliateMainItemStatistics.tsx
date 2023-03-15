@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { TIME_OPTIONS } from '../../constants'
+import { FC, useEffect, useMemo, useState } from 'react'
+import { TIME_OPTIONS_AFFILIEATES } from '../../constants'
 import { StatisticCartItem } from '../../types/StatisticCartItem'
 import { TimeOption } from '../../types/TimeOption'
 import { User } from '../../types/User'
@@ -11,64 +11,101 @@ import LinkIcon from '../icons/LinkIcon'
 import SponseeIcon from '../icons/SponseeIcon'
 import WalletIcon from '../icons/WalletIcon'
 import EditAffiliateCode from '../pop-up/EditAffiliateCode'
-import { generalInfoObj } from '../../types/Afiliates'
+import { affiliateDataObj, generalInfoObj } from '../../types/Afiliates'
 
-const AffiliateMainItemStatistics = ({ generalInfoObj }: { generalInfoObj: generalInfoObj }): JSX.Element => {
-  const [selectedGeneralStatisticPeriod, setSelectedGeneralStatisticPeriod] = useState(TIME_OPTIONS[0])
+interface IAffiliateGeneralProps {
+  userInfo?: affiliateDataObj
+  selectedPeriod: TimeOption
+  changePeriod: Function
+  onCodeChange: (userId: string, newCode: string) => void
+}
+
+const AffiliateMainItemStatistics: FC<IAffiliateGeneralProps> = ({ userInfo, selectedPeriod, changePeriod, onCodeChange }): JSX.Element => {
   const [editedUser, setEditedUSer] = useState<User>()
+  const [generalInfo, setGeneralInfo] = useState<generalInfoObj>()
+
+  useEffect(() => {
+    if (userInfo?.data && Array.isArray(userInfo.data.codeData)) {
+      console.log(userInfo.data)
+      setGeneralInfo({
+        user: {
+          avatar: userInfo.data.codeData[0].avatar || '',
+          name: userInfo.data.codeData[0].username || '',
+          id: userInfo.data.codeData[0].owner.toString() || ''
+        },
+        statistic: {
+          code: userInfo.data.codeData[0].code ?? '',
+          claims: Array.isArray(userInfo.data?.claimed) ? userInfo.data.claimed?.length.toString() || '0' : '0',
+          depositors: Array.isArray(userInfo.data.claimed) ? [...userInfo.data.claimed].reduce((cur, user) => Array.isArray(userInfo.data?.users) && userInfo?.data?.users && userInfo.data.users.findIndex(deposit => deposit.userid === user.id) >= 0 ? ++cur : cur, 0).toString() : '0',
+          totalDeposited: userInfo.data.codeData[0].wager.toString() ?? '0',
+          earnings: userInfo.data.codeData[0].earnings.toString() ?? '0',
+          currentBalance: userInfo.data.codeData[0].balance.toString() ?? '0'
+        }
+      })
+    }
+  }, [userInfo])
 
   const editFunction = () => {
-    setEditedUSer(generalInfoObj.user)
+    if (generalInfo) {
+      setEditedUSer(generalInfo.user)
+    }
   }
 
-  const generalStatistic = useMemo((): StatisticCartItem[] => [
-    {
-      text: generalInfoObj.statistic.code,
-      subtext: 'Code',
-      icon: <LinkIcon iconCalsses='w-4'/>,
-      canEdit: true,
-      editFunction: () => editFunction()
-    },
-    {
-      text: generalInfoObj.statistic.claims,
-      subtext: 'Claims',
-      icon: <CheckIcon iconCalsses='w-5'/>
-    },
-    {
-      text: generalInfoObj.statistic.depositors,
-      subtext: 'Depositors',
-      icon: <SponseeIcon iconCalsses='w-7'/>
-    },
-    {
-      text: generalInfoObj.statistic.totalDeposited,
-      isCoinceValue: true,
-      subtext: 'Total Deposited',
-      icon: <DownloadIcon iconCalsses='w-4'/>
-    },
-    {
-      text: generalInfoObj.statistic.earnings,
-      isCoinceValue: true,
-      subtext: 'Earnings',
-      icon: <CoinceIcon iconCalsses='w-5'/>
-    },
-    {
-      text: generalInfoObj.statistic.currentBalance,
-      isCoinceValue: true,
-      subtext: 'Current Balance',
-      icon: <WalletIcon iconCalsses='w-5'/>
-    }
-  ], [generalInfoObj])
+  const submitFunction = (userId: string, newCode: string) => {
+    setEditedUSer(undefined)
+    onCodeChange(userId, newCode)
+  }
+
+  const generalStatistic = useMemo((): StatisticCartItem[] => generalInfo
+    ? [
+        {
+          text: generalInfo.statistic.code,
+          subtext: 'Code',
+          icon: <LinkIcon iconCalsses='w-4'/>,
+          canEdit: true,
+          editFunction: () => editFunction()
+        },
+        {
+          text: generalInfo.statistic.claims,
+          subtext: 'Claims',
+          icon: <CheckIcon iconCalsses='w-5'/>
+        },
+        {
+          text: generalInfo.statistic.depositors,
+          subtext: 'Depositors',
+          icon: <SponseeIcon iconCalsses='w-7'/>
+        },
+        {
+          text: generalInfo.statistic.totalDeposited,
+          isCoinceValue: true,
+          subtext: 'Total Deposited',
+          icon: <DownloadIcon iconCalsses='w-4'/>
+        },
+        {
+          text: generalInfo.statistic.earnings,
+          isCoinceValue: true,
+          subtext: 'Earnings',
+          icon: <CoinceIcon iconCalsses='w-5'/>
+        },
+        {
+          text: generalInfo.statistic.currentBalance,
+          isCoinceValue: true,
+          subtext: 'Current Balance',
+          icon: <WalletIcon iconCalsses='w-5'/>
+        }
+      ]
+    : [], [generalInfo])
 
   return (<>
     <CardsStatistic
       title="AFFILIATE Statistics"
-      periodOptions={TIME_OPTIONS}
-      selectedPeriod={selectedGeneralStatisticPeriod}
-      changePeriod={(option: TimeOption) => setSelectedGeneralStatisticPeriod(option)}
+      periodOptions={TIME_OPTIONS_AFFILIEATES}
+      selectedPeriod={selectedPeriod}
+      changePeriod={changePeriod}
       items={generalStatistic}
-      user={generalInfoObj.user}
+      user={generalInfo?.user}
     />
-    <EditAffiliateCode user={editedUser} />
+    <EditAffiliateCode user={editedUser} onCodeChange={submitFunction} oldCode={generalInfo?.statistic.code ?? ''} onClose={() => setEditedUSer(undefined)} />
     </>
   )
 }

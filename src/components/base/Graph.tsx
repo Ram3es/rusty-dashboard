@@ -8,7 +8,7 @@ import CoinceImage from '../../assets/coins.png'
 
 const graphVariants = ['line graph', 'bar chart']
 
-const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, names, labels, setGraphMode }: { data: GraphData[], timePeriodOptions: any[], currentTimePeriod: any, changeTimePeriod: Function, names: Array<{ name: string, value: number | string, color: string, withIcon?: boolean }>, labels: React.ReactElement[], setGraphMode?: Dispatch<SetStateAction<string>> }) => {
+const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, names, labels, setGraphMode }: { data: GraphData[], timePeriodOptions?: any[], currentTimePeriod?: any, changeTimePeriod?: Function, names: Array<{ name: string, value: number | string, color: string, withIcon?: boolean }>, labels: React.ReactElement[], setGraphMode?: Dispatch<SetStateAction<string>> }) => {
   const [menegedGraphData, setMenegedGraphData] = useState<object[]>()
   const [currentGraphVariant, setCurrentGraphVariant] = useState<string>(graphVariants[0])
   const [middlePercent, setMiddlePercent] = useState<string>('50%')
