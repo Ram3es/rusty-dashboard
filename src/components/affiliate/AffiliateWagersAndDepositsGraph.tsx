@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import { useMemo, useState } from 'react'
 import { TIME_OPTIONS_AFFILIEATES } from '../../constants'
 import { IGrapgNames, IGraphData } from '../../routes/Affiliate/Affiliateitem'
-import { affiliateDataObj } from '../../types/Afiliates'
+import { affiliateDataObj, gameModes } from '../../types/Afiliates'
 import { TimeOption } from '../../types/TimeOption'
 import Graph from '../base/Graph'
 
@@ -85,6 +85,10 @@ const AffiliateWagersAndDepositsGraph = ({ userData }: { userData?: affiliateDat
       if (foundIndex >= 0) {
         wagerTotal += cur.bet_value / 1000
         monthData[foundIndex].value[0] = (monthData[foundIndex].value[0] + (cur.bet_value / 1000))
+        if (cur.mode === gameModes.COINFLIP || cur.mode === gameModes.JACKPOT) {
+          depositTotal += cur.bet_value / 1000
+          monthData[foundIndex].value[1] = (monthData[foundIndex].value[1] + (cur.bet_value / 1000))
+        }
       }
     })
     return {

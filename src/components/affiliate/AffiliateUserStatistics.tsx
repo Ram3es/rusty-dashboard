@@ -24,7 +24,7 @@ const AffilateUserStatistics = ({ userData }: { userData?: affiliateDataObj }) =
     return (
       <div className='flex items-center gap-2 text-white'>
         <img src={CoinceImage} />
-        <span>{value}</span></div>)
+        <span>{value.toLocaleString('en-US')}</span></div>)
   }
 
   const columns = useMemo(() => [
@@ -86,11 +86,10 @@ const AffilateUserStatistics = ({ userData }: { userData?: affiliateDataObj }) =
           col3: userData?.data?.coinflipAndJackpots && Array.isArray(userData?.data?.coinflipAndJackpots)
             ? userData?.data?.coinflipAndJackpots
               .reduce((prev, game) => game.userid === user.id ? (prev += game.bet_value) : prev, 0)
-              .toLocaleString('en-US')
             : 0,
-          col4: jackpotAndCoinflipDeposits.toLocaleString('en-US'),
-          col5: (shopDeposits + cryptoDeposit).toLocaleString('en-US'),
-          col6: (shopDeposits + cryptoDeposit + jackpotAndCoinflipDeposits).toLocaleString('en-US')
+          col4: jackpotAndCoinflipDeposits,
+          col5: (shopDeposits + cryptoDeposit),
+          col6: (shopDeposits + cryptoDeposit + jackpotAndCoinflipDeposits)
         }
       }) ?? []
       : [],
