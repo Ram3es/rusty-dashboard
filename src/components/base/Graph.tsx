@@ -1,8 +1,8 @@
-// import { Listbox } from '@headlessui/react'
+import { Listbox } from '@headlessui/react'
 import { Dispatch, Key, SetStateAction, useEffect, useState } from 'react'
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Rectangle, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { GraphData } from '../../types/GraphData'
-// import ArrowIcon from '../icons/ArrowIcon'
+import ArrowIcon from '../icons/ArrowIcon'
 import ButtonsToggle from './ButtonsToggle'
 import CoinceImage from '../../assets/coins.png'
 
@@ -86,7 +86,7 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
           </div>
           <div className='flex gap-4 relative w-full justify-between'>
             <ButtonsToggle options={graphVariants} currentSelect={currentGraphVariant} peackFunction={setCurrentGraphVariant} />
-            {/* <div className='relative'>
+            { timePeriodOptions && changeTimePeriod && <div className='relative'>
               <Listbox value={currentTimePeriod.name} onChange={(option) => changeTimePeriod(option)}>
                 {({ open }) => (
                   <>
@@ -109,7 +109,7 @@ const Graph = ({ data, timePeriodOptions, currentTimePeriod, changeTimePeriod, n
                   </>
                 )}
               </Listbox>
-            </div> */}
+            </div> }
           </div>
         </div>
       </div>

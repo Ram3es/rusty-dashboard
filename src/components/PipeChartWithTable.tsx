@@ -1,7 +1,7 @@
-// import { Listbox } from '@headlessui/react'
+import { Listbox } from '@headlessui/react'
 import { FC, useEffect, useState } from 'react'
 import { Deposit } from '../types/Deposit'
-// import ArrowIcon from './icons/ArrowIcon'
+import ArrowIcon from './icons/ArrowIcon'
 import CryptoIcon from './icons/CryptoIcon'
 import GiftCardsIcon from './icons/GiftCardsIcon'
 import SkinsIcon from './icons/SkinsIcon'
@@ -95,7 +95,7 @@ const PipeChartWithTable: FC<IPepeChart> = ({ periodOptions, depositData, select
               : ''
             }
           </div>
-          {/* <div className="relative">
+          { selectedPeriod && periodOptions && setSelectedDepositPeriod && <div className="relative">
               <Listbox value={selectedPeriod} onChange={setSelectedDepositPeriod}>
                 {({ open }) => (
                   <>
@@ -118,7 +118,7 @@ const PipeChartWithTable: FC<IPepeChart> = ({ periodOptions, depositData, select
                   </>
                 )}
               </Listbox>
-          </div> */}
+          </div>}
         </div>
         <div className='flex flex-col w-full'>
           {statisticData.map((item, index) => <div

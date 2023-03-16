@@ -1,7 +1,5 @@
 import { FC, useEffect, useMemo, useState } from 'react'
-import { TIME_OPTIONS_AFFILIEATES } from '../../constants'
 import { StatisticCartItem } from '../../types/StatisticCartItem'
-import { TimeOption } from '../../types/TimeOption'
 import { User } from '../../types/User'
 import CardsStatistic from '../CardsStatistic'
 import CheckIcon from '../icons/CheckIcon'
@@ -15,12 +13,10 @@ import { affiliateDataObj, generalInfoObj } from '../../types/Afiliates'
 
 interface IAffiliateGeneralProps {
   userInfo?: affiliateDataObj
-  selectedPeriod: TimeOption
-  changePeriod: Function
   onCodeChange: (userId: string, newCode: string) => void
 }
 
-const AffiliateMainItemStatistics: FC<IAffiliateGeneralProps> = ({ userInfo, selectedPeriod, changePeriod, onCodeChange }): JSX.Element => {
+const AffiliateMainItemStatistics: FC<IAffiliateGeneralProps> = ({ userInfo, onCodeChange }): JSX.Element => {
   const [editedUser, setEditedUSer] = useState<User>()
   const [generalInfo, setGeneralInfo] = useState<generalInfoObj>()
 
@@ -99,9 +95,6 @@ const AffiliateMainItemStatistics: FC<IAffiliateGeneralProps> = ({ userInfo, sel
   return (<>
     <CardsStatistic
       title="AFFILIATE Statistics"
-      periodOptions={TIME_OPTIONS_AFFILIEATES}
-      selectedPeriod={selectedPeriod}
-      changePeriod={changePeriod}
       items={generalStatistic}
       user={generalInfo?.user}
     />
