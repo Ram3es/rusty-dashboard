@@ -7,7 +7,7 @@ import Graph from '../base/Graph'
 const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: any[], currentGame: string }) => {
   /** @ts-expect-error */
   const [state, period] = useContext(Context)
-  const [selectedProfitPeriod, setSelectedProfitPeriod] = useState(periodOptions[0])
+  // const [selectedProfitPeriod, setSelectedProfitPeriod] = useState(periodOptions[0])
   const [profitTitleData, setProfitTitleData] = useState([{ name: 'PROFIT', value: 0, color: '#39C89D' }])
   const [dataProfit, setDataProfit] = useState({
     name: 'PROFIT',
@@ -151,7 +151,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
   }, [state, currentGame, graphMode])
   return (
     <>
-      <Graph timePeriodOptions={periodOptions} currentTimePeriod={selectedProfitPeriod} changeTimePeriod={setSelectedProfitPeriod} data={dataProfit.data} names={profitTitleData} labels={dataProfit.labels} setGraphMode={setGraphMode} />
+      <Graph data={dataProfit.data} names={profitTitleData} labels={dataProfit.labels} setGraphMode={setGraphMode} />
     </>
   )
 }

@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { useContext, useEffect, useState } from 'react'
-import { TIME_OPTIONS } from '../../constants'
+// import { TIME_OPTIONS } from '../../constants'
 import { Context } from '../../store/GlobalStatisticStore'
 import Graph from '../base/Graph'
 import CryptoIcon from '../icons/CryptoIcon'
@@ -10,7 +10,7 @@ import SkinsIcon from '../icons/SkinsIcon'
 const DepositGraph = () => {
   /** @ts-expect-error */
   const [state, period] = useContext(Context)
-  const [depositDataStatisticPeriod, setDepositDataStatisticPeriod] = useState(TIME_OPTIONS[0])
+  // const [depositDataStatisticPeriod, setDepositDataStatisticPeriod] = useState(TIME_OPTIONS[0])
   const [titleData, setTitleData] = useState([{ name: 'deposit', value: 0, color: '#39C89D' }])
   const [dataDeposit, setDataDeposit] = useState<{ name: string, labels: any[], data: Array<{ name: string, value: number[], colors: Array<{ postitveColor: string }> }> }>({
     name: 'deposit',
@@ -107,11 +107,11 @@ const DepositGraph = () => {
       })
       setTitleData(prev => [{ ...prev[0], value: totalSum }])
     }
-  }, [state, depositDataStatisticPeriod])
+  }, [state])
 
   return (
     <>
-      <Graph timePeriodOptions={TIME_OPTIONS} currentTimePeriod={depositDataStatisticPeriod} changeTimePeriod={setDepositDataStatisticPeriod} data={dataDeposit.data} names={titleData} labels={dataDeposit.labels} />
+      <Graph data={dataDeposit.data} names={titleData} labels={dataDeposit.labels} />
     </>
   )
 }

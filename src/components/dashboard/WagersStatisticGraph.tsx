@@ -7,7 +7,7 @@ import Graph from '../base/Graph'
 const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: any[], currentGame: string }) => {
   /** @ts-expect-error */
   const [state, period] = useContext(Context)
-  const [selectedWagersPeriod, setSelectedWagersPeriod] = useState(periodOptions[0])
+  // const [selectedWagersPeriod, setSelectedWagersPeriod] = useState(periodOptions[0])
   const [wagersTitleData, setWagersTitleData] = useState([{ name: 'Wagers', value: 0, color: '#39C89D' }])
   const [dataWagers, setDataWagers] = useState({
     name: 'Wagers',
@@ -118,7 +118,7 @@ const WagersStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
   }, [state, currentGame])
   return (
     <>
-      <Graph timePeriodOptions={periodOptions} currentTimePeriod={selectedWagersPeriod} changeTimePeriod={setSelectedWagersPeriod} data={dataWagers.data} names={wagersTitleData} labels={dataWagers.labels} />
+      <Graph data={dataWagers.data} names={wagersTitleData} labels={dataWagers.labels} />
     </>
   )
 }

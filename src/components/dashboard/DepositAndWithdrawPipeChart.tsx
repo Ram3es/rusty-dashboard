@@ -1,15 +1,15 @@
 import { useEffect, useState, useContext } from 'react'
 import { DepositBase } from '../../types/Deposit'
-import { TimeOption } from '../../types/TimeOption'
+// import { TimeOption } from '../../types/TimeOption'
 import { Context } from '../../store/GlobalStatisticStore'
 import PipeChartWithTable from '../PipeChartWithTable'
-import { TIME_OPTIONS } from '../../constants'
+// import { TIME_OPTIONS } from '../../constants'
 
 const depositOptions = ['deposit', 'withdraw']
 
 const DepositAndWithdrawPipeChart = () => {
   const [depositData, setDepositData] = useState<DepositBase[]>([])
-  const [selectedDepositPeriod, setSelectedDepositPeriod] = useState(TIME_OPTIONS[0])
+  // const [selectedDepositPeriod, setSelectedDepositPeriod] = useState(TIME_OPTIONS[0])
   const [currentDepositSelect, setCurrentDepositSelect] = useState<string>(depositOptions[0])
   /** @ts-expect-error */
   const [state] = useContext(Context)
@@ -54,16 +54,13 @@ const DepositAndWithdrawPipeChart = () => {
         ])
       }
     }
-  }, [state, selectedDepositPeriod, currentDepositSelect])
+  }, [state, currentDepositSelect])
 
   return (
     <>
       { depositData.length > 0
         ? <PipeChartWithTable
-        periodOptions={TIME_OPTIONS}
         depositData={depositData}
-        selectedPeriod={selectedDepositPeriod}
-        setSelectedDepositPeriod={(val: TimeOption) => setSelectedDepositPeriod(val)}
         currentDepositSelect={currentDepositSelect}
         setCurrentDepositSelect={(val: string) => setCurrentDepositSelect(val)}
         depositOptions={depositOptions}
