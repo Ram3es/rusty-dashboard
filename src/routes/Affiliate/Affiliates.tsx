@@ -54,8 +54,6 @@ interface IAffiliatesAllStatistic {
 
 const Affiliates = () => {
   const [user] = useUserContext()
-  const [pageSize, setPageSize] = useState<{ limit: number, page: number }>({ limit: 10, page: 0 })
-  const [countOfPages, setCountOfPages] = useState<number>()
   const [data, setData] = useState<affiliateStatisticItem[]>([])
   const navigate = useNavigate()
 
@@ -65,7 +63,7 @@ const Affiliates = () => {
   }
 
   const updateStatisticObj = () => {
-    user.socket?.emit('admin:affiliate:all', { limit: pageSize.limit, offset: pageSize.limit * pageSize.page }, (data: IAffiliatesAllStatistic) => {
+    user.socket?.emit('admin:affiliate:all', { limit: 3000, offset: 0 }, (data: IAffiliatesAllStatistic) => {
       if (!data?.error) {
         console.log(data?.data)
         let codes: affiliateStatisticItem[] = []
@@ -98,7 +96,6 @@ const Affiliates = () => {
           })
         }
         setData(codes)
-        setCountOfPages(data.data?.data?.count / 10)
       } else {
         console.log('error')
       }
@@ -109,7 +106,7 @@ const Affiliates = () => {
     if (user.isSystemConnect) {
       updateStatisticObj()
     }
-  }, [pageSize])
+  }, [])
 
   return (
     <>
@@ -119,30 +116,6 @@ const Affiliates = () => {
         </div>
         <div className="col-span-6 flex flex-col rounded-lg bg-dark-1 px-8 py-10">
           <AffiliateStatistics affiliatesData={data} />
-          {countOfPages
-            ? <div className="flex gap-5 mt-2">
-            <div className="flex gap-2 flex-wrap">
-              {Array.from({ length: countOfPages }, (v, i) => i).map(
-                (value: number, i: number) => {
-                  return (
-                    <button
-                      className={`${
-                        pageSize.page === value
-                          ? 'bg-yellow-f text-black'
-                          : 'bg-dark-1f text-gray-6'
-                      } text-sm flex w-8 h-8 items-center justify-center rounded`}
-                      key={i}
-                      onClick={() => setPageSize(() => ({ limit: 10, page: value }))}
-                      disabled={pageSize.page === value}
-                    >
-                      {value + 1}
-                    </button>
-                  )
-                }
-              )}
-            </div>
-          </div>
-            : ''}
         </div>
       </div>
     </>
