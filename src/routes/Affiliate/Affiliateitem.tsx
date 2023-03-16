@@ -37,7 +37,7 @@ const Affiliateitem = () => {
   const foundUser = (obj: Record<string, string>) => {
     const keys = Object.keys(obj)
     if (user.isSystemConnect && keys[0] && obj[keys[0]]) {
-      user.socket?.emit('admin:affiliate:get', { type: keys[0], value: obj[keys[0]], qty: selectedGeneralStatisticPeriod.days }, (data: affiliateDataObj) => {
+      user.socket?.emit('admin:affiliate:get', { type: keys[0], value: obj[keys[0]], qty: 999 }, (data: affiliateDataObj) => {
         if (!data?.error && data.data) {
           setUserData(data)
         } else {
