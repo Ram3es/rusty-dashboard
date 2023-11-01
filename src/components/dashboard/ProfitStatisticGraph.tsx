@@ -43,6 +43,7 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
             id: game.id,
             mode: 'coinflip',
             timestamp: game.timestamp,
+            sellWinnings: game.sellWinnings,
             fee_items_value: game.fee_items_value ?? 0,
             isOponentBot: game.opponent_steamid === 'bot',
             isBotWon: game.opponent_steamid === 'bot' && game.creator_side !== Number(game.winner_side)
@@ -124,6 +125,8 @@ const ProfitStatisticGraph = ({ periodOptions, currentGame }: { periodOptions: a
               profit = cur.bet_value
             } else if (!cur.isOponentBot) {
               profit = cur.fee_items_value ?? 0
+            } else if (cur.sellWinnings) {
+              profit = -cur.oponent_bet - cur.fee_items_value
             } else {
               profit = (cur.fee_items_value ?? 0) - cur.oponent_bet
             }
