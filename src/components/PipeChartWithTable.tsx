@@ -25,6 +25,13 @@ const colorAndIconPeaker = (item: any) => {
         chartColor: '#2E72C9',
         icon: <GiftCardsIcon iconCalsses='w-4' />
       }
+    case 'sell winnings':
+      return {
+        ...item,
+        color: 'radial-gradient(70% 70% at 50% 80%,#27f278 0%,#86ffb6 100%)',
+        chartColor: '#86ffb6',
+        icon: <></>
+      }
     case 'crypto':
       return {
         ...item,

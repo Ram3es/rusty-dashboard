@@ -16,7 +16,8 @@ const DepositAndWithdrawPipeChart = () => {
 
   useEffect(() => {
     if (state?.dataCurrentPeriod) {
-      const { crypto, depositsItems, giftcards, trades } = state.dataCurrentPeriod
+      console.log('state.dataCurrentPeriod', state.dataCurrentPeriod)
+      const { crypto, depositsItems, giftcards, trades, sellWinningsDeposits } = state.dataCurrentPeriod
       if (currentDepositSelect === 'deposit') {
         console.log('deposits in pie chart', depositsItems)
         setDepositData([
@@ -37,6 +38,13 @@ const DepositAndWithdrawPipeChart = () => {
           {
             name: 'crypto',
             value: crypto.reduce((prev: any, cur: { value: any }) => {
+              const total = Number(cur.value) / 1000 + Number(prev)
+              return total
+            }, 0)
+          },
+          {
+            name: 'sell winnings',
+            value: sellWinningsDeposits.reduce((prev: any, cur: { value: any }) => {
               const total = Number(cur.value) / 1000 + Number(prev)
               return total
             }, 0)

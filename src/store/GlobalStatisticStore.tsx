@@ -16,6 +16,7 @@ interface GlobalStatisticData {
   pvpMines: any[]
   trades: any[]
   user: any[]
+  sellWinningsDeposits: any[]
 }
 
 const initialState = {}
@@ -42,7 +43,7 @@ const Store = ({ children }: { children: ReactElement }) => {
 
   const value: { dataCurrentPeriod: GlobalStatisticData, dataPrevPeriod: GlobalStatisticData } | undefined = useMemo(() => {
     if (state.data?.data) {
-      const { crypto, depositsItems, giftcards, trades, gameHistory, jackpots, coinflips, pvpMines, user }: GlobalStatisticData = state.data.data
+      const { crypto, depositsItems, giftcards, trades, gameHistory, jackpots, coinflips, pvpMines, user, sellWinningsDeposits }: GlobalStatisticData = state.data.data
       const cryptoSortedByDate = sortDataByDate(period, crypto ?? [])
       const depositsSortedByDate = sortDataByDate(period, depositsItems ?? [])
       const giftcardsSortedByDate = sortDataByDate(period, giftcards ?? [])
@@ -52,6 +53,7 @@ const Store = ({ children }: { children: ReactElement }) => {
       const sortedJackpotsByDate = sortDataByDate(period, jackpots ?? [])
       const sortedCoinflipsByDate = sortDataByDate(period, coinflips ?? [])
       const sortedPvpMinesByDate = sortDataByDate(period, pvpMines ?? [])
+      const sortedSellWinningsDeposits = sortDataByDate(period, sellWinningsDeposits ?? [])
       return {
         dataCurrentPeriod: {
           excluded: state.excluded ?? [],
@@ -65,7 +67,8 @@ const Store = ({ children }: { children: ReactElement }) => {
           jackpots: sortedJackpotsByDate.currentPeriod ?? [],
           pvpMines: sortedPvpMinesByDate.currentPeriod ?? [],
           trades: tragesSortedByDate.currentPeriod ?? [],
-          user: sortedUsersByDate.currentPeriod ?? []
+          user: sortedUsersByDate.currentPeriod ?? [],
+          sellWinningsDeposits: sortedSellWinningsDeposits.currentPeriod ?? []
         },
         dataPrevPeriod: {
           coinflips: sortedCoinflipsByDate.previousPeriod ?? [],
@@ -76,7 +79,8 @@ const Store = ({ children }: { children: ReactElement }) => {
           jackpots: sortedJackpotsByDate.previousPeriod ?? [],
           pvpMines: sortedPvpMinesByDate.previousPeriod ?? [],
           trades: tragesSortedByDate.previousPeriod ?? [],
-          user: sortedUsersByDate.previousPeriod ?? []
+          user: sortedUsersByDate.previousPeriod ?? [],
+          sellWinningsDeposits: sortedSellWinningsDeposits.previousPeriod ?? []
         }
       }
     }
